@@ -15,13 +15,13 @@ Table of Contents
 -----------------
 
 1. `Quick Start <#quick-start>`__
-2. `Running on SageMaker Notebook Instances<#running-on-sagemaker-notebook-instances>`__
+2. `Running on SageMaker Notebook Instances <#running-on-sagemaker-notebook-instances>`__
 3. `Development <#development>`__
 
 Quick Start
 ------------
 
-sagemaker_pyspark works with python 2.7 and python 3.x. To install it use `pip`:
+sagemaker_pyspark works with python 2.7 and python 3.x. To install it use ``pip``:
 
 .. code-block:: sh
 
@@ -76,7 +76,7 @@ A KMeansSageMakerEstimator runs a training job using the Amazon SageMaker KMeans
 invocation of fit(), returning a SageMakerModel.
 
 .. code-block:: python
-    from sagemaker_pyspark import IAMRole 
+    from sagemaker_pyspark import IAMRole
     from sagemaker_pyspark.algorithms import KMeansSageMakerEstimator
 
     iam_role = "arn:aws:iam:0123456789012:role/MySageMakerRole"
@@ -107,7 +107,7 @@ given as a hyperparameter.
 The Amazon SageMaker KMeans algorithm accepts many parameters, but K (the number of clusters) and
 FeatureDim (the number of features per Row) are required.
 
-You can set other hyperparameters, See the docs (link), or run
+You can set other hyperparameters, for details on them, run:
 
 .. code-block:: python
 
@@ -150,15 +150,14 @@ Connecting to an EMR Spark Cluster
 
 Note: Make sure your SageMaker Notebook instance can talk to your EMR Cluster. This means:
 
-- They are in the same VPC or different `peered VPCs <http://docs.aws.amazon
-.com/AmazonVPC/latest/UserGuide/vpc-peering.html>`__.
-- The EMR Cluster Security group allows TCP port 8998 on the SageMaker Notebook Security group to
-ingress.
+- They are in the same VPC or different `peered VPCs <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-peering.html>`__.
+- The EMR Cluster Security group allows TCP port 8998 on the SageMaker Notebook Security group to ingress.
 
 Installing sagemaker_pyspark in a Spark EMR Cluster
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-sagemaker_pyspark works with EMR `5.10.0`. To install sagemaker_pyspark in EMR:
+sagemaker_pyspark works with ``EMR-5-8.0`` (which runs Spark 2.2). To install sagemaker_pyspark
+in EMR:
 
 Create a bootstrap script to install sagemaker_pyspark in your new EMR cluster:
 
@@ -204,12 +203,13 @@ Grab the EMR classpath from the installed sagemaker_pyspark:
     $ sagemakerpyspark-emr-jars :
 
 the output will be a ":" separated list of jar files. Copy the output and append it to the
-`spark.driver.extraClassPath` and `spark.executor.extraClassPath` sections of `spark-defaults.conf`
+``spark.driver.extraClassPath`` and ``spark.executor.extraClassPath`` sections of
+``spark-defaults.conf``
 
 Make sure that there is a ":" after the original classpath before you paste the sagemaker_pyspark
- classpath.
+classpath.
 
-Before proceeding to configure your Notebook instance, open port 8998 to allow ingress from the
+Before proceeding to configure your Notebook instance, open port ``8998`` to allow ingress from the
 security group in the Notebook instance.
 
 Configure your SageMaker Notebook instance to connect to the cluster
@@ -237,8 +237,8 @@ Override the default spark magic config
     $ cp example_config.json ~/.sparkmagic/config.json
 
 
-Launch a notebook using either the `pyspark2` or `pyspark3` Kernel. As soon as you try to run any
- code block, the notebook will connect to your spark cluster and get a `SparkContext` for you.
+Launch a notebook using either the ``pyspark2`` or ``pyspark3`` Kernel. As soon as you try to run
+any code block, the notebook will connect to your spark cluster and get a ``SparkContext`` for you.
 
 
 Development
@@ -288,7 +288,7 @@ make sure to add the pyenv and virtualenv init functions to your corresponding
 shell init (**.bashrc**, **.zshrc**, etc):
 
 .. code-block:: sh
-    
+
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 
@@ -306,11 +306,13 @@ Setup the python version we need. At the moment we are testing with python
 Set them as global versions
 
 .. code-block:: sh
+
     $ pyenv global 2.7.10 3.5.2 3.6.2
 
 Verify they show up when you do:
 
 .. code-block:: sh
+
     $ pyenv versions
 
 Restart your shell and run the command again to verify that it persists across shell sessions.
@@ -318,9 +320,12 @@ Restart your shell and run the command again to verify that it persists across s
 Now we just need to install tox to run our tests:
 
 .. code-block:: sh
+
     $ pip install tox
 
 Run the tests by running:
 
 .. code-block:: sh
+
     $ tox
+
