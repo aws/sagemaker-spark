@@ -1,0 +1,196 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>protobuf - com.amazonaws.services.sagemaker.sparksdk.protobuf</title>
+          <meta name="description" content="protobuf - com.amazonaws.services.sagemaker.sparksdk.protobuf" />
+          <meta name="keywords" content="protobuf com.amazonaws.services.sagemaker.sparksdk.protobuf" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.amazonaws.services.sagemaker.sparksdk.protobuf.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.amazonaws">amazonaws</a>.<a href="../../../package.html" class="extype" name="com.amazonaws.services">services</a>.<a href="../../package.html" class="extype" name="com.amazonaws.services.sagemaker">sagemaker</a>.<a href="../package.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk">sparksdk</a></p>
+        <h1>protobuf</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.protobuf.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">protobuf</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.protobuf.RecordIOOutputFormat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RecordIOOutputFormatextendsFileOutputFormat[org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.BytesWritable]"></a>
+      <a id="RecordIOOutputFormat:RecordIOOutputFormat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RecordIOOutputFormat.html"><span class="name">RecordIOOutputFormat</span></a><span class="result"> extends <span class="extype" name="org.apache.hadoop.mapreduce.lib.output.FileOutputFormat">FileOutputFormat</span>[<span class="extype" name="org.apache.hadoop.io.NullWritable">NullWritable</span>, <span class="extype" name="org.apache.hadoop.io.BytesWritable">BytesWritable</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.protobuf.package@RecordIOOutputFormatextendsFileOutputFormat[org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.BytesWritable]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.protobuf.SageMakerProtobufFileFormat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SageMakerProtobufFileFormatextendsFileFormatwithDataSourceRegister"></a>
+      <a id="SageMakerProtobufFileFormat:SageMakerProtobufFileFormat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SageMakerProtobufFileFormat.html"><span class="name">SageMakerProtobufFileFormat</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.sql.execution.datasources.FileFormat">FileFormat</span> with <span class="extype" name="org.apache.spark.sql.sources.DataSourceRegister">DataSourceRegister</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.protobuf.package@SageMakerProtobufFileFormatextendsFileFormatwithDataSourceRegister" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A Spark FileFormat for serializing Dataframes of labeled vectors to the Amazon Record
+protobuf file format encoded in RecordIO.</p><div class="fullcomment"><div class="comment cmt"><p>A Spark FileFormat for serializing Dataframes of labeled vectors to the Amazon Record
+protobuf file format encoded in RecordIO.</p><p>To write records from a DataFrame in this file format, run
+<code>dataframe.save
+  .format("sagemaker")
+  .option("labelColumnName", "myLabelColumn")
+  .option("featuresColumnName", "myFeaturesColumn")
+  .save("my_output_path")</code>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://mxnet.incubator.apache.org/architecture/note_data_loading.html" target="_blank">https://mxnet.incubator.apache.org/architecture/note_data_loading.html</a> for more
+     information on recordIO</p></span><span class="cmt"><p><a href="https://aws.amazon.com/sagemaker/latest/dg/cdf-training.html/" target="_blank">https://aws.amazon.com/sagemaker/latest/dg/cdf-training.html/</a> for more information on
+     the Amazon Record data format.</p></span></dd></dl></div>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.protobuf.SageMakerProtobufWriter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SageMakerProtobufWriterextendsOutputWriter"></a>
+      <a id="SageMakerProtobufWriter:SageMakerProtobufWriter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SageMakerProtobufWriter.html"><span class="name">SageMakerProtobufWriter</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.sql.execution.datasources.OutputWriter">OutputWriter</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.protobuf.package@SageMakerProtobufWriterextendsOutputWriter" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Writes rows of labeled vectors to Amazon protobuf Records encoded in RecordIO</p><div class="fullcomment"><div class="comment cmt"><p>Writes rows of labeled vectors to Amazon protobuf Records encoded in RecordIO</p><p>By default, writes a label column of Doubles named &quot;label&quot; and a features column
+of Vector[Double]s named &quot;features&quot; to protobuf.</p><p>These column names can be reassigned with the option &quot;labelColumnName&quot; and &quot;featuresColumnName&quot;.</p><p>To write records from a DataFrame in this file format, run
+<code>dataframe.save
+  .format("sagemaker")
+  .option("labelColumnName", "myLabelColumn")
+  .option("featuresColumnName", "myFeaturesColumn")
+  .save("my_output_path")</code>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://mxnet.incubator.apache.org/architecture/note_data_loading.html" target="_blank">https://mxnet.incubator.apache.org/architecture/note_data_loading.html</a> for more
+     information on recordIO</p></span><span class="cmt"><p><a href="https://aws.amazon.com/sagemaker/latest/dg/cdf-training.html/" target="_blank">https://aws.amazon.com/sagemaker/latest/dg/cdf-training.html/</a> for more information on
+     the Amazon Record data format.</p></span></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.protobuf.ProtobufConverter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ProtobufConverter"></a>
+      <a id="ProtobufConverter:ProtobufConverter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ProtobufConverter$.html"><span class="name">ProtobufConverter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.protobuf.package@ProtobufConverter" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility functions that convert to and from the Amazon Record protobuf data format and encode
+Records in recordIO.</p><div class="fullcomment"><div class="comment cmt"><p>Utility functions that convert to and from the Amazon Record protobuf data format and encode
+Records in recordIO.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://mxnet.incubator.apache.org/architecture/note_data_loading.html" target="_blank">https://mxnet.incubator.apache.org/architecture/note_data_loading.html</a> for more
+     information on recordIO</p></span><span class="cmt"><p><a href="https://aws.amazon.com/sagemaker/latest/dg/cdf-training.html/" target="_blank">https://aws.amazon.com/sagemaker/latest/dg/cdf-training.html/</a> for more information on
+    the Amazon Record data format</p></span></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

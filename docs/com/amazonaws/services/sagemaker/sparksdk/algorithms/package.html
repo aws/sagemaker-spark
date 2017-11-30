@@ -1,0 +1,322 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>algorithms - com.amazonaws.services.sagemaker.sparksdk.algorithms</title>
+          <meta name="description" content="algorithms - com.amazonaws.services.sagemaker.sparksdk.algorithms" />
+          <meta name="keywords" content="algorithms com.amazonaws.services.sagemaker.sparksdk.algorithms" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.amazonaws.services.sagemaker.sparksdk.algorithms.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.amazonaws">amazonaws</a>.<a href="../../../package.html" class="extype" name="com.amazonaws.services">services</a>.<a href="../../package.html" class="extype" name="com.amazonaws.services.sagemaker">sagemaker</a>.<a href="../package.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk">sparksdk</a></p>
+        <h1>algorithms</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">algorithms</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansSageMakerEstimator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="KMeansSageMakerEstimatorextendsSageMakerEstimatorwithKMeansParams"></a>
+      <a id="KMeansSageMakerEstimator:KMeansSageMakerEstimator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="KMeansSageMakerEstimator.html"><span class="name">KMeansSageMakerEstimator</span></a><span class="result"> extends <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> with <span class="extype" name="com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansParams">KMeansParams</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@KMeansSageMakerEstimatorextendsSageMakerEstimatorwithKMeansParams" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a K-Means Clustering training job on Amazon SageMaker upon a
+call to fit() on a DataFrame and returns a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a>
+that can be used to transform a DataFrame using the hosted K-Means model.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a K-Means Clustering training job on Amazon SageMaker upon a
+call to fit() on a DataFrame and returns a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a>
+that can be used to transform a DataFrame using the hosted K-Means model. K-Means Clustering
+is useful for grouping similar examples in your dataset.</p><p>Amazon SageMaker K-Means clustering trains on RecordIO-encoded Amazon Record protobuf data.
+SageMaker Spark writes a DataFrame to S3 by selecting a column of Vectors named &quot;features&quot;
+and, if present, a column of Doubles named &quot;label&quot;. These names are configurable by passing
+a map with entries in trainingSparkDataFormatOptions with key &quot;labelColumnName&quot; or
+&quot;featuresColumnName&quot;, with values corresponding to the desired label and features columns.</p><p>For inference, the SageMakerModel returned by fit() by the KMeansSageMakerEstimator
+uses <span class="extype" name="ProtobufRequestRowSerializer">ProtobufRequestRowSerializer</span> to serialize Rows into
+RecordIO-encoded Amazon Record protobuf messages for inference, by default selecting
+the column named &quot;features&quot; expected to contain a Vector of Doubles.</p><p>Inferences made against an Endpoint hosting a K-Means model contain
+a &quot;closest_cluster&quot; field and a &quot;distance_to_cluster&quot; field, both
+appended to the input DataFrame as columns of Double.
+</p></div></div>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.LinearLearnerBinaryClassifier" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LinearLearnerBinaryClassifierextendsLinearLearnerSageMakerEstimatorwithBinaryClassifierParams"></a>
+      <a id="LinearLearnerBinaryClassifier:LinearLearnerBinaryClassifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearLearnerBinaryClassifier.html"><span class="name">LinearLearnerBinaryClassifier</span></a><span class="result"> extends <span class="extype" name="com.amazonaws.services.sagemaker.sparksdk.algorithms.LinearLearnerSageMakerEstimator">LinearLearnerSageMakerEstimator</span> with <span class="extype" name="com.amazonaws.services.sagemaker.sparksdk.algorithms.BinaryClassifierParams">BinaryClassifierParams</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@LinearLearnerBinaryClassifierextendsLinearLearnerSageMakerEstimatorwithBinaryClassifierParams" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a Linear Learner training job in &quot;binary classifier&quot; mode
+in SageMaker and returns a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted Linear Learner model.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a Linear Learner training job in &quot;binary classifier&quot; mode
+in SageMaker and returns a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted Linear Learner model. The Linear Learner Binary Classifier is useful for classifying
+examples into one of two classes.</p><p>Amazon SageMaker Linear Learner trains on RecordIO-encoded Amazon Record protobuf data.
+SageMaker Spark writes a DataFrame to S3 by selecting a column of Vectors named &quot;features&quot;
+and, if present, a column of Doubles named &quot;label&quot;. These names are configurable by passing
+a map with entries in trainingSparkDataFormatOptions with key &quot;labelColumnName&quot; or
+&quot;featuresColumnName&quot;, with values corresponding to the desired label and features columns.</p><p>Inferences made against an Endpoint hosting a Linear Learner Binary classifier model contain
+a &quot;score&quot; field and a &quot;predicted_label&quot; field, both appended to the input DataFrame as
+Doubles.
+</p></div></div>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.LinearLearnerRegressor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LinearLearnerRegressorextendsLinearLearnerSageMakerEstimatorwithLinearLearnerParams"></a>
+      <a id="LinearLearnerRegressor:LinearLearnerRegressor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearLearnerRegressor.html"><span class="name">LinearLearnerRegressor</span></a><span class="result"> extends <span class="extype" name="com.amazonaws.services.sagemaker.sparksdk.algorithms.LinearLearnerSageMakerEstimator">LinearLearnerSageMakerEstimator</span> with <span class="extype" name="com.amazonaws.services.sagemaker.sparksdk.algorithms.LinearLearnerParams">LinearLearnerParams</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@LinearLearnerRegressorextendsLinearLearnerSageMakerEstimatorwithLinearLearnerParams" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a Linear Learner training job in &quot;regressor&quot; mode in
+SageMaker and returns a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted Linear Learner model.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a Linear Learner training job in &quot;regressor&quot; mode in
+SageMaker and returns a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted Linear Learner model. The Linear Learner Regressor is useful for predicting
+a real-valued label from training examples.</p><p>Amazon SageMaker Linear Learner trains on RecordIO-encoded Amazon Record protobuf data.
+SageMaker Spark writes a DataFrame to S3 by selecting a column of Vectors named &quot;features&quot;
+and, if present, a column of Doubles named &quot;label&quot;. These names are configurable by passing
+a map with entries in trainingSparkDataFormatOptions with key &quot;labelColumnName&quot; or
+&quot;featuresColumnName&quot;, with values corresponding to the desired label and features columns.</p><p>For inference against a hosted Endpoint, the SageMakerModel returned by fit() by
+Linear Learner uses <span class="extype" name="ProtobufRequestRowSerializer">ProtobufRequestRowSerializer</span> to serialize Rows into
+RecordIO-encoded Amazon Record protobuf messages, by default selecting
+the column named &quot;features&quot; expected to contain a Vector of Doubles.</p><p>Inferences made against an Endpoint hosting a Linear Learner Regressor model contain
+a &quot;score&quot; field appended to the input DataFrame as a Double
+</p></div></div>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.PCASageMakerEstimator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PCASageMakerEstimatorextendsSageMakerEstimatorwithPCAParams"></a>
+      <a id="PCASageMakerEstimator:PCASageMakerEstimator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PCASageMakerEstimator.html"><span class="name">PCASageMakerEstimator</span></a><span class="result"> extends <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> with <span class="extype" name="com.amazonaws.services.sagemaker.sparksdk.algorithms.PCAParams">PCAParams</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@PCASageMakerEstimatorextendsSageMakerEstimatorwithPCAParams" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a PCA training job in SageMaker and returns
+a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted PCA model.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs a PCA training job in SageMaker and returns
+a <a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted PCA model. PCA, or Principal Component Analysis, is useful
+for reducing the dimensionality of data before training with another algorithm.</p><p>Amazon SageMaker PCA trains on RecordIO-encoded Amazon Record protobuf data.
+SageMaker Spark writes a DataFrame to S3 by selecting a column of Vectors named &quot;features&quot;
+and, if present, a column of Doubles named &quot;label&quot;. These names are configurable by passing
+a map with entries in trainingSparkDataFormatOptions with key &quot;labelColumnName&quot; or
+&quot;featuresColumnName&quot;, with values corresponding to the desired label and features columns.</p><p>PCASageMakerEstimator uses <span class="extype" name="ProtobufRequestRowSerializer">ProtobufRequestRowSerializer</span> to serialize Rows into
+RecordIO-encoded Amazon Record protobuf messages for inference, by default selecting
+the column named &quot;features&quot; expected to contain a Vector of Doubles.</p><p>Inferences made against an Endpoint hosting a PCA model contain
+a &quot;projection&quot; field appended to the input DataFrame as a Dense Vector of Doubles.
+</p></div></div>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.XGBoostSageMakerEstimator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="XGBoostSageMakerEstimatorextendsSageMakerEstimatorwithXGBoostParams"></a>
+      <a id="XGBoostSageMakerEstimator:XGBoostSageMakerEstimator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="XGBoostSageMakerEstimator.html"><span class="name">XGBoostSageMakerEstimator</span></a><span class="result"> extends <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> with <span class="extype" name="com.amazonaws.services.sagemaker.sparksdk.algorithms.XGBoostParams">XGBoostParams</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@XGBoostSageMakerEstimatorextendsSageMakerEstimatorwithXGBoostParams" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs an XGBoost training job in SageMaker and returns a
+<a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted XGBoost model.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../SageMakerEstimator.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator">SageMakerEstimator</a> that runs an XGBoost training job in SageMaker and returns a
+<a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">SageMakerModel</a> that can be used to transform a DataFrame using
+the hosted XGBoost model. XGBoost is an open-source distributed gradient boosting
+library that Amazon SageMaker has adapted to run on Amazon SageMaker.</p><p>XGBoost trains and infers on LibSVM-formatted data. XGBoostSageMakerEstimator uses
+Spark's LibSVMFileFormat to write the training DataFrame to S3, and serializes
+Rows to LibSVM for inference, selecting the column named &quot;features&quot; by default,
+expected to contain a Vector of Doubles.</p><p>Inferences made against an Endpoint hosting an XGBoost model contain
+a &quot;prediction&quot; field appended to the input DataFrame as a column of Doubles, containing
+the prediction corresponding to the given Vector of features.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://github.com/dmlc/xgboost" target="_blank">https://github.com/dmlc/xgboost</a> for more on XGBoost.</p></span></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansSageMakerEstimator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KMeansSageMakerEstimator"></a>
+      <a id="KMeansSageMakerEstimator:KMeansSageMakerEstimator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KMeansSageMakerEstimator$.html"><span class="name">KMeansSageMakerEstimator</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@KMeansSageMakerEstimator" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.LinearLearnerSageMakerEstimator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinearLearnerSageMakerEstimator"></a>
+      <a id="LinearLearnerSageMakerEstimator:LinearLearnerSageMakerEstimator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearLearnerSageMakerEstimator$.html"><span class="name">LinearLearnerSageMakerEstimator</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@LinearLearnerSageMakerEstimator" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.PCASageMakerEstimator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PCASageMakerEstimator"></a>
+      <a id="PCASageMakerEstimator:PCASageMakerEstimator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PCASageMakerEstimator$.html"><span class="name">PCASageMakerEstimator</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@PCASageMakerEstimator" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.algorithms.XGBoostSageMakerEstimator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="XGBoostSageMakerEstimator"></a>
+      <a id="XGBoostSageMakerEstimator:XGBoostSageMakerEstimator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="XGBoostSageMakerEstimator$.html"><span class="name">XGBoostSageMakerEstimator</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.algorithms.package@XGBoostSageMakerEstimator" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

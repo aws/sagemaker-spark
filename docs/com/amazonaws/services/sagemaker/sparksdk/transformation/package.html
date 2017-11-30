@@ -1,0 +1,239 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>transformation - com.amazonaws.services.sagemaker.sparksdk.transformation</title>
+          <meta name="description" content="transformation - com.amazonaws.services.sagemaker.sparksdk.transformation" />
+          <meta name="keywords" content="transformation com.amazonaws.services.sagemaker.sparksdk.transformation" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.amazonaws.services.sagemaker.sparksdk.transformation.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.amazonaws">amazonaws</a>.<a href="../../../package.html" class="extype" name="com.amazonaws.services">services</a>.<a href="../../package.html" class="extype" name="com.amazonaws.services.sagemaker">sagemaker</a>.<a href="../package.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk">sparksdk</a></p>
+        <h1>transformation</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transformation</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.amazonaws.services.sagemaker.sparksdk.transformation"><span>transformation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="RequestRowSerializerextendsSerializable"></a>
+      <a id="RequestRowSerializer:RequestRowSerializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RequestRowSerializer.html"><span class="name">RequestRowSerializer</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.package@RequestRowSerializerextendsSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Serializes a <span class="extype" name="Row">Row</span> to a byte array with content type <a href="RequestRowSerializer.html#contentType:String" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer#contentType">RequestRowSerializer#contentType</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Serializes a <span class="extype" name="Row">Row</span> to a byte array with content type <a href="RequestRowSerializer.html#contentType:String" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer#contentType">RequestRowSerializer#contentType</a>.</p><p>Rows are serialized with <a href="RequestRowSerializer.html#serializeRow(row:org.apache.spark.sql.Row):Array[Byte]" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer#serializeRow">RequestRowSerializer#serializeRow</a> to an Array of Bytes.
+Implementations may require that Rows being serialized conform to a specific schema. Row
+schemas can be validated by <a href="RequestRowSerializer.html#validateSchema(schema:org.apache.spark.sql.types.StructType):Unit" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer#validateSchema">RequestRowSerializer#validateSchema</a>. The schema for a batch
+of Row of objects can be set via <a href="RequestRowSerializer.html#setSchema(schema:org.apache.spark.sql.types.StructType):Unit" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer#setSchema">RequestRowSerializer#setSchema</a>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">com.amazonaws.services.sagemaker.sparksdk.SageMakerModel</a></p></span></dd></dl></div>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.ResponseRowDeserializer" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ResponseRowDeserializerextendsSerializable"></a>
+      <a id="ResponseRowDeserializer:ResponseRowDeserializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ResponseRowDeserializer.html"><span class="name">ResponseRowDeserializer</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.package@ResponseRowDeserializerextendsSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Deserializes a SageMaker endpoint response into a series of <span class="extype" name="Row">Row</span>s.</p><div class="fullcomment"><div class="comment cmt"><p>Deserializes a SageMaker endpoint response into a series of <span class="extype" name="Row">Row</span>s.
+Each deserialized Row conforms to <a href="ResponseRowDeserializer.html#schema:org.apache.spark.sql.types.StructType" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.ResponseRowDeserializer#schema">ResponseRowDeserializer.schema</a>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SageMakerModel.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.SageMakerModel">com.amazonaws.services.sagemaker.sparksdk.SageMakerModel</a></p></span></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.ContentTypes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContentTypes"></a>
+      <a id="ContentTypes:ContentTypes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$ContentTypes$.html"><span class="name">ContentTypes</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.package@ContentTypes" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">SageMaker Transformation Content-Type HTTP Header Constants
+</p>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deserializers"></a>
+      <a id="deserializers:deserializers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="deserializers/package.html"><span class="name">deserializers</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.package@deserializers" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.serializers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="serializers"></a>
+      <a id="serializers:serializers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="serializers/package.html"><span class="name">serializers</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.package@serializers" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.util" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="util"></a>
+      <a id="util:util"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="util/package.html"><span class="name">util</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.package@util" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
