@@ -8,7 +8,6 @@ build
 target
 project/project
 spark-warehouse
-lib/
 **/*.pyc
 **/*.egg
 *.egg-info
