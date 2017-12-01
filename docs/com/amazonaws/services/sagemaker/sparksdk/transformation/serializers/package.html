@@ -1,0 +1,181 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>serializers - com.amazonaws.services.sagemaker.sparksdk.transformation.serializers</title>
+          <meta name="description" content="serializers - com.amazonaws.services.sagemaker.sparksdk.transformation.serializers" />
+          <meta name="keywords" content="serializers com.amazonaws.services.sagemaker.sparksdk.transformation.serializers" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../../index.html';
+            var hash = 'com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../../package.html" class="extype" name="com.amazonaws">amazonaws</a>.<a href="../../../../package.html" class="extype" name="com.amazonaws.services">services</a>.<a href="../../../package.html" class="extype" name="com.amazonaws.services.sagemaker">sagemaker</a>.<a href="../../package.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk">sparksdk</a>.<a href="../package.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.transformation">transformation</a></p>
+        <h1>serializers</h1><span class="permalink">
+      <a href="../../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.package" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">serializers</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.LibSVMRequestRowSerializer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LibSVMRequestRowSerializerextendsRequestRowSerializerwithSerializable"></a>
+      <a id="LibSVMRequestRowSerializer:LibSVMRequestRowSerializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LibSVMRequestRowSerializer.html"><span class="name">LibSVMRequestRowSerializer</span></a><span class="result"> extends <a href="../RequestRowSerializer.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer">RequestRowSerializer</a> with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.package@LibSVMRequestRowSerializerextendsRequestRowSerializerwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Extracts a label column and features column from a Row and serializes as a LibSVM record.</p><div class="fullcomment"><div class="comment cmt"><p>Extracts a label column and features column from a Row and serializes as a LibSVM record.
+Each Row must contain a Double column and a Vector column containing the label and features
+respectively. Row field indexes for the label and features are obtained by looking up the
+index of labelColumnName and featuresColumnName respectively
+in the specified schema.</p><p>A schema must be specified before <a href="../RequestRowSerializer.html#serializeRow(row:org.apache.spark.sql.Row):Array[Byte]" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer#serializeRow">RequestRowSerializer#serializeRow</a> is invoked by a
+client of this RequestRowSerializer. The schema is set either on instantiation of this
+RequestRowSerializer or by
+<a href="../RequestRowSerializer.html#setSchema(schema:org.apache.spark.sql.types.StructType):Unit" class="extmbr" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer#setSchema">RequestRowSerializer#setSchema</a>.
+</p></div></div>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ProtobufRequestRowSerializerextendsRequestRowSerializer"></a>
+      <a id="ProtobufRequestRowSerializer:ProtobufRequestRowSerializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProtobufRequestRowSerializer.html"><span class="name">ProtobufRequestRowSerializer</span></a><span class="result"> extends <a href="../RequestRowSerializer.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer">RequestRowSerializer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.package@ProtobufRequestRowSerializerextendsRequestRowSerializer" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <a href="../RequestRowSerializer.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer">RequestRowSerializer</a> for converting labeled rows to SageMaker Protobuf-in-recordio
+request data.</p>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.UnlabeledCSVRequestRowSerializer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnlabeledCSVRequestRowSerializerextendsRequestRowSerializerwithSerializable"></a>
+      <a id="UnlabeledCSVRequestRowSerializer:UnlabeledCSVRequestRowSerializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="UnlabeledCSVRequestRowSerializer.html"><span class="name">UnlabeledCSVRequestRowSerializer</span></a><span class="result"> extends <a href="../RequestRowSerializer.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer">RequestRowSerializer</a> with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.package@UnlabeledCSVRequestRowSerializerextendsRequestRowSerializerwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Serializes according to the current implementation of the scoring service:
+</p>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.UnlabeledLibSVMRequestRowSerializer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UnlabeledLibSVMRequestRowSerializerextendsRequestRowSerializer"></a>
+      <a id="UnlabeledLibSVMRequestRowSerializer:UnlabeledLibSVMRequestRowSerializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="UnlabeledLibSVMRequestRowSerializer.html"><span class="name">UnlabeledLibSVMRequestRowSerializer</span></a><span class="result"> extends <a href="../RequestRowSerializer.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer">RequestRowSerializer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.package@UnlabeledLibSVMRequestRowSerializerextendsRequestRowSerializer" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Extracts a features column from a Row and serializes as a LibSVM record.</p><div class="fullcomment"><div class="comment cmt"><p>Extracts a features column from a Row and serializes as a LibSVM record. Each serialized
+LibSVM record has a label of 0.</p><p>Each Row must contain a Vector column with name featuresColumnName.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>internal - com.amazonaws.services.sagemaker.sparksdk.internal</title>
+          <meta name="description" content="internal - com.amazonaws.services.sagemaker.sparksdk.internal" />
+          <meta name="keywords" content="internal com.amazonaws.services.sagemaker.sparksdk.internal" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.amazonaws.services.sagemaker.sparksdk.internal.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.amazonaws">amazonaws</a>.<a href="../../../package.html" class="extype" name="com.amazonaws.services">services</a>.<a href="../../package.html" class="extype" name="com.amazonaws.services.sagemaker">sagemaker</a>.<a href="../package.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk">sparksdk</a></p>
+        <h1>internal</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.internal.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">internal</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.amazonaws.services.sagemaker.sparksdk.internal.DataUploadResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DataUploadResultextendsAnyRef"></a>
+      <a id="DataUploadResult:DataUploadResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DataUploadResult.html"><span class="name">DataUploadResult</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.internal.package@DataUploadResultextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.internal.ManifestDataUploadResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ManifestDataUploadResultextendsDataUploadResultwithProductwithSerializable"></a>
+      <a id="ManifestDataUploadResult:ManifestDataUploadResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ManifestDataUploadResult.html"><span class="name">ManifestDataUploadResult</span></a><span class="params">(<span name="s3DataPath">s3DataPath: <a href="../S3DataPath.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.S3DataPath">S3DataPath</a></span>)</span><span class="result"> extends <a href="DataUploadResult.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.internal.DataUploadResult">DataUploadResult</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.internal.package@ManifestDataUploadResultextendsDataUploadResultwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.internal.ObjectPrefixUploadResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ObjectPrefixUploadResultextendsDataUploadResultwithProductwithSerializable"></a>
+      <a id="ObjectPrefixUploadResult:ObjectPrefixUploadResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ObjectPrefixUploadResult.html"><span class="name">ObjectPrefixUploadResult</span></a><span class="params">(<span name="s3DataPath">s3DataPath: <a href="../S3DataPath.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.S3DataPath">S3DataPath</a></span>)</span><span class="result"> extends <a href="DataUploadResult.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.internal.DataUploadResult">DataUploadResult</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.internal.package@ObjectPrefixUploadResultextendsDataUploadResultwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.internal.SystemTimeProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SystemTimeProviderextendsTimeProvider"></a>
+      <a id="SystemTimeProvider:SystemTimeProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SystemTimeProvider.html"><span class="name">SystemTimeProvider</span></a><span class="result"> extends <a href="TimeProvider.html" class="extype" name="com.amazonaws.services.sagemaker.sparksdk.internal.TimeProvider">TimeProvider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.internal.package@SystemTimeProviderextendsTimeProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implements TimeProvider using the Java System Time.</p>
+    </li><li name="com.amazonaws.services.sagemaker.sparksdk.internal.TimeProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="TimeProviderextendsAnyRef"></a>
+      <a id="TimeProvider:TimeProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TimeProvider.html"><span class="name">TimeProvider</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.amazonaws.services.sagemaker.sparksdk.internal.package@TimeProviderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Injectable interface for interacting with System time.</p><div class="fullcomment"><div class="comment cmt"><p>Injectable interface for interacting with System time.</p><p>Used for testing purposes only.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
