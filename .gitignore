@@ -6,9 +6,8 @@
 .settings
 build
 target
-project
+project/project
 spark-warehouse
-lib/
 **/*.pyc
 **/*.egg
 *.egg-info
