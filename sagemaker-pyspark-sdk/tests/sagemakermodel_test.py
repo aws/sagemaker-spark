@@ -113,6 +113,7 @@ def test_sagemakermodel_can_be_created_from_java_obj():
     assert new_model.uid == model.uid
 
 
+@pytest.mark.skip("this can't run w/o AWS creds")
 def test_sagemakermodel_can_do_resource_cleanup():
     endpoint_name = "my-existing-endpoint-123"
     model = SageMakerModel(

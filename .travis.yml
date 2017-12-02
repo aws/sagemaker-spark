@@ -1,11 +1,24 @@
-language: scala
-
-scala:
-- 2.11.2
-
+language: python
+python: 
+- 2.7
+- 3.4
+- 3.5
 env:
-  - AWS_REGION=us-west-2
-
+- AWS_REGION=us-west-2
+before_script:
+- source ./travis_build.sh
+- pip install tox-travis
+- cd sagemaker-pyspark-sdk
 script:
-  - cd sagemaker-spark-sdk
-  - sbt ++$TRAVIS_SCALA_VERSION test
+- tox
+
+matrix:
+  include:
+    - language: scala
+      scala: 2.11.7
+      env:
+        - AWS_REGION=us-west-2
+      before_script:
+        - cd sagemaker-spark-sdk
+      script:
+        - sbt test
