@@ -3,9 +3,7 @@
 API
 ===
 
-This part of the documentation covers all the interfaces of sagemaker_pyspark.!!!!!
-
-
+This part of the documentation covers all the interfaces of sagemaker_pyspark.
 
 
 SageMakerModel
