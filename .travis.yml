@@ -1,0 +1,11 @@
+language: scala
+
+scala:
+- 2.11.2
+
+env:
+  - AWS_REGION=us-west-2
+
+script:
+  - cd sagemaker-spark-sdk
+  - sbt ++$TRAVIS_SCALA_VERSION test
