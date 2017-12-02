@@ -69,6 +69,7 @@ A KMeansSageMakerEstimator runs a training job using the Amazon SageMaker KMeans
 invocation of fit(), returning a SageMakerModel.
 
 .. code-block:: python
+
     from sagemaker_pyspark import IAMRole
     from sagemaker_pyspark.algorithms import KMeansSageMakerEstimator
 
