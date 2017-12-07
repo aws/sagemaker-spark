@@ -76,8 +76,16 @@ A KMeansSageMakerEstimator runs a training job using the Amazon SageMaker KMeans
 invocation of fit(), returning a SageMakerModel.
 
 .. code-block:: python
-    from sagemaker_pyspark import IAMRole
+
+    from pyspark import SparkContext, SparkConf
+    from sagemaker_pyspark import IAMRole, classpath_jars
     from sagemaker_pyspark.algorithms import KMeansSageMakerEstimator
+
+    # Load the sagemaker_pyspark classpath. If you used --jars to submit your job
+    # there is no need to do this in code.
+    conf = (SparkConf()
+            .set("spark.driver.extraClassPath", ":".join(classpath_jars())))
+    SparkContext(conf=conf)
 
     iam_role = "arn:aws:iam:0123456789012:role/MySageMakerRole"
 
@@ -227,8 +235,8 @@ You can download it in your terminal using:
     $ wget https://raw.githubusercontent
     .com/jupyter-incubator/sparkmagic/master/sparkmagic/example_config.json
 
-In the `kernel_python_credentials` section, replace the `url` with
-http://your-cluster-private-dns-name:8998`.
+In the ``kernel_python_credentials`` section, replace the ``url`` with
+``http://your-cluster-private-dns-name:8998``.
 
 Override the default spark magic config
 
