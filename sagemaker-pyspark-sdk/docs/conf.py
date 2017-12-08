@@ -4,6 +4,27 @@
 # -- General configuration ------------------------------------------------
 
 import os
+import sys
+import subprocess
+
+from unittest.mock import MagicMock
+sys.path.insert(0, os.path.abspath('../src/'))
+
+if "READTHEDOCS" in os.environ:
+    # pyspark can't be installed on the readthedocs build system
+    # due to out of memory errors. And we can't mock it either due to
+    # inheritance constraints.
+    p = subprocess.Popen("sh get_pyspark.sh".split())
+    p.communicate()
+
+    class Mock(MagicMock):
+
+        @classmethod
+        def __getattr__(cls, name):
+            return MagicMock()
+
+    MOCK_MODULES = ['py4j', 'py4j.protocol', 'py4j.java_gateway', 'py4j.java_collections']
+    sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               'sphinx.ext.intersphinx', 'sphinx.ext.todo',
