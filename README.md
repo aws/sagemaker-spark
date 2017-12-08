@@ -2,7 +2,7 @@
 
 # SageMaker Spark
 
-SageMaker Spark is an open source Spark library for Amazon SageMaker. With SageMaker Spark you construct Spark ML `Pipeline`s using Amazon SageMaker stages. These pipelines interleave native Spark ML stages and stages that interact with SageMaker training and model hosting.
+SageMaker Spark is an open source Spark library for [Amazon SageMaker](https://aws.amazon.com/sagemaker/). With SageMaker Spark you construct Spark ML `Pipeline`s using Amazon SageMaker stages. These pipelines interleave native Spark ML stages and stages that interact with SageMaker training and model hosting.
 
 With SageMaker Spark, you can train on Amazon SageMaker from Spark `DataFrame`s using **Amazon-provided ML algorithms**
 like K-Means clustering or XGBoost, and make predictions on `DataFrame`s against
@@ -18,6 +18,7 @@ own algorithms -- **all at Spark scale.**
   * [Running SageMaker Spark Applications on EMR](#running-sagemaker-spark-applications-on-emr)
   * [Python](#python)
   * [S3 FileSystem Schemes](#s3-filesystem-schemes)
+  * [API Documentation](#api-documentation)
 * [Getting Started: K-Means Clustering on SageMaker with SageMaker Spark SDK](#getting-started-k-means-clustering-on-sagemaker-with-sagemaker-spark-sdk)
 * [Example: Using SageMaker Spark with Any SageMaker Algorithm](#example-using-sagemaker-spark-with-any-sagemaker-algorithm)
 * [Example: Using SageMakerEstimator and SageMakerModel in a Spark Pipeline](#example-using-sagemakerestimator-and-sagemakermodel-in-a-spark-pipeline)
@@ -87,7 +88,13 @@ comma-separated list with:
   * Joda-Time 2.8: joda-time-2.8.2.jar
   
 ```
-spark-shell --jars sagemaker-spark_2.11-spark_2.2.0-1.0.jar,hadoop-aws-2.8.1.jar,joda-time-2.8.2.jar,[FIXME: AWS Java SDK]
+spark-shell --jars sagemaker-spark_2.11-spark_2.2.0-1.0.jar,hadoop-aws-2.8.1.jar,joda-time-2.8.2.jar,aws-java-sdk-1.11.238.jar
+```
+
+Alternatively, use the --packages flag and pass in the Maven coordinates for SageMaker Spark:
+
+```
+spark-shell --packages com.amazonaws:sagemaker-spark_2.11:spark_2.1.1-1.0
 ```
 
 ### Running SageMaker Spark Applications on EMR
@@ -130,7 +137,14 @@ In other execution environments, you can use the S3A schema to use the S3A FileS
 spark.read.format("libsvm").load("s3a://my-bucket/my-prefix")
 ```
 
-In the code examples in this README, we use "s3://" to use the [EMRFS](http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-fs.html).
+In the code examples in this README, we use "s3://" to use the [EMRFS](http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-fs.html),
+or "s3a://" to use the [S3A system](https://wiki.apache.org/hadoop/AmazonS3), which is recommended over "s3n://".
+
+### API Documentation
+
+You can view the [Scala API Documentation for SageMaker Spark here.](https://aws.github.io/sagemaker-spark/)
+
+You can view the [PySpark API Documentation for SageMaker Spark here.](http://sagemaker-pyspark.readthedocs.io/en/latest/)
 
 ## Getting Started: K-Means Clustering on SageMaker with SageMaker Spark SDK
  
@@ -140,19 +154,25 @@ host the resulting model on SageMaker Spark, and making predictions on a Spark D
 We'll cluster handwritten digits in the MNIST dataset, which we've made available in LibSVM format at 
 `s3://sagemaker-sample-data-us-east-1/spark/mnist/train/mnist_train.libsvm`.
 
+You can start a Spark shell with SageMaker Spark
+
+```
+spark-shell --packages com.amazonaws:sagemaker-spark_2.11:spark_2.1.1-1.0
+```
+
 1. Create your Spark Session and load your training and test data into DataFrames:
 ```scala
 val spark = SparkSession.builder.getOrCreate
 
-// load mnist data as a dataframe from libsvm
+// load mnist data as a dataframe from libsvm. replace this region with your own.
 val region = "us-east-1"
 val trainingData = spark.read.format("libsvm")
   .option("numFeatures", "784")
-  .load(s"s3://sagemaker-sample-data-$region/spark/mnist/train/")
+  .load(s"s3a://sagemaker-sample-data-$region/spark/mnist/train/")
 
 val testData = spark.read.format("libsvm")
   .option("numFeatures", "784")
-  .load(s"s3://sagemaker-sample-data-$region/spark/mnist/test/")
+  .load(s"s3a://sagemaker-sample-data-$region/spark/mnist/test/")
 ```
 
 The `DataFrame` consists of a column named "label" of Doubles, indicating the digit for each example,
@@ -197,6 +217,8 @@ In this example, we are setting the "k" and "feature_dim" hyperparameters, corre
 of clusters we want and to the number of dimensions in our training dataset, respectively.
 
 ```scala
+
+// Replace this IAM Role ARN with your own.
 val roleArn = "arn:aws:iam::account-id:role/rolename"
 
 val estimator = new KMeansSageMakerEstimator(

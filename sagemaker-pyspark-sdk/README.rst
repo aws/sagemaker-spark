@@ -58,15 +58,19 @@ Alternatively pass the jars to your pyspark job via the --jars flag:
 
 .. code-block:: sh
 
-    $ spark-submit --jars `sagemakerpyspark-jars` ...
-
+    $ spark-submit --jars `bin/sagemakerpyspark-jars`
 
 If you want to play around in interactive mode, the pyspark shell can be used too:
 
 .. code-block:: sh
 
-    $ pyspark --jars `sagemakerpyspark-jars`
+    $ pyspark --jars `bin/sagemakerpyspark-jars`
 
+You can also use the --packages flag and pass in the Maven coordinates for SageMaker Spark:
+
+.. code-block:: sh
+
+    $ pyspark --packages com.amazonaws:sagemaker-spark_2.11:spark_2.1.1-1.0
 
 
 Training and Hosting a K-Means Clustering model using SageMaker PySpark
@@ -81,8 +85,12 @@ invocation of fit(), returning a SageMakerModel.
 
     iam_role = "arn:aws:iam:0123456789012:role/MySageMakerRole"
 
-    training_data = spark.read.format("libsvm").option("numFeatures", "50") \
-        .option("vectorType", "dense").load("s3a://some-bucket/some-data")
+    region = "us-east-1"
+    training_data = spark.read.format("libsvm").option("numFeatures", "784")
+      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region))
+
+    test_data = spark.read.format("libsvm").option("numFeatures", "784")
+      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region))
 
     kmeans_estimator = KMeansSageMakerEstimator(
         trainingInstanceType="ml.m4.xlarge",
@@ -92,11 +100,11 @@ invocation of fit(), returning a SageMakerModel.
         sagemakerRole=IAMRole(iam_role))
 
     kmeans_estimator.setK(10)
-    kmeans_estimator.setFeatureDim(50)
+    kmeans_estimator.setFeatureDim(784)
 
-    kmeans_model = estimator.fit(training_data)
+    kmeans_model = kmeans_estimator.fit(training_data)
 
-    transformed_data = kmeans_model.transform(training_data)
+    transformed_data = kmeans_model.transform(test_data)
     transformed_data.show()
 
 The SageMakerEstimator expects an input DataFrame with a column named "features" that holds a
@@ -119,6 +127,7 @@ model. Like the SageMakerEstimator, the SageMakerModel expects an input DataFram
 named "features" that holds a Spark ML Vector equal in dimension to the value of the FeatureDim
 parameter.
 
+You can view the `PySpark API Documentation for SageMaker Spark here <http://sagemaker-pyspark.readthedocs.io/en/latest/>`_
 
 Running on SageMaker Notebook Instances
 ---------------------------------------
