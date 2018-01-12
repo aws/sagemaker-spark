@@ -166,3 +166,29 @@ class LinearLearnerRegressorProtobufResponseRowDeserializer
     StructType(Array(StructField(scoreColumnName, DoubleType))),
     protobufKeys = Some(Seq("score")))
 
+/**
+  * Deserializes a Protobuf response from the FactorizationMachines model image with predictorType
+  *   "binary_classifier" into Rows in a Spark Dataframe
+  * @param scoreColumnName name of the column of Doubles indicating the output score for the record.
+  * @param predictedLabelColumnName name of the column of Doubles indicating the predicted label
+  *   for the record.
+  */
+class FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer
+(val scoreColumnName: String = "score",
+ val predictedLabelColumnName: String = "predicted_label")
+  extends ProtobufResponseRowDeserializer(schema =
+    StructType(Array(StructField(scoreColumnName, DoubleType),
+      StructField(predictedLabelColumnName, DoubleType))),
+    protobufKeys = Some(Seq("score", "predicted_label")))
+
+/**
+  * Deserializes a Protobuf response from the FactorizationMachines model image with predictorType
+  * "regressor" into Rows in a Spark Dataframe
+  *
+  * @param scoreColumnName name of the column of Doubles indicating the output score for the record.
+  */
+class FactorizationMachinesRegressorProtobufResponseRowDeserializer
+(val scoreColumnName: String = "score")
+  extends ProtobufResponseRowDeserializer(schema =
+    StructType(Array(StructField(scoreColumnName, DoubleType))),
+    protobufKeys = Some(Seq("score")))
