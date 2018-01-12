@@ -33,7 +33,7 @@ import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.{F
 import com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer
 
 /**
-  * Common params for [[LinearLearnerSageMakerEstimator]] with accessors
+  * Common params for [[FactorizationMachinesSageMakerEstimator]] with accessors
   */
 private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithmParams {
 
@@ -278,7 +278,7 @@ object FactorizationMachinesSageMakerEstimator {
 /**
   * A [[SageMakerEstimator]] that runs a Factorization Machines training job in "binary classifier"
   * mode in SageMaker and returns a [[SageMakerModel]] that can be used to transform a DataFrame
-  * using the hosted Factorization Machines model. The Linear Learner Binary Classifier is
+  * using the hosted Factorization Machines model. The Factorization Machines Binary Classifier is
   * useful for classifying examples into one of two classes.
   *
   * Amazon SageMaker Factorization Machines trains on RecordIO-encoded Amazon Record protobuf data.
@@ -433,7 +433,7 @@ class FactorizationMachinesBinaryClassifier(
   * "featuresColumnName", with values corresponding to the desired label and features columns.
   *
   * For inference against a hosted Endpoint, the SageMakerModel returned by fit() by
-  * Linear Learner uses [[ProtobufRequestRowSerializer]] to serialize Rows into
+  * Factorization Machines uses [[ProtobufRequestRowSerializer]] to serialize Rows into
   * RecordIO-encoded Amazon Record protobuf messages, by default selecting
   * the column named "features" expected to contain a Vector of Doubles.
   *
