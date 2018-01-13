@@ -173,7 +173,7 @@ class LinearLearnerRegressorProtobufResponseRowDeserializer
   * @param predictedLabelColumnName name of the column of Doubles indicating the predicted label
   *   for the record.
   */
-class FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer
+class FactorizationMachinesBinaryClassifierDeserializer
 (val scoreColumnName: String = "score",
  val predictedLabelColumnName: String = "predicted_label")
   extends ProtobufResponseRowDeserializer(schema =
@@ -187,7 +187,7 @@ class FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer
   *
   * @param scoreColumnName name of the column of Doubles indicating the output score for the record.
   */
-class FactorizationMachinesRegressorProtobufResponseRowDeserializer
+class FactorizationMachinesRegressorDeserializer
 (val scoreColumnName: String = "score")
   extends ProtobufResponseRowDeserializer(schema =
     StructType(Array(StructField(scoreColumnName, DoubleType))),

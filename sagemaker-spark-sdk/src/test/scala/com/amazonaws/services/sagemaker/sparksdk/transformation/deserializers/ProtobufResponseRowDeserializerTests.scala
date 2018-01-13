@@ -182,7 +182,7 @@ class ProtobufResponseRowDeserializerTests extends FlatSpec with Matchers with M
 
   it should "create a factorization machines regressor deserializer with " +
     "the correct schema and fields" in {
-    val regressorDeserializer = new FactorizationMachinesRegressorProtobufResponseRowDeserializer()
+    val regressorDeserializer = new FactorizationMachinesRegressorDeserializer()
     val schemaFieldNames = regressorDeserializer.schema.fieldNames
     assert(schemaFieldNames.contains("score"))
     val protobufKeys = regressorDeserializer.protobufKeys.get
@@ -190,10 +190,10 @@ class ProtobufResponseRowDeserializerTests extends FlatSpec with Matchers with M
     assert(schemaFieldNames(0) == protobufKeys(0))
   }
 
-  it should "create a factorization machines  binary classifier deserializer with " +
+  it should "create a factorization machines binary classifier deserializer with " +
     "the correct schema and fields" in {
     val classifierDeserializer =
-      new FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer()
+      new FactorizationMachinesBinaryClassifierDeserializer()
     val schemaFieldNames = classifierDeserializer.schema.fieldNames
     assert(schemaFieldNames.contains("score"))
     assert(schemaFieldNames.contains("predicted_label"))

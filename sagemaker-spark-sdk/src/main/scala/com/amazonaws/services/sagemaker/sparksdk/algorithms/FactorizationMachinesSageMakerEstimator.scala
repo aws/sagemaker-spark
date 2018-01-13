@@ -29,7 +29,7 @@ import com.amazonaws.services.sagemaker.model.{S3DataDistribution, TrainingInput
 import com.amazonaws.services.sagemaker.sparksdk._
 import com.amazonaws.services.sagemaker.sparksdk.EndpointCreationPolicy.EndpointCreationPolicy
 import com.amazonaws.services.sagemaker.sparksdk.transformation.{RequestRowSerializer, ResponseRowDeserializer}
-import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.{FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer, FactorizationMachinesRegressorProtobufResponseRowDeserializer}
+import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.{FactorizationMachinesBinaryClassifierDeserializer, FactorizationMachinesRegressorDeserializer}
 import com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer
 
 /**
@@ -93,8 +93,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.1
     */
   val biasLr : DoubleParam = new DoubleParam(this, "bias_lr",
-    "Multiplies the gradient with this value before updating. Must be > 0",
-    ParamValidators.gt(0))
+    "Multiplies the gradient with this value before updating. Must be >= 0",
+    ParamValidators.gtEq(0))
   def getBiasLr: Double = $(biasLr)
 
   /**
@@ -103,8 +103,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.001
     */
   val linearLr : DoubleParam = new DoubleParam(this, "linear_lr",
-    "Learning rate for linear terms. Must be > 0",
-    ParamValidators.gt(0))
+    "Learning rate for linear terms. Must be >= 0",
+    ParamValidators.gtEq(0))
   def getLinearLr: Double = $(linearLr)
 
   /**
@@ -113,8 +113,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.0001
     */
   val factorsLr : DoubleParam = new DoubleParam(this, "factors_lr",
-    "Learning rate for factorization terms. Must be > 0",
-    ParamValidators.gt(0))
+    "Learning rate for factorization terms. Must be >= 0",
+    ParamValidators.gtEq(0))
   def getFactorsLr: Double = $(factorsLr)
 
   /**
@@ -123,8 +123,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.01
     */
   val biasWd : DoubleParam = new DoubleParam(this, "bias_wd",
-    "Weight decay for the bias term. Must be > 0",
-    ParamValidators.gt(0))
+    "Weight decay for the bias term. Must be >= 0",
+    ParamValidators.gtEq(0))
   def getBiasWd: Double = $(biasWd)
 
   /**
@@ -133,8 +133,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.001
     */
   val linearWd : DoubleParam = new DoubleParam(this, "linear_wd",
-    "Weight decay for linear terms. Must be > 0",
-    ParamValidators.gt(0))
+    "Weight decay for linear terms. Must be >= 0",
+    ParamValidators.gtEq(0))
   def getLinearWd: Double = $(linearWd)
 
   /**
@@ -143,8 +143,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.00001
     */
   val factorsWd : DoubleParam = new DoubleParam(this, "factors_wd",
-    "Weight decay for factorization terms. Must be > 0",
-    ParamValidators.gt(0))
+    "Weight decay for factorization terms. Must be >= 0",
+    ParamValidators.gtEq(0))
   def getFactorsWd: Double = $(factorsWd)
 
   /**
@@ -165,8 +165,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Suggested value range: [1e-8, 512].
     */
   val biasInitScale : DoubleParam = new DoubleParam(this, "bias_init_scale",
-    "Range for bias term uniform initialization. Must be > 0.",
-    ParamValidators.gt(0))
+    "Range for bias term uniform initialization. Must be >= 0.",
+    ParamValidators.gtEq(0))
   def getBiasInitScale: Double = $(biasInitScale)
 
   /**
@@ -175,8 +175,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.01.
     */
   val biasInitSigma : DoubleParam = new DoubleParam(this, "bias_init_sigma",
-    "Standard deviation for initialization of the bias terms. Must be > 0.",
-    ParamValidators.gt(0))
+    "Standard deviation for initialization of the bias terms. Must be >= 0.",
+    ParamValidators.gtEq(0))
   def getBiasInitSigma: Double = $(biasInitSigma)
 
   /**
@@ -205,8 +205,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Suggested value range: [1e-8, 512].
     */
   val linearInitScale : DoubleParam = new DoubleParam(this, "linear_init_scale",
-    "Range for linear term uniform initialization. Must be > 0.",
-    ParamValidators.gt(0))
+    "Range for linear term uniform initialization. Must be >= 0.",
+    ParamValidators.gtEq(0))
   def getLinearInitScale: Double = $(linearInitScale)
 
   /**
@@ -215,8 +215,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.01.
     */
   val linearInitSigma : DoubleParam = new DoubleParam(this, "linear_init_sigma",
-    "Standard deviation for initialization of linear terms. Must be > 0.",
-    ParamValidators.gt(0))
+    "Standard deviation for initialization of linear terms. Must be >= 0.",
+    ParamValidators.gtEq(0))
   def getLinearInitSigma: Double = $(linearInitSigma)
 
   /**
@@ -246,8 +246,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Suggested value range: [1e-8, 512].
     */
   val factorsInitScale : DoubleParam = new DoubleParam(this, "factors_init_scale",
-    "Range for factorization terms uniform initialization. Must be > 0.",
-    ParamValidators.gt(0))
+    "Range for factorization terms uniform initialization. Must be >= 0.",
+    ParamValidators.gtEq(0))
   def getFactorsInitScale: Double = $(factorsInitScale)
 
   /**
@@ -256,8 +256,8 @@ private[algorithms] trait FactorizationMachinesParams extends SageMakerAlgorithm
     * Default: 0.001.
     */
   val factorsInitSigma : DoubleParam = new DoubleParam(this, "factors_init_sigma",
-    "Standard deviation for initialization of factorization terms. Must be > 0.",
-    ParamValidators.gt(0))
+    "Standard deviation for initialization of factorization terms. Must be >= 0.",
+    ParamValidators.gtEq(0))
   def getFactorsInitSigma: Double = $(factorsInitSigma)
 
   /**
@@ -356,7 +356,7 @@ class FactorizationMachinesBinaryClassifier(
            override val requestRowSerializer : RequestRowSerializer =
            new ProtobufRequestRowSerializer(),
            override val responseRowDeserializer : ResponseRowDeserializer =
-           new FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer(),
+           new FactorizationMachinesBinaryClassifierDeserializer(),
            override val trainingInputS3DataPath : S3Resource = S3AutoCreatePath(),
            override val trainingOutputS3DataPath : S3Resource = S3AutoCreatePath(),
            override val trainingInstanceVolumeSizeInGB : Int = 1024,
@@ -505,7 +505,7 @@ class FactorizationMachinesRegressor(
             override val requestRowSerializer : RequestRowSerializer =
             new ProtobufRequestRowSerializer(),
             override val responseRowDeserializer : ResponseRowDeserializer =
-            new FactorizationMachinesRegressorProtobufResponseRowDeserializer(),
+            new FactorizationMachinesRegressorDeserializer(),
             override val trainingInputS3DataPath : S3Resource = S3AutoCreatePath(),
             override val trainingOutputS3DataPath : S3Resource = S3AutoCreatePath(),
             override val trainingInstanceVolumeSizeInGB : Int = 1024,

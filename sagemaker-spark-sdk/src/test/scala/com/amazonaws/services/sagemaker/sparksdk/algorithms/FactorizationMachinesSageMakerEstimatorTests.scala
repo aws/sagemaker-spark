@@ -24,7 +24,7 @@ import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 
 import com.amazonaws.services.sagemaker.sparksdk.IAMRole
-import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.{FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer, FactorizationMachinesRegressorProtobufResponseRowDeserializer}
+import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.{FactorizationMachinesBinaryClassifierDeserializer, FactorizationMachinesRegressorDeserializer}
 import com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer
 
 class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
@@ -53,7 +53,7 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
     assert(estimator.trainingSparkDataFormat == "sagemaker")
     assert(estimator.requestRowSerializer.isInstanceOf[ProtobufRequestRowSerializer])
     assert(estimator.responseRowDeserializer.
-      isInstanceOf[FactorizationMachinesBinaryClassifierProtobufResponseRowDeserializer])
+      isInstanceOf[FactorizationMachinesBinaryClassifierDeserializer])
   }
 
   it should "use the correct images in all regions for binary classifier" in {
@@ -83,7 +83,7 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
     assert(estimator.trainingSparkDataFormat == "sagemaker")
     assert(estimator.requestRowSerializer.isInstanceOf[ProtobufRequestRowSerializer])
     assert(estimator.responseRowDeserializer.
-      isInstanceOf[FactorizationMachinesRegressorProtobufResponseRowDeserializer])
+      isInstanceOf[FactorizationMachinesRegressorDeserializer])
   }
 
   it should "use the correct images in all regions for regressor" in {
@@ -353,7 +353,7 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
 
   it should "validate setFactorsWd" in {
     val estimator = createFactorizationMachinesRegressor()
-    val factorsWd = 0e1
+    val factorsWd = -1e8
     val caught = intercept[IllegalArgumentException] {
       estimator.setFactorsWd(factorsWd)
     }
@@ -377,7 +377,7 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
 
   it should "validate setBiasInitSigma" in {
     val estimator = createFactorizationMachinesRegressor()
-    val biasInitSigma = 0
+    val biasInitSigma = -0.0001
     val caught = intercept[IllegalArgumentException] {
       estimator.setBiasInitSigma(biasInitSigma)
     }
@@ -401,7 +401,7 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
 
   it should "validate setLinearInitSigma" in {
     val estimator = createFactorizationMachinesRegressor()
-    val linearInitSigma = 0
+    val linearInitSigma = -1
     val caught = intercept[IllegalArgumentException] {
       estimator.setLinearInitSigma(linearInitSigma)
     }
