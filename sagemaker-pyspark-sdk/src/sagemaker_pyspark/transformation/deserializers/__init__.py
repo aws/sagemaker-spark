@@ -17,6 +17,8 @@ from .deserializers import (
     KMeansProtobufResponseRowDeserializer, PCAProtobufResponseRowDeserializer,
     LinearLearnerRegressorProtobufResponseRowDeserializer,
     LinearLearnerBinaryClassifierProtobufResponseRowDeserializer,
+    FactorizationMachinesBinaryClassifierDeserializer,
+    FactorizationMachinesRegressorDeserializer,
     LibSVMResponseRowDeserializer)
 
 __all__ = ['ResponseRowDeserializer',
@@ -26,4 +28,6 @@ __all__ = ['ResponseRowDeserializer',
            'KMeansProtobufResponseRowDeserializer',
            'LinearLearnerBinaryClassifierProtobufResponseRowDeserializer',
            'LinearLearnerRegressorProtobufResponseRowDeserializer',
+           'FactorizationMachinesBinaryClassifierDeserializer',
+           'FactorizationMachinesRegressorDeserializer',
            'LibSVMResponseRowDeserializer']
