@@ -126,4 +126,3 @@ def test_factorizationMachinesRegressor_passes_correct_params_to_scala():
     assert estimator.trainingInstanceVolumeSizeInGB == 2048
     assert estimator.trainingMaxRuntimeInSeconds == 1
     assert estimator.trainingKmsKeyId is None
-

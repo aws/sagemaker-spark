@@ -46,7 +46,8 @@ class FactorizationMachinesParams(Params):
                    typeConverter=TypeConverters.toInt)
 
     clip_gradient = Param(Params._dummy(), "clip_gradient",
-                          "Clip the gradient by projecting onto the box [-clip_gradient, +clip_gradient]. ",
+                          "Clip the gradient by projecting onto"
+                          "the box [-clip_gradient, +clip_gradient]. ",
                           typeConverter=TypeConverters.toFloat)
 
     eps = Param(Params._dummy(), "eps",
@@ -82,7 +83,8 @@ class FactorizationMachinesParams(Params):
                        typeConverter=TypeConverters.toFloat)
 
     bias_init_method = Param(Params._dummy(), "bias_init_method",
-                             "Initialization method for the bias supports 'normal', 'uniform' and 'constant'. ",
+                             "Initialization method for the bias supports"
+                             " 'normal', 'uniform' and 'constant'. ",
                              typeConverter=TypeConverters.toString)
 
     bias_init_scale = Param(Params._dummy(), "bias_init_scale",
@@ -90,7 +92,7 @@ class FactorizationMachinesParams(Params):
                             typeConverter=TypeConverters.toFloat)
 
     bias_init_sigma = Param(Params._dummy(), "bias_init_sigma",
-                            "Standard deviation for initialization of the bias terms. Must be >= 0. ",
+                            "Standard deviation to initialize bias terms. Must be >= 0. ",
                             typeConverter=TypeConverters.toFloat)
 
     bias_init_value = Param(Params._dummy(), "bias_init_value",
@@ -98,7 +100,8 @@ class FactorizationMachinesParams(Params):
                             typeConverter=TypeConverters.toFloat)
 
     linear_init_method = Param(Params._dummy(), "linear_init_method",
-                               "Initialization method for linear term, supports: 'normal', 'uniform' and 'constant'. ",
+                               "Initialization method for linear term,"
+                               " supports: 'normal', 'uniform' and 'constant'. ",
                                typeConverter=TypeConverters.toString)
 
     linear_init_scale = Param(Params._dummy(), "linear_init_scale",
@@ -106,7 +109,7 @@ class FactorizationMachinesParams(Params):
                               typeConverter=TypeConverters.toFloat)
 
     linear_init_sigma = Param(Params._dummy(), "linear_init_sigma",
-                              "Standard deviation for initialization of linear terms. Must be >= 0. ",
+                              "Standard deviation to initialize linear terms. Must be >= 0. ",
                               typeConverter=TypeConverters.toFloat)
 
     linear_init_value = Param(Params._dummy(), "linear_init_value",
@@ -114,15 +117,18 @@ class FactorizationMachinesParams(Params):
                               typeConverter=TypeConverters.toFloat)
 
     factors_init_method = Param(Params._dummy(), "factors_init_method",
-                                "Init method for factorization terms, supports: 'normal', 'uniform' and 'constant'. ",
+                                "Init method for factorization terms,"
+                                " supports: 'normal', 'uniform' and 'constant'. ",
                                 typeConverter=TypeConverters.toString)
 
     factors_init_scale = Param(Params._dummy(), "factors_init_scale",
-                               "Range for factorization terms uniform initialization. Must be >= 0. ",
+                               "Range for factorization terms uniform initialization."
+                               " Must be >= 0. ",
                                typeConverter=TypeConverters.toFloat)
 
     factors_init_sigma = Param(Params._dummy(), "factors_init_sigma",
-                               "Standard deviation for initialization of factorization terms. Must be >= 0. ",
+                               "Standard deviation to initialize factorization terms."
+                               " Must be >= 0. ",
                                typeConverter=TypeConverters.toFloat)
 
     factors_init_value = Param(Params._dummy(), "factors_init_value",
@@ -232,7 +238,8 @@ class FactorizationMachinesParams(Params):
 
     def setBiasInitMethod(self, value):
         if value not in ('uniform', 'normal', 'constant'):
-            raise ValueError("bias_init_method must be 'uniform', 'constant' or 'normal', got: %s" % value)
+            raise ValueError("bias_init_method must be 'uniform',"
+                             " 'constant' or 'normal', got: %s" % value)
         self._set(bias_init_method=value)
 
     def getBiasInitScale(self):
@@ -262,7 +269,8 @@ class FactorizationMachinesParams(Params):
 
     def setLinearInitMethod(self, value):
         if value not in ('uniform', 'normal', 'constant'):
-            raise ValueError("linear_init_method must be 'uniform', 'constant' or 'normal', got: %s" % value)
+            raise ValueError("linear_init_method must be 'uniform', "
+                             "'constant' or 'normal', got: %s" % value)
         self._set(linear_init_method=value)
 
     def getLinearInitScale(self):
@@ -292,7 +300,8 @@ class FactorizationMachinesParams(Params):
 
     def setFactorsInitMethod(self, value):
         if value not in ('uniform', 'normal', 'constant'):
-            raise ValueError("factors_init_method must be 'uniform', 'constant' or 'normal', got: %s" % value)
+            raise ValueError("factors_init_method must be 'uniform', "
+                             "'constant' or 'normal', got: %s" % value)
         self._set(factors_init_method=value)
 
     def getFactorsInitScale(self):
@@ -320,10 +329,11 @@ class FactorizationMachinesParams(Params):
 
 class FactorizationMachinesBinaryClassifier(SageMakerEstimatorBase, FactorizationMachinesParams):
     """
-    A :class:`~sagemaker_pyspark.SageMakerEstimator` that runs a Factorization Machines training job in
-    "binary classifier" mode in SageMaker and returns a :class:`~sagemaker_pyspark.SageMakerModel`
-    that can be used to transform a DataFrame using the hosted Factorization Machines model. The Factorization
-    Machines Binary Classifier is useful for classifying examples into one of two classes.
+    A :class:`~sagemaker_pyspark.SageMakerEstimator` that runs a Factorization Machines training
+    job in "binary classifier" mode in SageMaker and returns a
+    :class:`~sagemaker_pyspark.SageMakerModel` that can be used to transform a DataFrame using
+    the hosted Factorization Machines model. The Factorization Machines Binary Classifier is useful
+    for classifying examples into one of two classes.
 
     Amazon SageMaker Factorization Machines trains on RecordIO-encoded Amazon Record protobuf data.
     SageMaker pyspark writes a DataFrame to S3 by selecting a column of Vectors named "features"
@@ -331,8 +341,9 @@ class FactorizationMachinesBinaryClassifier(SageMakerEstimatorBase, Factorizatio
     dictionary with entries in trainingSparkDataFormatOptions with key "labelColumnName" or
     "featuresColumnName", with values corresponding to the desired label and features columns.
 
-    Inferences made against an Endpoint hosting a Factorization Machines Binary classifier model contain
-    a "score" field and a "predicted_label" field, both appended to the input DataFrame as Doubles.
+    Inferences made against an Endpoint hosting a Factorization Machines Binary classifier model
+    contain a "score" field and a "predicted_label" field, both appended to the
+    input DataFrame as Doubles.
 
     Args:
         sageMakerRole (IAMRole): The SageMaker TrainingJob and Hosting IAM Role. Used by
@@ -395,7 +406,8 @@ class FactorizationMachinesBinaryClassifier(SageMakerEstimatorBase, Factorizatio
             ML pipelines.
        """
     _wrapped_class = \
-        "com.amazonaws.services.sagemaker.sparksdk.algorithms.FactorizationMachinesBinaryClassifier"
+        "com.amazonaws.services.sagemaker.sparksdk.algorithms."\
+        "FactorizationMachinesBinaryClassifier"
 
     def __init__(
             self,
@@ -496,10 +508,11 @@ class FactorizationMachinesBinaryClassifier(SageMakerEstimatorBase, Factorizatio
 
 class FactorizationMachinesRegressor(SageMakerEstimatorBase, FactorizationMachinesParams):
     """
-    A :class:`~sagemaker_pyspark.SageMakerEstimator` that runs a Factorization Machines training job in
-    "regressor" mode in SageMaker and returns a  :class:`~sagemaker_pyspark.SageMakerModel` that
-    can be used to transform a DataFrame using the hosted Linear Learner model. The Factorization Machines
-    Regressor is useful for predicting a real-valued label from training examples.
+    A :class:`~sagemaker_pyspark.SageMakerEstimator` that runs a Factorization Machines training
+    job in "regressor" mode in SageMaker and returns a  :class:`~sagemaker_pyspark.SageMakerModel`
+    that can be used to transform a DataFrame using the hosted Linear Learner model.
+    The Factorization Machines Regressor is useful for predicting a real-valued label
+    from training examples.
 
     Amazon SageMaker Linear Learner trains on RecordIO-encoded Amazon Record protobuf data.
     SageMaker pyspark writes a DataFrame to S3 by selecting a column of Vectors named "features"
@@ -513,8 +526,8 @@ class FactorizationMachinesRegressor(SageMakerEstimatorBase, FactorizationMachin
     Record protobuf messages, by default selecting the column named "features" expected to contain
     a Vector of Doubles.
 
-    Inferences made against an Endpoint hosting a Factorization Machines Regressor model contain a "score"
-    field appended to the input DataFrame as a Double.
+    Inferences made against an Endpoint hosting a Factorization Machines Regressor model contain
+    a "score" field appended to the input DataFrame as a Double.
 
     Args:
         sageMakerRole (IAMRole): The SageMaker TrainingJob and Hosting IAM Role. Used by
@@ -576,7 +589,8 @@ class FactorizationMachinesRegressor(SageMakerEstimatorBase, FactorizationMachin
         uid (str): The unique identifier of this Estimator. Used to represent this stage in Spark
             ML pipelines.
            """
-    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.algorithms.FactorizationMachinesRegressor"
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.algorithms."\
+                     "FactorizationMachinesRegressor"
 
     def __init__(self,
                  trainingInstanceType,
