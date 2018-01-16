@@ -31,7 +31,7 @@ private[algorithms] object SageMakerImageURIProvider {
 }
 
 private[algorithms] object SagerMakerRegionAccountMaps {
-  // For KMeans, PCA, Linear Learner
+  // For KMeans, PCA, Linear Learner, FactorizationMachines
   val AlgorithmsAccountMap: Map[String, String] = Map(
     Regions.EU_WEST_1.getName -> "438346466558",
     Regions.US_EAST_1.getName -> "382416733822",
