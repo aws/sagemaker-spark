@@ -142,6 +142,7 @@ class Option(SageMakerJavaWrapper):
 
 
 class ScalaMap(SageMakerJavaWrapper):
+
     _wrapped_class = "scala.collection.immutable.HashMap"
 
     def __init__(self, dictionary):
@@ -164,6 +165,8 @@ class ScalaMap(SageMakerJavaWrapper):
 # wrap scala.collection.immutable.List
 class ScalaList(SageMakerJavaWrapper):
 
+    _wrapped_class = "scala.collection.immutable.List"
+
     def __init__(self, p_list):
         self.p_list = p_list
 
@@ -171,13 +174,11 @@ class ScalaList(SageMakerJavaWrapper):
         # Since py4j cannot deal with scala list directly
         # we convert to scala listmap as an intermediate step
         s_list = self._new_java_obj("scala.collection.immutable.ListMap")
-        key = 0
-        for elem in self.p_list:
+        key_list = range(len(self.p_list))
+        for elem, key in zip(self.p_list, key_list):
             tuple = self._new_java_obj("scala.Tuple2", key, elem)
             s_list = getattr(s_list, "$plus")(tuple)
-            key += 1
-        s_list = getattr(s_list, "values")()
-        s_list = getattr(s_list, "toList")()
+        s_list = s_list.values().toList()
 
         return s_list
 
