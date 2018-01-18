@@ -5,7 +5,7 @@ from pyspark import SparkConf, SparkContext
 
 from sagemaker_pyspark import (S3DataPath, EndpointCreationPolicy, RandomNamePolicyFactory,
                                SageMakerClients, IAMRole, classpath_jars)
-from sagemaker_pyspark.wrapper import ScalaMap, ScalaList
+from sagemaker_pyspark.wrapper import Option, ScalaMap, ScalaList
 
 
 @pytest.fixture(autouse=True)
@@ -31,8 +31,13 @@ def test_convert_dictionary():
 
 def test_convert_list():
     list = ["features", "label", "else"]
-
     s_list = ScalaList(list)._to_java()
     assert getattr(s_list, "apply")(0) == "features"
     assert getattr(s_list, "apply")(1) == "label"
     assert getattr(s_list, "apply")(2) == "else"
+
+
+def test_convert_option():
+    list = ["features", "label", "else"]
+    option = Option(list)._to_java()
+    assert getattr(getattr(option, "get")(), "apply")(0) == "features"
