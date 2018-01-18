@@ -174,8 +174,7 @@ class ScalaList(SageMakerJavaWrapper):
         # Since py4j cannot deal with scala list directly
         # we convert to scala listmap as an intermediate step
         s_list = self._new_java_obj("scala.collection.immutable.ListMap")
-        key_list = range(len(self.p_list))
-        for elem, key in zip(self.p_list, key_list):
+        for key, elem in enumerate(self.p_list):
             tuple = self._new_java_obj("scala.Tuple2", key, elem)
             s_list = getattr(s_list, "$plus")(tuple)
         s_list = s_list.values().toList()
