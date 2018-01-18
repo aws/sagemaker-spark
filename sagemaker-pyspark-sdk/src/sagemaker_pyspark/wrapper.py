@@ -33,6 +33,8 @@ class SageMakerJavaWrapper(JavaWrapper):
     def _py2j(self, arg):
         if isinstance(arg, dict):
             return ScalaMap(arg)._to_java()
+        elif isinstance(arg, list):
+            return ScalaList(arg)._to_java()
         elif isinstance(arg, StructType):
             return JavaWrapper._new_java_obj(
                 "org.apache.spark.sql.types.DataType.fromJson", json.dumps(arg.jsonValue())
@@ -154,6 +156,30 @@ class ScalaMap(SageMakerJavaWrapper):
             map = getattr(map, "$plus")(tuple)
 
         return map
+
+    def _from_java(self):
+        raise NotImplementedError()
+
+
+# wrap scala.collection.immutable.List
+class ScalaList(SageMakerJavaWrapper):
+
+    def __init__(self, p_list):
+        self.p_list = p_list
+
+    def _to_java(self):
+        # Since py4j cannot deal with scala list directly
+        # we convert to scala listmap as an intermediate step
+        s_list = self._new_java_obj("scala.collection.immutable.ListMap")
+        key = 0
+        for elem in self.p_list:
+            tuple = self._new_java_obj("scala.Tuple2", key, elem)
+            s_list = getattr(s_list, "$plus")(tuple)
+            key += 1
+        s_list = getattr(s_list, "values")()
+        s_list = getattr(s_list, "toList")()
+
+        return s_list
 
     def _from_java(self):
         raise NotImplementedError()
