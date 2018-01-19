@@ -228,3 +228,65 @@ class XGBoostCSVRowDeserializer(ResponseRowDeserializer):
     @classmethod
     def _from_java(cls, JavaObject):
         raise NotImplementedError()
+
+
+class FactorizationMachinesBinaryClassifierDeserializer(ResponseRowDeserializer):
+    """
+    Deserializes a Protobuf response from the Factorization Machines model image with predictorType
+    "binary_classifier" into Rows in a Spark Dataframe.
+
+    Args:
+        score_column_name (str): name of the column indicating the output score for
+            the record.
+        predicted_label_column_name(str): name of the column indicating the predicted
+            label for the record.
+    """
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.transformation." \
+                     "deserializers.FactorizationMachinesBinaryClassifierDeserializer"
+
+    def __init__(self, score_column_name="score", predicted_label_column_name="predicted_label"):
+        self.score_column_name = score_column_name
+        self.predicted_label_column_name = predicted_label_column_name
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(
+                FactorizationMachinesBinaryClassifierDeserializer._wrapped_class,
+                self.score_column_name,
+                self.predicted_label_column_name)
+
+        return self._java_obj
+
+    @classmethod
+    def _from_java(cls, JavaObject):
+        raise NotImplementedError()
+
+
+class FactorizationMachinesRegressorDeserializer(ResponseRowDeserializer):
+    """
+    Deserializes a Protobuf response from the Factorization Machines model image with predictorType
+    "regressor" into Rows in a Spark DataFrame.
+
+    Args:
+        score_column_name (str): name of the column of Doubles indicating the output score for
+            the record.
+    """
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.transformation." \
+                     "deserializers.FactorizationMachinesRegressorDeserializer"
+
+    def __init__(self, score_column_name="score"):
+        self.score_column_name = score_column_name
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(
+                FactorizationMachinesRegressorDeserializer._wrapped_class,
+                self.score_column_name)
+
+        return self._java_obj
+
+    @classmethod
+    def _from_java(cls, JavaObject):
+        raise NotImplementedError()

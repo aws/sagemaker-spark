@@ -13,11 +13,16 @@
 
 from .KMeansSageMakerEstimator import KMeansSageMakerEstimator
 from .LinearLearnerSageMakerEstimator import LinearLearnerRegressor, LinearLearnerBinaryClassifier
+from .FactorizationMachinesSageMakerEstimator import (
+    FactorizationMachinesBinaryClassifier,
+    FactorizationMachinesRegressor)
 from .PCASageMakerEstimator import PCASageMakerEstimator
 from .XGBoostSageMakerEstimator import XGBoostSageMakerEstimator
 
 __all__ = ['KMeansSageMakerEstimator',
            'LinearLearnerRegressor',
            'LinearLearnerBinaryClassifier',
+           'FactorizationMachinesBinaryClassifier',
+           'FactorizationMachinesRegressor',
            'PCASageMakerEstimator',
            'XGBoostSageMakerEstimator']
