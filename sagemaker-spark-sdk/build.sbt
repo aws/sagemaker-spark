@@ -42,8 +42,7 @@ exportJars := true
 lazy val printClasspath = taskKey[Unit]("Dump classpath")
 printClasspath := (fullClasspath in Runtime value) foreach { e => println(e.data) }
 
-// enable coverage and allow it to fail the build
-coverageEnabled := true
+// set coverage threshold
 coverageMinimum := 90
 coverageFailOnMinimum := true
 
