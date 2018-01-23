@@ -21,4 +21,4 @@ matrix:
       before_script:
         - cd sagemaker-spark-sdk
       script:
-        - sbt test
+        - sbt clean coverage test coverageReport

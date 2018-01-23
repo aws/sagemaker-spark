@@ -46,12 +46,11 @@ Then, to load the sagemaker jars programatically:
 
 .. code-block:: python
 
-    from pyspark import SparkContext, SparkConf
     import sagemaker_pyspark
+    from pyspark.sql import SparkSession
 
-    conf = (SparkConf()
-            .set("spark.driver.extraClassPath", ":".join(sagemaker_pyspark.classpath_jars())))
-    SparkContext(conf=conf)
+    classpath = ":".join(sagemaker_pyspark.classpath_jars())
+    spark = SparkSession.builder.config("spark.driver.extraClassPath", classpath).getOrCreate()
 
 
 Alternatively pass the jars to your pyspark job via the --jars flag:
@@ -155,12 +154,12 @@ initialize a spark context the same way it is described in the QuickStart sectio
 
 .. code-block:: python
 
-    from pyspark import SparkContext, SparkConf
     import sagemaker_pyspark
+    from pyspark.sql import SparkSession
 
-    conf = (SparkConf()
-            .set("spark.driver.extraClassPath", ":".join(sagemaker_pyspark.classpath_jars())))
-    SparkContext(conf=conf)
+    classpath = ":".join(sagemaker_pyspark.classpath_jars())
+    spark = SparkSession.builder.config("spark.driver.extraClassPath", classpath).getOrCreate()
+
 
 Connecting to an EMR Spark Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -255,7 +254,7 @@ Override the default spark magic config
 
 
 Launch a notebook using either the ``pyspark2`` or ``pyspark3`` Kernel. As soon as you try to run
-any code block, the notebook will connect to your spark cluster and get a ``SparkContext`` for you.
+any code block, the notebook will connect to your spark cluster and get a ``SparkSession`` for you.
 
 
 Development
