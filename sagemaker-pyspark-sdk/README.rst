@@ -27,6 +27,14 @@ sagemaker_pyspark works with python 2.7 and python 3.x. To install it use ``pip`
 
     $ pip install sagemaker_pyspark
 
+You can also install sagemaker_pyspark from source:
+
+.. code-block:: sh
+
+    $ git clone git@github.com:aws/sagemaker-spark.git
+    $ cd sagemaker-pyspark-sdk
+    $ python setup.py install
+
 Next, set up credentials (in e.g. ``~/.aws/credentials``):
 
 .. code-block:: ini
