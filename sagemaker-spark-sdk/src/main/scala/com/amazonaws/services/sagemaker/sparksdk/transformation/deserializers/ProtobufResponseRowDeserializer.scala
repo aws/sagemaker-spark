@@ -192,3 +192,16 @@ class FactorizationMachinesRegressorDeserializer
   extends ProtobufResponseRowDeserializer(schema =
     StructType(Array(StructField(scoreColumnName, DoubleType))),
     protobufKeys = Some(Seq("score")))
+
+/**
+  * Deserializes a Protobuf response from the LDA model image to a Vector of Doubles containing
+  *   the projection of the input vector.
+  *
+  * @param topicMixtureColumnName name of the column holding Vectors of Doubles representing the
+  *   projected vectors
+  */
+class LDAProtobufResponseRowDeserializer
+(val topicMixtureColumnName : String = "topic_mixture")
+  extends ProtobufResponseRowDeserializer(schema =
+    StructType(Array(StructField(topicMixtureColumnName, VectorType))),
+    protobufKeys = Some(Seq("topic_mixture")))
