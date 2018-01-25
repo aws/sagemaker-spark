@@ -51,13 +51,13 @@ Alternatively pass the jars to your pyspark job via the --jars flag:
 
 .. code-block:: sh
 
-    $ spark-submit --jars `bin/sagemakerpyspark-jars`
+    $ spark-submit --jars `sagemakerpyspark-jars`
 
 If you want to play around in interactive mode, the pyspark shell can be used too:
 
 .. code-block:: sh
 
-    $ pyspark --jars `bin/sagemakerpyspark-jars`
+    $ pyspark --jars `sagemakerpyspark-jars`
 
 You can also use the --packages flag and pass in the Maven coordinates for SageMaker Spark:
 
