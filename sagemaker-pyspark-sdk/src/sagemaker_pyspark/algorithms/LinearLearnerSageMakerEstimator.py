@@ -516,13 +516,6 @@ class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams)
                              "recall_at_target_precision. Must be in range [0, 1]. ",
                              typeConverter=TypeConverters.toFloat)
 
-    positive_example_weight_mult = Param(Params._dummy(), "positive_example_weight_mult",
-                                         "Parameter specific to classification tasks. "
-                                         "The importance weight of positive examples is "
-                                         "multiplied by this constant. Useful for skewed datasets. "
-                                         "Must be > 0. ",
-                                         typeConverter=TypeConverters.toFloat)
-
     def __init__(
             self,
             trainingInstanceType,
