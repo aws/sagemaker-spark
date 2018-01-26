@@ -27,6 +27,14 @@ sagemaker_pyspark works with python 2.7 and python 3.x. To install it use ``pip`
 
     $ pip install sagemaker_pyspark
 
+You can also install sagemaker_pyspark from source:
+
+.. code-block:: sh
+
+    $ git clone git@github.com:aws/sagemaker-spark.git
+    $ cd sagemaker-pyspark-sdk
+    $ python setup.py install
+
 Next, set up credentials (in e.g. ``~/.aws/credentials``):
 
 .. code-block:: ini
@@ -70,6 +78,18 @@ You can also use the --packages flag and pass in the Maven coordinates for SageM
 .. code-block:: sh
 
     $ pyspark --packages com.amazonaws:sagemaker-spark_2.11:spark_2.1.1-1.0
+
+
+S3 File System Schemes
+~~~~~~~~~~~~~~~~~~~~~~
+
+In PySpark, we recommend using "s3://" to access the EMR file system(EMRFS) in EMR and "s3a://" to access S3A file system
+in other environments. Examples:
+
+.. code-block:: python
+
+    data_s3 = spark.read.format("libsvm").load("s3://some-bucket/some-prefix")
+    data_s3a = spark.read.format("libsvm").load("s3a://some-bucket/some-prefix")
 
 
 Training and Hosting a K-Means Clustering model using SageMaker PySpark
