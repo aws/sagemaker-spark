@@ -204,4 +204,12 @@ class ProtobufResponseRowDeserializerTests extends FlatSpec with Matchers with M
     assert(schemaFieldNames(1) == protobufKeys(1))
   }
 
+  it should "create a LDA deserializer with the correct schema and fields" in {
+    val ldaDeserializer = new LDAProtobufResponseRowDeserializer()
+    val schemaFieldNames = ldaDeserializer.schema.fieldNames
+    assert(schemaFieldNames.contains("topic_mixture"))
+    val protobufKeys = ldaDeserializer.protobufKeys.get
+    assert(protobufKeys.contains("topic_mixture"))
+    assert(schemaFieldNames(0) == protobufKeys(0))
+  }
 }

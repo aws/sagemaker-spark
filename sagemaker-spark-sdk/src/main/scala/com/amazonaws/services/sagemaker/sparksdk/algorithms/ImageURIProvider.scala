@@ -39,6 +39,14 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.US_WEST_2.getName -> "174872318107"
   )
 
+  // For LDA
+  val LDAAccountMap: Map[String, String] = Map(
+    Regions.EU_WEST_1.getName -> "999678624901",
+    Regions.US_EAST_1.getName -> "766337827248",
+    Regions.US_EAST_2.getName -> "999911452149",
+    Regions.US_WEST_2.getName -> "266724342769"
+  )
+
   // For XGBoost
   val ApplicationsAccountMap: Map[String, String] = Map(
     Regions.EU_WEST_1.getName -> "685385470294",
