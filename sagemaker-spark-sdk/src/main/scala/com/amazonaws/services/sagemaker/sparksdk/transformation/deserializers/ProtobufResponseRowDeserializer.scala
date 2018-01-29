@@ -194,11 +194,11 @@ class FactorizationMachinesRegressorDeserializer
     protobufKeys = Some(Seq("score")))
 
 /**
-  * Deserializes a Protobuf response from the LDA model image to a Vector of Doubles containing
-  *   the projection of the input vector.
+  * Deserializes a Protobuf response from the LDA model image to a Vector of Doubles
+  *   representing the topic mixture for the document represented by the input vector.
   *
   * @param topicMixtureColumnName name of the column holding Vectors of Doubles representing the
-  *   projected vectors
+  *   topic mixtures for the documents
   */
 class LDAProtobufResponseRowDeserializer
 (val topicMixtureColumnName : String = "topic_mixture")
