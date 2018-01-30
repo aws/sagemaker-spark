@@ -2,6 +2,21 @@
 CHANGELOG
 =========
 
+1.0.2
+=====
+
+* feature: Estimators: Add wrapper class for LDA algorithm
+* feature: Setup: Add module pytest-xdist to enable parallel testing
+* feature: Documentation: Change jar path in index.rst
+* feature: Documentation: Add instructions for s3 and s3a in README
+* feature: Estimators: Remove unimplemented hyper-parameter in linear learner
+* feature: Tests: Remove tests in py3.5 to speed up testing
+* feature: Documentation: Add instructions for building pyspark from source in readme
+* feature: Wrapper: Enable conversion from python list to scala.collection.immutable.List
+* feature: Setup: add coverage to the scala build
+* feature: Documentation: use SparkSession, not SparkContext in PySpark README
+
+
 1.0.1
 =====
 
