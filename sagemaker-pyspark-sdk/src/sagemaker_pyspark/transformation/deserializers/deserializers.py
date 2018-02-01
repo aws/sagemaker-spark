@@ -113,6 +113,35 @@ class PCAProtobufResponseRowDeserializer(ResponseRowDeserializer):
         raise NotImplementedError()
 
 
+class LDAProtobufResponseRowDeserializer(ResponseRowDeserializer):
+    """
+    Deserializes a Protobuf response from the LDA model image to a Vector of Doubles
+    representing the topic mixture for the document represented by the input vector.
+
+    Args:
+        projection_column_name (str): name of the column holding Vectors of Doubles representing the
+            topic mixtures for the documents.
+    """
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.transformation." \
+                     "deserializers.LDAProtobufResponseRowDeserializer"
+
+    def __init__(self, projection_column_name="topic_mixture"):
+        self.projection_column_name = projection_column_name
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(
+                LDAProtobufResponseRowDeserializer._wrapped_class,
+                self.projection_column_name)
+
+        return self._java_obj
+
+    @classmethod
+    def _from_java(cls, JavaObject):
+        raise NotImplementedError()
+
+
 class LinearLearnerBinaryClassifierProtobufResponseRowDeserializer(ResponseRowDeserializer):
     """
     Deserializes a Protobuf response from the LinearLearner model image with predictorType
