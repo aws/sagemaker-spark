@@ -186,7 +186,7 @@ Connecting to an EMR Spark Cluster
 
 Note: Make sure your SageMaker Notebook instance can talk to your EMR Cluster. This means:
 
-- They are in the same VPC or different `peered VPCs <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-peering.html>`__.
+- They are in the same VPC.
 - The EMR Cluster Security group allows TCP port 8998 on the SageMaker Notebook Security group to ingress.
 
 Installing sagemaker_pyspark in a Spark EMR Cluster
@@ -364,4 +364,3 @@ Run the tests by running:
 .. code-block:: sh
 
     $ tox
-
