@@ -105,7 +105,7 @@ class XGBoostSageMakerEstimatorTests extends FlatSpec with Matchers with Mockito
 
 
   it should "setMaxDepth" in {
-    val maxDepth = 10.0
+    val maxDepth = 10
     estimator.setMaxDepth(maxDepth)
     assert(maxDepth == estimator.getMaxDepth)
   }
@@ -354,7 +354,7 @@ class XGBoostSageMakerEstimatorTests extends FlatSpec with Matchers with Mockito
       "nthread" -> "2",
       "eta" -> "0.3",
       "gamma" -> "0.1",
-      "max_depth" -> "8.0",
+      "max_depth" -> "8",
       "min_child_weight" -> "0.8",
       "max_delta_step" -> "0.8",
       "subsample" -> "0.8",
@@ -418,7 +418,7 @@ class XGBoostSageMakerEstimatorTests extends FlatSpec with Matchers with Mockito
 
   it should "validate maxDepth" in {
     val maxDepth = intercept[IllegalArgumentException] {
-      estimator.setMaxDepth(-1.0)
+      estimator.setMaxDepth(-1)
     }
   }
 
