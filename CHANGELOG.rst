@@ -2,6 +2,12 @@
 CHANGELOG
 =========
 
+1.0.3
+=====
+
+* feature: XGBoostSageMakerEstimator: Fix maxDepth hyperparameter to use correct type (Int)
+
+
 1.0.2
 =====
 
