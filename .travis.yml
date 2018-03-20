@@ -7,10 +7,12 @@ env:
 - AWS_REGION=us-west-2
 before_script:
 - source ./travis_build.sh
-- pip install tox-travis
+- pip install tox-travis codecov
 - cd sagemaker-pyspark-sdk
 script:
 - tox
+after_success:
+- codecov
 
 matrix:
   include:
@@ -22,3 +24,5 @@ matrix:
         - cd sagemaker-spark-sdk
       script:
         - sbt clean coverage test coverageReport
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)

@@ -1,6 +1,7 @@
 # <img alt="SageMaker" src="branding/icon/sagemaker-banner.png" height="100">
 
 # SageMaker Spark
+[![codecov](https://codecov.io/gh/aws/sagemaker-spark/branch/master/graph/badge.svg)](https://codecov.io/gh/aws/sagemaker-spark)
 
 SageMaker Spark is an open source Spark library for [Amazon SageMaker](https://aws.amazon.com/sagemaker/). With SageMaker Spark you construct Spark ML `Pipeline`s using Amazon SageMaker stages. These pipelines interleave native Spark ML stages and stages that interact with SageMaker training and model hosting.
 
