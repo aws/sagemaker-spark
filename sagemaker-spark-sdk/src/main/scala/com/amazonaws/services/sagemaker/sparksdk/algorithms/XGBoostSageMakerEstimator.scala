@@ -91,12 +91,12 @@ private[algorithms] trait XGBoostParams extends Params {
     * Must be >= 0.
     * Default = 6
     */
-  val maxDepth: DoubleParam = new DoubleParam(this, "max_depth",
+  val maxDepth: IntParam = new IntParam(this, "max_depth",
     " Maximum depth of a tree, increase this value will make the model more complex (likely to be" +
       " overfitting). 0 indicates no limit, limit is required when grow_policy=depth-wise. " +
       "Must be >= 0. ",
     ParamValidators.gtEq(0))
-  def getMaxDepth: Double = $(maxDepth)
+  def getMaxDepth: Int = $(maxDepth)
 
   /** Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results
     * in a leaf node with the sum of instance weight less than min_child_weight, then the building
@@ -558,7 +558,7 @@ class XGBoostSageMakerEstimator(
 
   def setGamma(value: Double) : this.type = set(gamma, value)
 
-  def setMaxDepth(value: Double) : this.type = set(maxDepth, value)
+  def setMaxDepth(value: Int) : this.type = set(maxDepth, value)
 
   def setMinChildWeight(value: Double) : this.type = set(minChildWeight, value)
 
