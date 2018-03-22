@@ -157,7 +157,7 @@ parameter.
 You can view the `PySpark API Documentation for SageMaker Spark here <http://sagemaker-pyspark.readthedocs.io/en/latest/>`_
 
 
-Training and Hosting an XGBoost Classificaiton model using SageMaker PySpark
+Training and Hosting an XGBoost model using SageMaker PySpark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A XGBoostSageMakerEstimator runs a training job using the Amazon SageMaker XGBoost algorithm upon
