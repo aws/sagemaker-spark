@@ -191,9 +191,9 @@ invocation of fit(), returning a SageMakerModel.
         endpointInitialInstanceCount=1,
         sagemakerRole=IAMRole(iam_role))
 
+    xgboost_estimator.setObjective('multi:softmax')
     xgboost_estimator.setNumRound(25)
     xgboost_estimator.setNumClasses(10)
-    xgboost_estimator.setObjective('multi:softmax')
 
     xgboost_model = xgboost_estimator.fit(training_data)
 
