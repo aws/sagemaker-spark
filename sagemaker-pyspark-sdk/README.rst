@@ -202,8 +202,7 @@ invocation of fit(), returning a SageMakerModel.
 
 The SageMakerEstimator expects an input DataFrame with a column named "features" that holds a
 Spark ML  Vector. The estimator also serializes a "label" column of Doubles if present. Other
-columns are ignored. The dimension of this input vector should be equal to the feature dimension
-given as a hyperparameter.
+columns are ignored.
 
 The Amazon SageMaker XGBoost algorithm accepts many parameters. Objective (the learning objective of your model, in this case multi-class classification) and NumRounds (the number of rounds to perform tree boosting on) are required. For multi-class classification NumClasses (the number of classes to classify the data into) is required as well.
 
@@ -214,10 +213,8 @@ You can set other hyperparameters, for details on them, run:
     xgboost_estimator.explainParams()
 
 After training is complete, an Amazon SageMaker Endpoint is created to host the model and serve
-predictions. Upon invocation of transform(), the SageMakerModel predicts against their hosted
-model. Like the SageMakerEstimator, the SageMakerModel expects an input DataFrame with a column
-named "features" that holds a Spark ML Vector equal in dimension to the value of the FeatureDim
-parameter.
+predictions. Upon invocation of transform(), the SageMakerModel predicts against the hosted
+model.
 
 You can view the `PySpark API Documentation for SageMaker Spark here <http://sagemaker-pyspark.readthedocs.io/en/latest/>`_
 
