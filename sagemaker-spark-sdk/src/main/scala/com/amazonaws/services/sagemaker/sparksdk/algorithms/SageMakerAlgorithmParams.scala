@@ -59,9 +59,7 @@ private[algorithms] trait SageMakerAlgorithmParams extends Params {
                                              lowerBound: Double): String => Boolean = {
     (value: String) =>
       try {
-        validValues.contains(value) || {
-          value.toDouble > lowerBound
-        }
+        validValues.contains(value) || value.toDouble > lowerBound
       } catch {
         case e: NumberFormatException => false
       }
