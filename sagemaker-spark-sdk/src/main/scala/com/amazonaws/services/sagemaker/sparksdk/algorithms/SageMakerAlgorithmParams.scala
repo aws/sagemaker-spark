@@ -55,17 +55,12 @@ private[algorithms] trait SageMakerAlgorithmParams extends Params {
       }
   }
 
-  protected def inArrayOrAboveParamValidator(validValues: Array[String], lowerBound: Double,
-                                          inclusive: Boolean): String => Boolean = {
+  protected def inArrayOrAboveParamValidator(validValues: Array[String],
+                                             lowerBound: Double): String => Boolean = {
     (value: String) =>
       try {
         validValues.contains(value) || {
-          if (inclusive) {
-            value.toDouble >= lowerBound
-          }
-          else {
-            value.toDouble > lowerBound
-          }
+          value.toDouble > lowerBound
         }
       } catch {
         case e: NumberFormatException => false

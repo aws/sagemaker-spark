@@ -95,7 +95,7 @@ private[algorithms] trait BinaryClassifierParams extends LinearLearnerParams {
       "errors in classifying negative vs. positive examples have equal impact on the training" +
       "loss. If auto, the algorithm will attempt to select the weight that optimizes" +
       "performance. Must be string 'auto', 'balanced' or float > 0",
-    inArrayOrAboveParamValidator(Array("auto", "balanced"), 0, false))
+    inArrayOrAboveParamValidator(Array("auto", "balanced"), 0))
   def getPositiveExampleWeightMult: String = $(positiveExampleWeightMult)
 }
 

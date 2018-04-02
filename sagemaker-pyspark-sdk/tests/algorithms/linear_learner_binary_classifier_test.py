@@ -612,7 +612,7 @@ def test_linearLearnerBinaryClassifier_early_stopping_tolerance():
 
     estimator.setEarlyStoppingTolerance(1.0)
     estimator._transfer_params_to_java()
-    assert estimator.getEarlyStoppingTolerance() ==\
+    assert estimator.getEarlyStoppingTolerance() == \
         estimator._call_java("getEarlyStoppingTolerance")
 
 
