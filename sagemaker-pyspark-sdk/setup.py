@@ -7,7 +7,7 @@ import sys
 from setuptools import setup
 
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 
 TEMP_PATH = "deps"
 JARS_TARGET = os.path.join(TEMP_PATH, "jars")
