@@ -80,6 +80,23 @@ private[algorithms] trait BinaryClassifierParams extends LinearLearnerParams {
       "Ignored otherwise. Must be in range (0, 1).",
     ParamValidators.inRange(0.0, 1.0, false, false))
   def getTargetPrecision: Double = $(targetPrecision)
+
+  /**
+    * Weight assigned to positive examples when training a binary classifier. The weight of
+    * negative examples is fixed at 1. If balanced, then a weight will be selected so that errors
+    * in classifying negative vs. positive examples have equal impact on the training loss.
+    * If auto, the algorithm will attempt to select the weight that optimizes performance.
+    * Must be string "auto", "balanced" or float > 0
+    * Default: 1.0.
+    */
+  val positiveExampleWeightMult : Param[String] = new Param(this, "positive_example_weight_mult",
+    "Weight assigned to positive examples when training a binary classifier. The weight of" +
+      "negative examples is fixed at 1. If balanced, then a weight will be selected so that" +
+      "errors in classifying negative vs. positive examples have equal impact on the training" +
+      "loss. If auto, the algorithm will attempt to select the weight that optimizes" +
+      "performance. Must be string 'auto', 'balanced' or float > 0",
+    inArrayOrAboveParamValidator(Array("auto", "balanced"), 0))
+  def getPositiveExampleWeightMult: String = $(positiveExampleWeightMult)
 }
 
 
@@ -186,8 +203,12 @@ private[algorithms] trait LinearLearnerParams extends SageMakerAlgorithmParams {
     * Default: "auto".
     */
   val loss : Param[String] = new Param(this, "loss", "The loss function to apply. " +
-    "Supported options: 'logistic', 'squared_loss' and 'auto'.",
-    ParamValidators.inArray(Array("logistic", "squared_loss", "auto")))
+    "Supported options: 'logistic', 'squared_loss', 'absolute_loss', 'hinge_loss'," +
+    "'eps_insensitive_squared_loss', 'eps_insensitive_absolute_loss', 'quantile_loss'," +
+    "'huber_loss' and 'auto'.",
+    ParamValidators.inArray(Array("logistic", "squared_loss", "absolute_loss", "hinge_loss",
+      "eps_insensitive_squared_loss", "eps_insensitive_absolute_loss", "quantile_loss",
+      "huber_loss", "auto")))
   def getLoss: String = $(loss)
 
   /**
@@ -362,6 +383,76 @@ private[algorithms] trait LinearLearnerParams extends SageMakerAlgorithmParams {
     "Number of data points to use for calcuating the normalizing / unbiasing terms. " +
       "Must be > 0.", ParamValidators.gt(0))
   def getNumPointForScaler: Int = $(numPointForScaler)
+
+  /**
+    * The number of epochs to wait before ending training if no improvement is made in the relevant
+    * metric. The metric is the binary_classifier_model_selection_criteria if provided, otherwise
+    * the metric is the same as loss. The metric is evaluated on the validation data. If no
+    * validation data is provided, the metric is always the same as loss and is evaluated on the
+    * training data. To disable early stopping, set early_stopping_patience to a value larger than
+    * epochs. Must be > 0.
+    * Default: 3.
+    */
+  val earlyStoppingPatience : IntParam = new IntParam(this, "early_stopping_patience",
+    "The number of epochs to wait before ending training if no improvement is made in the" +
+      "relevant metric. The metric is the binary_classifier_model_selection_criteria if" +
+      "provided,otherwise the metric is the same as loss. The metric is evaluated on the" +
+      "validation data. If no validation data is provided, the metric is always the same as loss" +
+      "and is evaluated on the training data. To disable early stopping, set" +
+      "early_stopping_patience to a value larger than epochs. Must be > 0.", ParamValidators.gt(0))
+  def getEarlyStoppingPatience: Int = $(earlyStoppingPatience)
+
+  /**
+    * Relative tolerance to measure an improvement in loss. If the ratio of the improvement in loss
+    * divided by the previous best loss is smaller than this value, early stopping will consider
+    * the improvement to be zero. Must be > 0.
+    * Default: 0.001.
+    */
+  val earlyStoppingTolerance : DoubleParam = new DoubleParam(this, "early_stopping_tolerance",
+    "Relative tolerance to measure an improvement in loss. If the ratio of the improvement in" +
+      "loss divided by the previous best loss is smaller than this value, early stopping will" +
+      "consider the improvement to be zero. Must be > 0.", ParamValidators.gt(0))
+  def getEarlyStoppingTolerance: Double = $(earlyStoppingTolerance)
+
+  /**
+    * Margin for hinge_loss. Must be > 0.
+    * Default: 1.0.
+    */
+  val margin : DoubleParam = new DoubleParam(this, "margin",
+    "Margin for hinge_loss. Must be > 0.", ParamValidators.gt(0))
+  def getMargin: Double = $(margin)
+
+  /**
+    * Quantile for quantile loss. For quantile q, the model will attempt to produce predictions
+    * such that true_label < prediction with probability q. Must be in (0, 1).
+    * Default: 0.5.
+    */
+  val quantile : DoubleParam = new DoubleParam(this, "quantile",
+    "Quantile for quantile loss. For quantile q, the model will attempt to produce predictions" +
+      "such that true_label < prediction with probability q. " +
+      "Must be in (0, 1).", ParamValidators.inRange(0, 1, false, false))
+  def getQuantile: Double = $(quantile)
+
+  /**
+    * Parameter for epsilon insensitive loss type. During training and metric evaluation,
+    * any error smaller than this is considered to be zero. Must be > 0.
+    * Default: 0.01.
+    */
+  val lossInsensitivity : DoubleParam = new DoubleParam(this, "loss_insensitivity",
+    "Parameter for epsilon insensitive loss type. During training and metric evaluation," +
+      "any error smaller than this is considered to be zero. Must be > 0.", ParamValidators.gt(0))
+  def getLossInsensitivity: Double = $(lossInsensitivity)
+
+  /**
+    * Parameter for Huber loss. During training and metric evaluation, compute L2 loss for errors
+    * smaller than delta and L1 loss for errors larger than delta. Must be > 0.
+    * Default: 1.0.
+    */
+  val huberDelta : DoubleParam = new DoubleParam(this, "huber_delta",
+    "Parameter for Huber loss. During training and metric evaluation, compute L2 loss for" +
+      "errors smaller than delta and L1 loss for errors larger than delta." +
+      "Must be > 0.", ParamValidators.gt(0))
+  def getHuberDelta: Double = $(huberDelta)
 }
 
 object LinearLearnerSageMakerEstimator {
@@ -519,6 +610,11 @@ class LinearLearnerBinaryClassifier(
   def setTargetRecall(value: Double): this.type = set(targetRecall, value)
 
   def setTargetPrecision(value: Double): this.type = set(targetPrecision, value)
+
+  def setPositiveExampleWeightMult(value: String): this.type = set(positiveExampleWeightMult, value)
+
+  def setPositiveExampleWeightMult(value: Double): this.type = set(positiveExampleWeightMult,
+                                                                   value.toString())
 }
 
 
@@ -902,6 +998,19 @@ private[algorithms] class LinearLearnerSageMakerEstimator(
   })
 
   def setNumPointForScaler(value: Int): this.type = set(numPointForScaler, value)
+
+  def setEarlyStoppingPatience(value: Int): this.type = set(earlyStoppingPatience, value)
+
+  def setEarlyStoppingTolerance(value: Double): this.type = set(earlyStoppingTolerance, value)
+
+  def setMargin(value: Double): this.type = set(margin, value)
+
+  def setQuantile(value: Double): this.type = set(quantile, value)
+
+  def setLossInsensitivity(value: Double): this.type = set(lossInsensitivity, value)
+
+  def setHuberDelta(value: Double): this.type = set(huberDelta, value)
+
 
   // Check whether required hyper-parameters are set
   override def transformSchema(schema: StructType): StructType = {

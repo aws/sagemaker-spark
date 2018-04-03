@@ -55,6 +55,16 @@ private[algorithms] trait SageMakerAlgorithmParams extends Params {
       }
   }
 
+  protected def inArrayOrAboveParamValidator(validValues: Array[String],
+                                             lowerBound: Double): String => Boolean = {
+    (value: String) =>
+      try {
+        validValues.contains(value) || value.toDouble > lowerBound
+      } catch {
+        case e: NumberFormatException => false
+      }
+  }
+
   protected def parseTrueAndFalse(param: Param[String]): Boolean = {
     $(param) match {
       case "True" => true

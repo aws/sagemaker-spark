@@ -2,6 +2,12 @@
 CHANGELOG
 =========
 
+1.0.dev4
+========
+
+* spark/pyspark feature: LinearLearnerEstimator: Add more hyper-parameters
+
+
 1.0.3
 =====
 
