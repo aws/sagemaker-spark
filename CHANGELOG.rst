@@ -2,6 +2,12 @@
 CHANGELOG
 =========
 
+1.0.dev5
+========
+
+* pyspark: SageMakerModel: Fix bugs in creating model from training job, s3 file and endpoint
+
+
 1.0.4
 =====
 
