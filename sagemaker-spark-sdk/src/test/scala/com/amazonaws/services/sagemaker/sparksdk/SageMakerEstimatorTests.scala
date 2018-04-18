@@ -108,6 +108,17 @@ class SageMakerEstimatorTests extends FlatSpec with Matchers with MockitoSugar w
     assert(estimator.makeHyperParameters() == collection.immutable.Map().asJava)
   }
 
+  it should "record the latest training job after calling fit()" in {
+    val estimator = new DummyEstimator()
+    assert (estimator.latestTrainingJob.isEmpty)
+
+    when(timeProviderMock.currentTimeMillis).thenReturn(0)
+    setupCreateTrainingJobResult()
+    setupDescribeTrainingJobResponses(TrainingJobStatus.Completed)
+    val model = estimator.fit(dataset)
+    assert (estimator.latestTrainingJob.nonEmpty)
+  }
+
   it should "select only the projected columns of the dataset to a given s3 location in fit()" in {
     val estimator = new DummyEstimator()
     when(timeProviderMock.currentTimeMillis).thenReturn(0)
