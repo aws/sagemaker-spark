@@ -193,7 +193,7 @@ class SageMakerModel(SageMakerJavaWrapper, JavaModel):
         if modelEnvironmentVariables is None:
             modelEnvironmentVariables = {}
 
-        return SageMakerJavaWrapper()._new_java_obj(
+        model_java_obj = SageMakerJavaWrapper()._new_java_obj(
             scala_function,
             trainingJobName,
             modelImage,
@@ -208,6 +208,13 @@ class SageMakerModel(SageMakerJavaWrapper, JavaModel):
             prependResultRows,
             namePolicy,
             uid)
+
+        return SageMakerModel(
+            endpointInstanceType=endpointInstanceType,
+            endpointInitialInstanceCount=endpointInitialInstanceCount,
+            requestRowSerializer=requestRowSerializer,
+            responseRowDeserializer=responseRowDeserializer,
+            javaObject=model_java_obj)
 
     @classmethod
     def fromEndpoint(cls,
@@ -255,7 +262,7 @@ class SageMakerModel(SageMakerJavaWrapper, JavaModel):
         if modelEnvironmentVariables is None:
             modelEnvironmentVariables = {}
 
-        return SageMakerJavaWrapper()._new_java_obj(
+        model_java_obj = SageMakerJavaWrapper()._new_java_obj(
             scala_function,
             endpointName,
             requestRowSerializer,
@@ -265,6 +272,13 @@ class SageMakerModel(SageMakerJavaWrapper, JavaModel):
             prependResultRows,
             namePolicy,
             uid)
+
+        return SageMakerModel(
+            endpointInstanceType=None,
+            endpointInitialInstanceCount=None,
+            requestRowSerializer=requestRowSerializer,
+            responseRowDeserializer=responseRowDeserializer,
+            javaObject=model_java_obj)
 
     @classmethod
     def fromModelS3Path(cls,
@@ -325,7 +339,7 @@ class SageMakerModel(SageMakerJavaWrapper, JavaModel):
         if modelEnvironmentVariables is None:
             modelEnvironmentVariables = {}
 
-        return SageMakerJavaWrapper()._new_java_obj(
+        model_java_obj = SageMakerJavaWrapper()._new_java_obj(
             scala_function,
             modelPath,
             modelImage,
@@ -340,6 +354,13 @@ class SageMakerModel(SageMakerJavaWrapper, JavaModel):
             prependResultRows,
             namePolicy,
             uid)
+
+        return SageMakerModel(
+            endpointInstanceType=endpointInstanceType,
+            endpointInitialInstanceCount=endpointInitialInstanceCount,
+            requestRowSerializer=requestRowSerializer,
+            responseRowDeserializer=responseRowDeserializer,
+            javaObject=model_java_obj)
 
     @property
     def endpointInstanceType(self):

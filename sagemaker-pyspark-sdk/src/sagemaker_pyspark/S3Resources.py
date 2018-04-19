@@ -60,15 +60,9 @@ class S3DataPath(S3Resource, SageMakerJavaWrapper):
     def __init__(self, bucket, objectPath):
         self.bucket = bucket
         self.objectPath = objectPath
-        self._java_obj = None
+        self._java_obj = self._new_java_obj(S3DataPath._wrapped_class, self.bucket, self.objectPath)
 
     def _to_java(self):
-        if self._java_obj is None:
-            self._java_obj = self._new_java_obj(
-                S3DataPath._wrapped_class,
-                self.bucket,
-                self.objectPath)
-
         return self._java_obj
 
     @classmethod
@@ -79,3 +73,6 @@ class S3DataPath(S3Resource, SageMakerJavaWrapper):
         object_path = _java2py(sc, JavaObject.objectPath())
 
         return S3DataPath(bucket, object_path)
+
+    def toS3UriString(self):
+        return self._call_java("toS3UriString")
