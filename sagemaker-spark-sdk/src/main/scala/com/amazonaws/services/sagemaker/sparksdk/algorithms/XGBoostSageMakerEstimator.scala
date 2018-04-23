@@ -379,8 +379,8 @@ private[algorithms] trait XGBoostParams extends Params {
   /** Random number seed.
     * Default = 0
     */
-  val seed: DoubleParam = new DoubleParam(this, "seed", "Random number seed.")
-  def getSeed: Double = $(seed)
+  val seed: IntParam = new IntParam(this, "seed", "Random number seed.")
+  def getSeed: Int = $(seed)
 
   /**
     * Number of rounds for gradient boosting. Must be >= 1. Required.
@@ -614,7 +614,7 @@ class XGBoostSageMakerEstimator(
 
   def setEvalMetric(value: String) : this.type = set(evalMetric, value)
 
-  def setSeed(value: Double) : this.type = set(seed, value)
+  def setSeed(value: Int) : this.type = set(seed, value)
 
   def setNumRound(value: Int) : this.type = set(numRound, value)
 

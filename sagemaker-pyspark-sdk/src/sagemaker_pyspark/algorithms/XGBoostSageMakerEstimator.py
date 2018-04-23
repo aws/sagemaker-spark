@@ -331,7 +331,7 @@ class XGBoostSageMakerEstimator(SageMakerEstimatorBase):
     seed = Param(
         Params._dummy(), "seed",
         "Random number seed",
-        typeConverter=TypeConverters.toFloat)
+        typeConverter=TypeConverters.toInt)
 
     num_round = Param(
         Params._dummy(), "num_round",

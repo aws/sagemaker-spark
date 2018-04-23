@@ -301,7 +301,7 @@ class XGBoostSageMakerEstimatorTests extends FlatSpec with Matchers with Mockito
 
 
   it should "setSeed" in {
-    val seed = 10.0
+    val seed = 10
     estimator.setSeed(seed)
     assert(seed == estimator.getSeed)
   }
@@ -381,7 +381,7 @@ class XGBoostSageMakerEstimatorTests extends FlatSpec with Matchers with Mockito
       "objective" -> "reg:logistic",
       "base_score" -> "0.5",
       "eval_metric" -> "mae",
-      "seed" -> "0.0"
+      "seed" -> "0"
     )
 
     assert(hyperParamMap.asJava == estimator.makeHyperParameters())

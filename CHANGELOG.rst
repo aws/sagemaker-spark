@@ -6,7 +6,7 @@ CHANGELOG
 ========
 
 * pyspark: SageMakerModel: Fix bugs in creating model from training job, s3 file and endpoint
-
+* spark/pyspark: XGBoostSageMakerEstimator: Fix seed hyperparameter to use correct type (Int)
 
 1.0.4
 =====
