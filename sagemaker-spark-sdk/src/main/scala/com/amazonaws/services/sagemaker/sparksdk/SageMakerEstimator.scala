@@ -216,6 +216,8 @@ class SageMakerEstimator(val trainingImage: String,
 
   private[sparksdk] val trainingJobTimeout = Duration.ofHours(trainingMaxRuntimeInSeconds)
 
+  private[sparksdk] var latestTrainingJob: Option[String] = None
+
   /**
     * Builds a SageMaker Training Job hyper-parameter map from the Params set on this
     * defined both on the input set and on the
@@ -304,6 +306,7 @@ class SageMakerEstimator(val trainingImage: String,
 
     try {
       log.info(s"Creating training job with name $trainingJobName")
+      latestTrainingJob = Some(trainingJobName)
       val createTrainingJobRequest = buildCreateTrainingJobRequest(trainingJobName,
         dataUploadResults, conf)
 

@@ -200,8 +200,8 @@ def test_xgboostSageMakerEstimator_validates_gamma():
 def test_xgboostSageMakerEstimator_validates_maxDepth():
     estimator = get_xgboost_estimator()
 
-    estimator.setMaxDepth(1.1)
-    assert estimator.getMaxDepth() == 1.1
+    estimator.setMaxDepth(1)
+    assert estimator.getMaxDepth() == 1
 
     with pytest.raises(ValueError):
         estimator.setMaxDepth(-1)

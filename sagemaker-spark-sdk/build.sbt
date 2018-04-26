@@ -19,7 +19,7 @@ scalaVersion := "2.11.7"
 // to change the version of spark add -DSPARK_VERSION=2.x.x when running sbt
 // for example: "sbt -DSPARK_VERSION=2.1.1 clean compile test doc package"
 val sparkVersion = System.getProperty("SPARK_VERSION", "2.2.0")
-version := "spark_" + sparkVersion + "-1.0"
+version := "spark_" + sparkVersion + "-1.0.5"
 
 lazy val SageMakerSpark = (project in file("."))
 
@@ -41,6 +41,10 @@ libraryDependencies ++= Seq(
 exportJars := true
 lazy val printClasspath = taskKey[Unit]("Dump classpath")
 printClasspath := (fullClasspath in Runtime value) foreach { e => println(e.data) }
+
+// set coverage threshold
+coverageMinimum := 90
+coverageFailOnMinimum := true
 
 // make scalastyle gate the build
 (compile in Compile) := {

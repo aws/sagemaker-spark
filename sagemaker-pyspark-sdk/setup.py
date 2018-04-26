@@ -7,7 +7,7 @@ import sys
 from setuptools import setup
 
 
-VERSION = "1.0.0"
+VERSION = "1.0.5"
 
 TEMP_PATH = "deps"
 JARS_TARGET = os.path.join(TEMP_PATH, "jars")
@@ -92,7 +92,7 @@ try:  # noqa
         ],
 
         setup_requires=["pyspark", "pypandoc", "pytest-runner", "numpy"],
-        tests_require=["pytest", "pytest-cov", "coverage", "teamcity-messages"]
+        tests_require=["pytest", "pytest-cov", "pytest-xdist", "coverage", "teamcity-messages"]
 
     )
 

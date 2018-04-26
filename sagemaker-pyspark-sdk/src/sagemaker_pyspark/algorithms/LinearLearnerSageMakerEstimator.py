@@ -159,6 +159,47 @@ class LinearLearnerParams(Params):
                                  "normalizing / unbiasing terms. Must be > 0",
                                  typeConverter=TypeConverters.toInt)
 
+    early_stopping_patience = Param(Params._dummy(), "early_stopping_patience",
+                                    "The number of epochs to wait before ending training if no"
+                                    "improvement is made in the relevant metric. The metric is"
+                                    "the binary_classifier_model_selection_criteria if provided,"
+                                    "otherwise the metric is the same as loss. The metric is"
+                                    "evaluatedon the validation data. If no validation data is"
+                                    "provided, the metric is always the same as loss and is"
+                                    "evaluated on the training data. To disable early stopping,"
+                                    "set early_stopping_patience to a value larger than epochs."
+                                    "Must be > 0",
+                                    typeConverter=TypeConverters.toInt)
+
+    early_stopping_tolerance = Param(Params._dummy(), "early_stopping_tolerance",
+                                     "Relative tolerance to measure an improvement in loss. If the"
+                                     "ratio of the improvement in loss divided by the previous best"
+                                     "loss is smaller than this value, early stopping will consider"
+                                     "the improvement to be zero. Must be > 0. ",
+                                     typeConverter=TypeConverters.toFloat)
+
+    margin = Param(Params._dummy(), "margin",
+                   "Margin for hinge_loss. Must be > 0. ",
+                   typeConverter=TypeConverters.toFloat)
+
+    quantile = Param(Params._dummy(), "quantile",
+                     "Quantile for quantile loss. For quantile q, the model will attempt to"
+                     "produce predictions such that true_label < prediction with probability q."
+                     "Must be in (0, 1). ",
+                     typeConverter=TypeConverters.toFloat)
+
+    loss_insensitivity = Param(Params._dummy(), "loss_insensitivity",
+                               "Parameter for epsilon insensitive loss type. During training and"
+                               "metric evaluation, any error smaller than this is considered to be"
+                               "zero. Must be > 0. ",
+                               typeConverter=TypeConverters.toFloat)
+
+    huber_delta = Param(Params._dummy(), "huber_delta",
+                        "Parameter for Huber loss. During training and metric evaluation, compute"
+                        "L2 loss for errors smaller than delta and L1 loss for errors larger than"
+                        "delta. Must be > 0. ",
+                        typeConverter=TypeConverters.toFloat)
+
     def getFeatureDim(self):
         return self.getOrDefault(self.feature_dim)
 
@@ -415,8 +456,56 @@ class LinearLearnerParams(Params):
 
     def setNumPointForScaler(self, value):
         if value <= 0:
-            raise ValueError("numPointForScaler must be > 0, got: %s" % value)
+            raise ValueError("num_point_for_scaler must be > 0, got: %s" % value)
         self._set(num_point_for_scaler=value)
+
+    def getEarlyStoppingPatience(self):
+            return self.getOrDefault(self.early_stopping_patience)
+
+    def setEarlyStoppingPatience(self, value):
+        if value <= 0:
+            raise ValueError("early_stopping_patience must be > 0, got: %s" % value)
+        self._set(early_stopping_patience=value)
+
+    def getEarlyStoppingTolerance(self):
+            return self.getOrDefault(self.early_stopping_tolerance)
+
+    def setEarlyStoppingTolerance(self, value):
+        if value <= 0:
+            raise ValueError("early_stopping_tolerance must be > 0, got: %s" % value)
+        self._set(early_stopping_tolerance=value)
+
+    def getMargin(self):
+        return self.getOrDefault(self.margin)
+
+    def setMargin(self, value):
+        if value <= 0:
+            raise ValueError("margin must be > 0, got: %s" % value)
+        self._set(margin=value)
+
+    def getQuantile(self):
+        return self.getOrDefault(self.quantile)
+
+    def setQuantile(self, value):
+        if value <= 0 or value >= 1:
+            raise ValueError("quantile must be in (0, 1), got: %s" % value)
+        self._set(quantile=value)
+
+    def getLossInsensitivity(self):
+            return self.getOrDefault(self.loss_insensitivity)
+
+    def setLossInsensitivity(self, value):
+        if value <= 0:
+            raise ValueError("loss_insensitivity must be > 0, got: %s" % value)
+        self._set(loss_insensitivity=value)
+
+    def getHuberDelta(self):
+        return self.getOrDefault(self.huber_delta)
+
+    def setHuberDelta(self, value):
+        if value <= 0:
+            raise ValueError("huber_delta must be > 0, got: %s" % value)
+        self._set(huber_delta=value)
 
 
 class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams):
@@ -517,11 +606,15 @@ class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams)
                              typeConverter=TypeConverters.toFloat)
 
     positive_example_weight_mult = Param(Params._dummy(), "positive_example_weight_mult",
-                                         "Parameter specific to classification tasks. "
-                                         "The importance weight of positive examples is "
-                                         "multiplied by this constant. Useful for skewed datasets. "
-                                         "Must be > 0. ",
-                                         typeConverter=TypeConverters.toFloat)
+                                         "Weight assigned to positive examples when training a"
+                                         "binary classifier. The weight of negative examples is"
+                                         "fixed at 1. If balanced, then a weight will be selected"
+                                         "so that errors in classifying negative vs. positive"
+                                         "examples have equal impact on the training loss. If auto,"
+                                         "the algorithm will attempt to select the weight that"
+                                         "optimizes performance. Must be string 'auto',"
+                                         "'balanced', or float > 0",
+                                         typeConverter=TypeConverters.toString)
 
     def __init__(
             self,
@@ -641,6 +734,18 @@ class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams)
         if value > 1 or value < 0:
             raise ValueError("target_precision must be within [0, 1], got: %s" % value)
         self._set(target_precision=value)
+
+    def getPositiveExampleWeightMult(self):
+            return self.getOrDefault(self.positive_example_weight_mult)
+
+    def setPositiveExampleWeightMult(self, value):
+        if isinstance(value, numbers.Real) and value <= 0:
+            raise ValueError("positive_example_weight_mult must be 'auto', 'balanced' or > 0, "
+                             "got: %s" % value)
+        if value not in ('auto', 'balanced') and float(value) <= 0:
+            raise ValueError("positive_example_weight_mult must be 'auto', 'balanced' or > 0, "
+                             "got: %s" % value)
+        self._set(positive_example_weight_mult=str(value))
 
     @classmethod
     def _from_java(cls, javaObject):

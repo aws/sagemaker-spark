@@ -94,3 +94,4 @@ def test_sagemakerestimator_default_params():
     assert estimator.trainingKmsKeyId is None
     assert estimator.modelPrependInputRowsToTransformationRows is True
     assert estimator.deleteStagingDataAfterTraining is True
+    assert estimator.latestTrainingJob is None

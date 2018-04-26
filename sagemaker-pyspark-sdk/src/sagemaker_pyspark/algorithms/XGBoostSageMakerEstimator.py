@@ -137,7 +137,7 @@ class XGBoostSageMakerEstimator(SageMakerEstimatorBase):
         Params._dummy(), "max_depth",
         "Minimum loss reduction required to make a further partition on a leaf node of the tree. "
         "The larger the value, the more conservative the algorithm will be. Must be >= 0",
-        typeConverter=TypeConverters.toFloat)
+        typeConverter=TypeConverters.toInt)
 
     min_child_weight = Param(
         Params._dummy(), "min_child_weight",
@@ -331,7 +331,7 @@ class XGBoostSageMakerEstimator(SageMakerEstimatorBase):
     seed = Param(
         Params._dummy(), "seed",
         "Random number seed",
-        typeConverter=TypeConverters.toFloat)
+        typeConverter=TypeConverters.toInt)
 
     num_round = Param(
         Params._dummy(), "num_round",

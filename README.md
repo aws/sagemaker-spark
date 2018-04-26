@@ -1,6 +1,7 @@
 # <img alt="SageMaker" src="branding/icon/sagemaker-banner.png" height="100">
 
 # SageMaker Spark
+[![codecov](https://codecov.io/gh/aws/sagemaker-spark/branch/master/graph/badge.svg)](https://codecov.io/gh/aws/sagemaker-spark)
 
 SageMaker Spark is an open source Spark library for [Amazon SageMaker](https://aws.amazon.com/sagemaker/). With SageMaker Spark you construct Spark ML `Pipeline`s using Amazon SageMaker stages. These pipelines interleave native Spark ML stages and stages that interact with SageMaker training and model hosting.
 
@@ -61,6 +62,10 @@ Or, if your project depends on Spark 2.1:
 You can also build SageMaker Spark from source. See [sagemaker-spark-sdk](sagemaker-spark-sdk) for more on
 building SageMaker Spark from source.
 
+### Python
+
+See the [sagemaker-pyspark-sdk](sagemaker-pyspark-sdk) for more on installing and running SageMaker PySpark.
+
 ## Running SageMaker Spark
 
 SageMaker Spark depends on hadoop-aws-2.8.1. To run Spark applications that depend on SageMaker Spark, you need to
@@ -80,21 +85,10 @@ on SageMaker Spark in Maven using the "--package" flag.
 1. Install Hadoop-2.8. [https://hadoop.apache.org/docs/r2.8.0/](https://hadoop.apache.org/docs/r2.8.0/)
 2. Build Spark 2.2 with Hadoop-2.8. The [Spark documentation](https://spark.apache.org/docs/2.2.0/hadoop-provided.html)
 has guidance on building Spark with your own Hadoop installation.
-3. Run ```spark-shell``` or ```spark-submit``` with the --jars flag, passing in a
-comma-separated list with:
-  * SageMaker Spark: sagemaker-spark_2.11-spark_2.2.0-1.0.jar
-  * Hadoop-aws 2.8: hadoop-aws-2.8.1.jar
-  * AWS Java SDK with SageMaker and SageMakerRuntime
-  * Joda-Time 2.8: joda-time-2.8.2.jar
-  
-```
-spark-shell --jars sagemaker-spark_2.11-spark_2.2.0-1.0.jar,hadoop-aws-2.8.1.jar,joda-time-2.8.2.jar,aws-java-sdk-1.11.238.jar
-```
-
-Alternatively, use the --packages flag and pass in the Maven coordinates for SageMaker Spark:
+3. Run ```spark-shell``` or ```spark-submit``` with the `--packages` flag:
 
 ```
-spark-shell --packages com.amazonaws:sagemaker-spark_2.11:spark_2.1.1-1.0
+spark-shell --packages com.amazonaws:sagemaker-spark_2.11:spark_2.2.0-1.0
 ```
 
 ### Running SageMaker Spark Applications on EMR
@@ -102,22 +96,29 @@ spark-shell --packages com.amazonaws:sagemaker-spark_2.11:spark_2.1.1-1.0
 You can run SageMaker Spark applications on an EMR cluster just like any other Spark application by
 submitting your Spark application jar and the SageMaker Spark dependency jars with the --jars or --packages flags.
 
-SageMaker Spark applications have been verified to be compatible with EMR-5.6.0 (which runs Spark 2.1) and EMR-5-8.0
-(which runs Spark 2.2).
+SageMaker Spark is pre-installed on EMR releases since 5.11.0. You can run your SageMaker Spark application
+on EMR by submitting your Spark application jar and any additional dependencies your Spark application uses.
 
-You should submit your EMR Spark Application with the following dependencies:
+SageMaker Spark applications have also been verified to be compatible with EMR-5.6.0 (which runs Spark 2.1) and EMR-5-8.0
+(which runs Spark 2.2). When submitting your Spark application to an earlier EMR release, use the `--packages` flag to
+depend on a recent version of the AWS Java SDK:  
 
-* SageMaker Spark: for example, sagemaker-spark_2.11-spark_2.2.0-1.0.jar
-* AWS Java SDK with SageMaker and SageMakerRuntime
+```
+spark-submit
+  --packages com.amazonaws:aws-java-sdk:1.11.238 \
+  --deploy-mode cluster \
+  --conf spark.driver.userClassPathFirst=true \
+  --conf spark.executor.userClassPathFirst=true \
+  --jars SageMakerSparkApplicationJar.jar,...
+  ...
+```
 
-The EMR cluster has to use the AWS Java SDK with the SageMaker and SageMakerRuntime clients.
-To do this, set the following Spark configuration properties with the "--conf" flag:
+The `spark.driver.userClassPathFirst=true` and `spark.executor.userClassPathFirst=true` properties are required so that
+the Spark cluster will use the AWS Java SDK dependencies with SageMaker, rather than the AWS Java SDK installed on these
+earlier EMR clusters.
 
-* spark.driver.userClassPathFirst=true
-* spark.executor.userClassPathFirst=true
-
-See the [EMR Documentation](http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-submit-step.html) on
-submitting a step.
+For more on running Spark application on EMR, see the
+[EMR Documentation](http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-submit-step.html) on submitting a step.
 
 ### Python
 
@@ -125,7 +126,7 @@ See the [sagemaker-pyspark-sdk](sagemaker-pyspark-sdk) for more on installing an
 
 ### S3 FileSystem Schemes
 
-EMR allows you to read and write data using the EMRFS scheme, accessed through Spark with "s3://":
+EMR allows you to read and write data using the EMR FileSystem (EMRFS), accessed through Spark with "s3://":
 
 ```scala
 spark.read.format("libsvm").load("s3://my-bucket/my-prefix")
@@ -168,11 +169,11 @@ val spark = SparkSession.builder.getOrCreate
 val region = "us-east-1"
 val trainingData = spark.read.format("libsvm")
   .option("numFeatures", "784")
-  .load(s"s3a://sagemaker-sample-data-$region/spark/mnist/train/")
+  .load(s"s3://sagemaker-sample-data-$region/spark/mnist/train/")
 
 val testData = spark.read.format("libsvm")
   .option("numFeatures", "784")
-  .load(s"s3a://sagemaker-sample-data-$region/spark/mnist/test/")
+  .load(s"s3://sagemaker-sample-data-$region/spark/mnist/test/")
 ```
 
 The `DataFrame` consists of a column named "label" of Doubles, indicating the digit for each example,

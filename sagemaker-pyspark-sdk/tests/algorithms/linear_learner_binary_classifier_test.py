@@ -499,6 +499,24 @@ def test_linearLearnerBinaryClassifier_validates_target_precision():
     assert estimator.getTargetPrecision() == estimator._call_java("getTargetPrecision")
 
 
+def test_linearLearnerBinaryClassifier_validates_positive_example_weight_mult():
+
+    estimator = get_linear_learner_binary_classifier()
+    estimator.setPositiveExampleWeightMult("balanced")
+    assert estimator.getPositiveExampleWeightMult() == "balanced"
+
+    with pytest.raises(ValueError):
+        estimator.setPositiveExampleWeightMult("some-value")
+
+    with pytest.raises(ValueError):
+        estimator.setPositiveExampleWeightMult(0)
+
+    estimator.setTargetPrecision(0.1)
+    estimator._transfer_params_to_java()
+    assert estimator.getPositiveExampleWeightMult() == \
+        estimator._call_java("getPositiveExampleWeightMult")
+
+
 def test_linearLearnerRegressor_validates_normalize_data():
 
     estimator = get_linear_learner_binary_classifier()
@@ -567,3 +585,91 @@ def test_linearLearnerBinaryClassifier_num_point_for_scaler():
     estimator.setNumPointForScaler(1)
     estimator._transfer_params_to_java()
     assert estimator.getNumPointForScaler() == estimator._call_java("getNumPointForScaler")
+
+
+def test_linearLearnerBinaryClassifier_early_stopping_patience():
+
+    estimator = get_linear_learner_binary_classifier()
+    estimator.setEarlyStoppingPatience(5)
+    assert estimator.getEarlyStoppingPatience() == 5
+
+    with pytest.raises(ValueError):
+        estimator.setEarlyStoppingPatience(-1)
+
+    estimator.setEarlyStoppingPatience(1)
+    estimator._transfer_params_to_java()
+    assert estimator.getEarlyStoppingPatience() == estimator._call_java("getEarlyStoppingPatience")
+
+
+def test_linearLearnerBinaryClassifier_early_stopping_tolerance():
+
+    estimator = get_linear_learner_binary_classifier()
+    estimator.setEarlyStoppingTolerance(5.0)
+    assert estimator.getEarlyStoppingTolerance() == 5.0
+
+    with pytest.raises(ValueError):
+        estimator.setEarlyStoppingTolerance(-1.0)
+
+    estimator.setEarlyStoppingTolerance(1.0)
+    estimator._transfer_params_to_java()
+    assert estimator.getEarlyStoppingTolerance() == \
+        estimator._call_java("getEarlyStoppingTolerance")
+
+
+def test_linearLearnerBinaryClassifier_margin():
+
+    estimator = get_linear_learner_binary_classifier()
+    estimator.setMargin(5.0)
+    assert estimator.getMargin() == 5.0
+
+    with pytest.raises(ValueError):
+        estimator.setMargin(-1.0)
+
+    estimator.setMargin(1.0)
+    estimator._transfer_params_to_java()
+    assert estimator.getMargin() == estimator._call_java("getMargin")
+
+
+def test_linearLearnerBinaryClassifier_quantile():
+
+    estimator = get_linear_learner_binary_classifier()
+    estimator.setQuantile(0.5)
+    assert estimator.getQuantile() == 0.5
+
+    with pytest.raises(ValueError):
+        estimator.setQuantile(-1)
+
+    with pytest.raises(ValueError):
+        estimator.setQuantile(2)
+
+    estimator.setQuantile(0.1)
+    estimator._transfer_params_to_java()
+    assert estimator.getQuantile() == estimator._call_java("getQuantile")
+
+
+def test_linearLearnerBinaryClassifier_loss_insensitivity():
+
+    estimator = get_linear_learner_binary_classifier()
+    estimator.setLossInsensitivity(0.5)
+    assert estimator.getLossInsensitivity() == 0.5
+
+    with pytest.raises(ValueError):
+        estimator.setLossInsensitivity(-1)
+
+    estimator.setLossInsensitivity(0.1)
+    estimator._transfer_params_to_java()
+    assert estimator.getLossInsensitivity() == estimator._call_java("getLossInsensitivity")
+
+
+def test_linearLearnerBinaryClassifier_huber_delta():
+
+    estimator = get_linear_learner_binary_classifier()
+    estimator.setHuberDelta(5.0)
+    assert estimator.getHuberDelta() == 5.0
+
+    with pytest.raises(ValueError):
+        estimator.setHuberDelta(-1.0)
+
+    estimator.setHuberDelta(1.0)
+    estimator._transfer_params_to_java()
+    assert estimator.getHuberDelta() == estimator._call_java("getHuberDelta")

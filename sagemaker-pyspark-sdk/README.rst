@@ -27,6 +27,14 @@ sagemaker_pyspark works with python 2.7 and python 3.x. To install it use ``pip`
 
     $ pip install sagemaker_pyspark
 
+You can also install sagemaker_pyspark from source:
+
+.. code-block:: sh
+
+    $ git clone git@github.com:aws/sagemaker-spark.git
+    $ cd sagemaker-pyspark-sdk
+    $ python setup.py install
+
 Next, set up credentials (in e.g. ``~/.aws/credentials``):
 
 .. code-block:: ini
@@ -46,12 +54,11 @@ Then, to load the sagemaker jars programatically:
 
 .. code-block:: python
 
-    from pyspark import SparkContext, SparkConf
     import sagemaker_pyspark
+    from pyspark.sql import SparkSession
 
-    conf = (SparkConf()
-            .set("spark.driver.extraClassPath", ":".join(sagemaker_pyspark.classpath_jars())))
-    SparkContext(conf=conf)
+    classpath = ":".join(sagemaker_pyspark.classpath_jars())
+    spark = SparkSession.builder.config("spark.driver.extraClassPath", classpath).getOrCreate()
 
 
 Alternatively pass the jars to your pyspark job via the --jars flag:
@@ -71,6 +78,18 @@ You can also use the --packages flag and pass in the Maven coordinates for SageM
 .. code-block:: sh
 
     $ pyspark --packages com.amazonaws:sagemaker-spark_2.11:spark_2.1.1-1.0
+
+
+S3 File System Schemes
+~~~~~~~~~~~~~~~~~~~~~~
+
+In PySpark, we recommend using "s3://" to access the EMR file system(EMRFS) in EMR and "s3a://" to access S3A file system
+in other environments. Examples:
+
+.. code-block:: python
+
+    data_s3 = spark.read.format("libsvm").load("s3://some-bucket/some-prefix")
+    data_s3a = spark.read.format("libsvm").load("s3a://some-bucket/some-prefix")
 
 
 Training and Hosting a K-Means Clustering model using SageMaker PySpark
@@ -137,6 +156,68 @@ parameter.
 
 You can view the `PySpark API Documentation for SageMaker Spark here <http://sagemaker-pyspark.readthedocs.io/en/latest/>`_
 
+
+Training and Hosting an XGBoost model using SageMaker PySpark
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A XGBoostSageMakerEstimator runs a training job using the Amazon SageMaker XGBoost algorithm upon
+invocation of fit(), returning a SageMakerModel. 
+
+.. code-block:: python
+
+    from pyspark import SparkContext, SparkConf
+    from sagemaker_pyspark import IAMRole, classpath_jars
+    from sagemaker_pyspark.algorithms import XGBoostSageMakerEstimator
+
+    # Load the sagemaker_pyspark classpath. If you used --jars to submit your job
+    # there is no need to do this in code.
+    conf = (SparkConf()
+            .set("spark.driver.extraClassPath", ":".join(classpath_jars())))
+    SparkContext(conf=conf)
+
+    iam_role = "arn:aws:iam:0123456789012:role/MySageMakerRole"
+
+    region = "us-east-1"
+    training_data = spark.read.format("libsvm").option("numFeatures", "784")
+      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region))
+
+    test_data = spark.read.format("libsvm").option("numFeatures", "784")
+      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region))
+
+    xgboost_estimator = XGBoostSageMakerEstimator(
+        trainingInstanceType="ml.m4.xlarge",
+        trainingInstanceCount=1,
+        endpointInstanceType="ml.m4.xlarge",
+        endpointInitialInstanceCount=1,
+        sagemakerRole=IAMRole(iam_role))
+
+    xgboost_estimator.setObjective('multi:softmax')
+    xgboost_estimator.setNumRound(25)
+    xgboost_estimator.setNumClasses(10)
+
+    xgboost_model = xgboost_estimator.fit(training_data)
+
+    transformed_data = xgboost_model.transform(test_data)
+    transformed_data.show()
+
+The SageMakerEstimator expects an input DataFrame with a column named "features" that holds a
+Spark ML  Vector. The estimator also serializes a "label" column of Doubles if present. Other
+columns are ignored.
+
+The Amazon SageMaker XGBoost algorithm accepts many parameters. Objective (the learning objective of your model, in this case multi-class classification) and NumRounds (the number of rounds to perform tree boosting on) are required. For multi-class classification NumClasses (the number of classes to classify the data into) is required as well.
+
+You can set other hyperparameters, for details on them, run:
+
+.. code-block:: python
+
+    xgboost_estimator.explainParams()
+
+After training is complete, an Amazon SageMaker Endpoint is created to host the model and serve
+predictions. Upon invocation of transform(), the SageMakerModel predicts against the hosted
+model.
+
+You can view the `PySpark API Documentation for SageMaker Spark here <http://sagemaker-pyspark.readthedocs.io/en/latest/>`_
+
 Running on SageMaker Notebook Instances
 ---------------------------------------
 
@@ -155,19 +236,19 @@ initialize a spark context the same way it is described in the QuickStart sectio
 
 .. code-block:: python
 
-    from pyspark import SparkContext, SparkConf
     import sagemaker_pyspark
+    from pyspark.sql import SparkSession
 
-    conf = (SparkConf()
-            .set("spark.driver.extraClassPath", ":".join(sagemaker_pyspark.classpath_jars())))
-    SparkContext(conf=conf)
+    classpath = ":".join(sagemaker_pyspark.classpath_jars())
+    spark = SparkSession.builder.config("spark.driver.extraClassPath", classpath).getOrCreate()
+
 
 Connecting to an EMR Spark Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Note: Make sure your SageMaker Notebook instance can talk to your EMR Cluster. This means:
 
-- They are in the same VPC or different `peered VPCs <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-peering.html>`__.
+- They are in the same VPC.
 - The EMR Cluster Security group allows TCP port 8998 on the SageMaker Notebook Security group to ingress.
 
 Installing sagemaker_pyspark in a Spark EMR Cluster
@@ -255,7 +336,7 @@ Override the default spark magic config
 
 
 Launch a notebook using either the ``pyspark2`` or ``pyspark3`` Kernel. As soon as you try to run
-any code block, the notebook will connect to your spark cluster and get a ``SparkContext`` for you.
+any code block, the notebook will connect to your spark cluster and get a ``SparkSession`` for you.
 
 
 Development
@@ -345,4 +426,3 @@ Run the tests by running:
 .. code-block:: sh
 
     $ tox
-

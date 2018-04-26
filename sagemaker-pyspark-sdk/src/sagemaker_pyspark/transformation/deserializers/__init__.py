@@ -15,15 +15,21 @@ from .deserializers import (
     ResponseRowDeserializer,
     XGBoostCSVRowDeserializer, ProtobufResponseRowDeserializer,
     KMeansProtobufResponseRowDeserializer, PCAProtobufResponseRowDeserializer,
+    LDAProtobufResponseRowDeserializer,
     LinearLearnerRegressorProtobufResponseRowDeserializer,
     LinearLearnerBinaryClassifierProtobufResponseRowDeserializer,
+    FactorizationMachinesBinaryClassifierDeserializer,
+    FactorizationMachinesRegressorDeserializer,
     LibSVMResponseRowDeserializer)
 
 __all__ = ['ResponseRowDeserializer',
            'XGBoostCSVRowDeserializer',
            'ProtobufResponseRowDeserializer',
            'PCAProtobufResponseRowDeserializer',
+           'LDAProtobufResponseRowDeserializer',
            'KMeansProtobufResponseRowDeserializer',
            'LinearLearnerBinaryClassifierProtobufResponseRowDeserializer',
            'LinearLearnerRegressorProtobufResponseRowDeserializer',
+           'FactorizationMachinesBinaryClassifierDeserializer',
+           'FactorizationMachinesRegressorDeserializer',
            'LibSVMResponseRowDeserializer']

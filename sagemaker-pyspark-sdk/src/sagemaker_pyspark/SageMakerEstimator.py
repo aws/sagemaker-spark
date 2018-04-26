@@ -117,6 +117,10 @@ class SageMakerEstimatorBase(SageMakerJavaWrapper, JavaEstimator):
         raise NotImplementedError()
 
     @property
+    def latestTrainingJob(self):
+        return self._call_java("latestTrainingJob")
+
+    @property
     def trainingImage(self):
         return self._call_java("trainingImage")
 

@@ -149,6 +149,20 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     assert(targetPrecision == estimator.getTargetPrecision)
   }
 
+  it should "setPositiveExampleWeightMult with a double" in {
+    val estimator = createLinearLearnerBinaryClassifier()
+    val positiveExampleWeightMult = 0.5
+    estimator.setPositiveExampleWeightMult(positiveExampleWeightMult)
+    assert(positiveExampleWeightMult.toString == estimator.getPositiveExampleWeightMult)
+  }
+
+  it should "setPositiveExampleWeightMult with a string" in {
+    val estimator = createLinearLearnerBinaryClassifier()
+    val positiveExampleWeightMult = "balanced"
+    estimator.setPositiveExampleWeightMult(positiveExampleWeightMult)
+    assert(positiveExampleWeightMult == estimator.getPositiveExampleWeightMult)
+  }
+
   it should "setNumModels with an int" in {
     val estimator = createLinearLearnerRegressor()
     val numModels = 5
@@ -338,6 +352,48 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     assert(numPointForScaler == estimator.getNumPointForScaler)
   }
 
+  it should "setEarlyStoppingPatience" in {
+    val estimator = createLinearLearnerRegressor()
+    val earlyStoppingPatience = 5
+    estimator.setEarlyStoppingPatience(earlyStoppingPatience)
+    assert(earlyStoppingPatience == estimator.getEarlyStoppingPatience)
+  }
+
+  it should "setEarlyStoppingTolerance" in {
+    val estimator = createLinearLearnerRegressor()
+    val earlyStoppingTolerance = 0.5
+    estimator.setEarlyStoppingTolerance(earlyStoppingTolerance)
+    assert(earlyStoppingTolerance == estimator.getEarlyStoppingTolerance)
+  }
+
+  it should "setMargin" in {
+    val estimator = createLinearLearnerRegressor()
+    val margin = 5.0
+    estimator.setMargin(margin)
+    assert(margin == estimator.getMargin)
+  }
+
+  it should "setQuantile" in {
+    val estimator = createLinearLearnerRegressor()
+    val quantile = 0.5
+    estimator.setQuantile(quantile)
+    assert(quantile == estimator.getQuantile)
+  }
+
+  it should "setLossInsensitivity" in {
+    val estimator = createLinearLearnerRegressor()
+    val lossInsensitivity = 0.5
+    estimator.setLossInsensitivity(lossInsensitivity)
+    assert(lossInsensitivity == estimator.getLossInsensitivity)
+  }
+
+  it should "setHuberDelta" in {
+    val estimator = createLinearLearnerRegressor()
+    val huberDelta = 5.0
+    estimator.setHuberDelta(huberDelta)
+    assert(huberDelta == estimator.getHuberDelta)
+  }
+
   it should "create correct hyper-parameter map" in {
     val estimator = createLinearLearnerBinaryClassifier()
     estimator.setEpochs(2)
@@ -347,6 +403,7 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     estimator.setBinaryClassifierModelSelectionCriteria("f1")
     estimator.setTargetRecall(0.8)
     estimator.setTargetPrecision(0.8)
+    estimator.setPositiveExampleWeightMult("balanced")
     estimator.setNumModels("auto")
     estimator.setNumCalibrationSamples(5)
     estimator.setInitMethod("uniform")
@@ -372,6 +429,12 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     estimator.setUnbiasData(false)
     estimator.setUnbiasLabel(false)
     estimator.setNumPointForScaler(100)
+    estimator.setEarlyStoppingPatience(5)
+    estimator.setEarlyStoppingTolerance(0.1)
+    estimator.setMargin(0.5)
+    estimator.setQuantile(0.5)
+    estimator.setLossInsensitivity(0.05)
+    estimator.setHuberDelta(0.5)
 
     val hyperParamMap = Map(
       "predictor_type" -> "binary_classifier",
@@ -382,6 +445,7 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       "binary_classifier_model_selection_criteria" -> "f1",
       "target_recall" -> "0.8",
       "target_precision" -> "0.8",
+      "positive_example_weight_mult" -> "balanced",
       "num_models" -> "auto",
       "num_calibration_samples" -> "5",
       "init_method" -> "uniform",
@@ -406,7 +470,13 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       "normalize_label" -> "False",
       "unbias_data" -> "False",
       "unbias_label" -> "False",
-      "num_point_for_scaler" -> "100"
+      "num_point_for_scaler" -> "100",
+      "early_stopping_patience" -> "5",
+      "early_stopping_tolerance" -> "0.1",
+      "margin" -> "0.5",
+      "quantile" -> "0.5",
+      "loss_insensitivity" -> "0.05",
+      "huber_delta" -> "0.5"
     )
 
     assert(hyperParamMap.asJava == estimator.makeHyperParameters())
@@ -451,6 +521,20 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     val estimator = createLinearLearnerBinaryClassifier()
     val caughtTargetPrecision = intercept[IllegalArgumentException] {
       estimator.setTargetPrecision(-1.0)
+    }
+  }
+
+  it should "validate positiveExampleWeightMult with a double" in {
+    val estimator = createLinearLearnerBinaryClassifier()
+    val positiveExampleWeightMult = intercept[IllegalArgumentException] {
+      estimator.setPositiveExampleWeightMult(-1.0)
+    }
+  }
+
+  it should "validate positiveExampleWeightMult with a string" in {
+    val estimator = createLinearLearnerBinaryClassifier()
+    val positiveExampleWeightMult = intercept[IllegalArgumentException] {
+      estimator.setPositiveExampleWeightMult("invalid")
     }
   }
 
@@ -603,6 +687,48 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     val estimator = createLinearLearnerRegressor()
     val caughtNumPointForScaler = intercept[IllegalArgumentException] {
       estimator.setNumPointForScaler(-1)
+    }
+  }
+
+  it should "validate earlyStoppingPatience" in {
+    val estimator = createLinearLearnerRegressor()
+    val earlyStoppingPatience = intercept[IllegalArgumentException] {
+      estimator.setEarlyStoppingPatience(-1)
+    }
+  }
+
+  it should "validate earlyStoppingTolerance" in {
+    val estimator = createLinearLearnerRegressor()
+    val earlyStoppingTolerance = intercept[IllegalArgumentException] {
+      estimator.setEarlyStoppingTolerance(-1.0)
+    }
+  }
+
+  it should "validate margin" in {
+    val estimator = createLinearLearnerRegressor()
+    val margin = intercept[IllegalArgumentException] {
+      estimator.setMargin(-1.0)
+    }
+  }
+
+  it should "validate quantile" in {
+    val estimator = createLinearLearnerRegressor()
+    val quantile = intercept[IllegalArgumentException] {
+      estimator.setQuantile(2.0)
+    }
+  }
+
+  it should "validate lossInsensitivity" in {
+    val estimator = createLinearLearnerRegressor()
+    val lossInsensitivity = intercept[IllegalArgumentException] {
+      estimator.setLossInsensitivity(-1.0)
+    }
+  }
+
+  it should "validate huberDelta" in {
+    val estimator = createLinearLearnerRegressor()
+    val huberDelta = intercept[IllegalArgumentException] {
+      estimator.setHuberDelta(-1.0)
     }
   }
 }
