@@ -3,6 +3,7 @@ Please fill out the form below.
 ### System Information
 - **Spark or PySpark**:
 - **SDK Version**:
+- **Spark Version**:
 - **Algorithm (e.g. KMeans)**:
 
 ### Describe the problem
