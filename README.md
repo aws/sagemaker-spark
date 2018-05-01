@@ -551,6 +551,7 @@ val model = SageMakerModel
 SageMaker Spark provides a utility for deleting Endpoints created by a SageMakerModel:
 
 ```scala
+val sagemakerClient = AmazonSageMakerClientBuilder.defaultClient
 val cleanup = new SageMakerResourceCleanup(sagemakerClient)
 cleanup.deleteResources(model.getCreatedResources)
 
