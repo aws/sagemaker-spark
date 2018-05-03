@@ -1,1 +1,364 @@
-﻿{"paragraphs":[{"text":"%md\n\nThis notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.\n\nWe will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.\n\nFirst, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://awsai-sparksdk-dataset/mnist_libsvm/","dateUpdated":"2018-04-26T05:48:38+0000","config":{"tableHide":false,"editorSetting":{"language":"markdown","editOnDblClick":true},"colWidth":12,"editorMode":"ace/mode/markdown","editorHide":true,"results":{},"enabled":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"HTML","data":"<p>This notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.</p>\n<p>We will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.</p>\n<p>First, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://awsai-sparksdk-dataset/mnist_libsvm/</p>\n"}]},"apps":[],"jobName":"paragraph_1524718341807_2144207933","id":"20171027-200858_635792860","dateCreated":"2018-04-26T04:52:21+0000","status":"READY","errorMessage":"","progressUpdateIntervalMs":500,"focus":true,"$$hashKey":"object:101"},{"text":"%spark\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder.getOrCreate\n\nval region = \"us-east-1\"\nval trainingData = spark.read.format(\"libsvm\")\n  .option(\"numFeatures\", \"784\")\n  .load(s\"s3://sagemaker-sample-data-$region/spark/mnist/train/\")\n\nval testData = spark.read.format(\"libsvm\")\n  .option(\"numFeatures\", \"784\")\n  .load(s\"s3://sagemaker-sample-data-$region/spark/mnist/test/\")","user":"anonymous","dateUpdated":"2018-04-26T05:48:51+0000","config":{"colWidth":12,"editorMode":"ace/mode/scala","results":{},"enabled":true,"editorSetting":{"language":"scala","editOnDblClick":false},"tableHide":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"TEXT","data":"import org.apache.spark.sql.SparkSession\nspark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@4a10f5d2\nregion: String = us-east-1\ntrainingData: org.apache.spark.sql.DataFrame = [label: double, features: vector]\ntestData: org.apache.spark.sql.DataFrame = [label: double, features: vector]\n"}]},"apps":[],"jobName":"paragraph_1524718341811_-2139986393","id":"20171027-194154_1485869505","dateCreated":"2018-04-26T04:52:21+0000","dateStarted":"2018-04-26T04:54:10+0000","dateFinished":"2018-04-26T04:54:50+0000","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:102"},{"text":"%md\n\nIn order to train and make inferences our input DataFrame must have a column of Doubles (named \"label\" by default) and a column of Vectors of Doubles (named \"features\" by default).\n\nSpark's LibSVM DataFrameReader loads a DataFrame already suitable for training and inference.","dateUpdated":"2018-04-26T05:48:38+0000","config":{"tableHide":false,"editorSetting":{"language":"markdown","editOnDblClick":true},"colWidth":12,"editorMode":"ace/mode/markdown","editorHide":true,"results":{},"enabled":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"HTML","data":"<p>In order to train and make inferences our input DataFrame must have a column of Doubles (named &ldquo;label&rdquo; by default) and a column of Vectors of Doubles (named &ldquo;features&rdquo; by default).</p>\n<p>Spark's LibSVM DataFrameReader loads a DataFrame already suitable for training and inference.</p>\n"}]},"apps":[],"jobName":"paragraph_1524718341812_-2141910138","id":"20171027-201017_1626571936","dateCreated":"2018-04-26T04:52:21+0000","status":"READY","errorMessage":"","progressUpdateIntervalMs":500,"$$hashKey":"object:103"},{"text":"%spark\n\ntrainingData.show","user":"anonymous","dateUpdated":"2018-04-26T05:48:44+0000","config":{"colWidth":12,"editorMode":"ace/mode/scala","results":{},"enabled":true,"editorSetting":{"language":"scala","editOnDblClick":false},"tableHide":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"TEXT","data":"+-----+--------------------+\n|label|            features|\n+-----+--------------------+\n|  5.0|(784,[152,153,154...|\n|  0.0|(784,[127,128,129...|\n|  4.0|(784,[160,161,162...|\n|  1.0|(784,[158,159,160...|\n|  9.0|(784,[208,209,210...|\n|  2.0|(784,[155,156,157...|\n|  1.0|(784,[124,125,126...|\n|  3.0|(784,[151,152,153...|\n|  1.0|(784,[152,153,154...|\n|  4.0|(784,[134,135,161...|\n|  3.0|(784,[123,124,125...|\n|  5.0|(784,[216,217,218...|\n|  3.0|(784,[143,144,145...|\n|  6.0|(784,[72,73,74,99...|\n|  1.0|(784,[151,152,153...|\n|  7.0|(784,[211,212,213...|\n|  2.0|(784,[151,152,153...|\n|  8.0|(784,[159,160,161...|\n|  6.0|(784,[100,101,102...|\n|  9.0|(784,[209,210,211...|\n+-----+--------------------+\nonly showing top 20 rows\n\n"}]},"apps":[],"jobName":"paragraph_1524718341812_-2141910138","id":"20171027-194234_1638663044","dateCreated":"2018-04-26T04:52:21+0000","dateStarted":"2018-04-26T04:54:13+0000","dateFinished":"2018-04-26T04:54:59+0000","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:104"},{"text":"%md\n\nNow we create a KMeansSageMakerEstimator, which uses the KMeans Amazon SageMaker Algorithm to train on our input data, and uses the KMeans Amazon SageMaker model image to host our model.\n\nCalling fit() on this estimator will train our model on Amazon SageMaker, and then create an Amazon SageMaker Endpoint to host our model.\n\nWe can then use the SageMakerModel returned by this call to fit() to transform Dataframes using our hosted model.","dateUpdated":"2018-04-26T05:48:38+0000","config":{"tableHide":false,"editorSetting":{"language":"markdown","editOnDblClick":true},"colWidth":12,"editorMode":"ace/mode/markdown","editorHide":true,"results":{},"enabled":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"HTML","data":"<p>Now we create a KMeansSageMakerEstimator, which uses the KMeans Amazon SageMaker Algorithm to train on our input data, and uses the KMeans Amazon SageMaker model image to host our model.</p>\n<p>Calling fit() on this estimator will train our model on Amazon SageMaker, and then create an Amazon SageMaker Endpoint to host our model.</p>\n<p>We can then use the SageMakerModel returned by this call to fit() to transform Dataframes using our hosted model.</p>\n"}]},"apps":[],"jobName":"paragraph_1524718341812_-2141910138","id":"20171027-201222_716997275","dateCreated":"2018-04-26T04:52:21+0000","status":"READY","errorMessage":"","progressUpdateIntervalMs":500,"$$hashKey":"object:105"},{"text":"%spark\nimport com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder\nimport com.amazonaws.services.securitytoken.model.GetCallerIdentityRequest\n\nimport com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansSageMakerEstimator\nimport com.amazonaws.services.sagemaker.sparksdk.IAMRole\n\nval accountId = AWSSecurityTokenServiceClientBuilder.standard().build()\n    .getCallerIdentity(new GetCallerIdentityRequest()).getAccount()\n\nval roleName = \"SageMakerRole\"\n\nval roleArn = s\"arn:aws:iam::$accountId:role/$roleName\"\n\nval kMeansSageMakerEstimator = new KMeansSageMakerEstimator(\n  sagemakerRole = IAMRole(roleArn),\n  trainingInstanceType = \"ml.p2.xlarge\",\n  trainingInstanceCount = 1,\n  endpointInstanceType = \"ml.m4.xlarge\",\n  endpointInitialInstanceCount = 1)\n  .setK(10).setFeatureDim(784)\n\nval trainedKMeansModel = kMeansSageMakerEstimator.fit(trainingData)","user":"anonymous","dateUpdated":"2018-04-26T05:48:55+0000","config":{"colWidth":12,"editorMode":"ace/mode/scala","results":{},"enabled":true,"editorSetting":{"language":"scala","editOnDblClick":false},"tableHide":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"TEXT","data":"import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder\nimport com.amazonaws.services.securitytoken.model.GetCallerIdentityRequest\nimport com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansSageMakerEstimator\nimport com.amazonaws.services.sagemaker.sparksdk.IAMRole\naccountId: String = 038453126632\nroleName: String = SageMakerRole\nroleArn: String = arn:aws:iam::038453126632:role/SageMakerRole\nkMeansSageMakerEstimator: com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansSageMakerEstimator = sagemaker_4b66da673ce9\ntrainedKMeansModel: com.amazonaws.services.sagemaker.sparksdk.SageMakerModel = sagemaker_4b66da673ce9\n"}]},"apps":[],"jobName":"paragraph_1524718341812_-2141910138","id":"20171027-194247_300882492","dateCreated":"2018-04-26T04:52:21+0000","dateStarted":"2018-04-26T05:00:06+0000","dateFinished":"2018-04-26T05:11:53+0000","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:106"},{"text":"%md\n\nNow we transform our DataFrame.\nTo do this, we serialize each row's \"features\" Vector of Doubles into a Protobuf format for inference against the Amazon SageMaker Endpoint. We deserialize the Protobuf responses back into our DataFrame:","dateUpdated":"2018-04-26T05:48:38+0000","config":{"tableHide":false,"editorSetting":{"language":"markdown","editOnDblClick":true},"colWidth":12,"editorMode":"ace/mode/markdown","editorHide":true,"results":{},"enabled":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"HTML","data":"<p>Now we transform our DataFrame.\n<br  />To do this, we serialize each row's &ldquo;features&rdquo; Vector of Doubles into a Protobuf format for inference against the Amazon SageMaker Endpoint. We deserialize the Protobuf responses back into our DataFrame:</p>\n"}]},"apps":[],"jobName":"paragraph_1524718341813_-2142294887","id":"20171027-201535_1579479","dateCreated":"2018-04-26T04:52:21+0000","status":"READY","errorMessage":"","progressUpdateIntervalMs":500,"$$hashKey":"object:107"},{"text":"%spark\nval transformedData = trainedKMeansModel.transform(testData)\n// This is used in the SQL queries below\ntransformedData.createOrReplaceTempView(\"transformedData\")\ntransformedData.show()","user":"anonymous","dateUpdated":"2018-04-26T05:48:58+0000","config":{"colWidth":12,"editorMode":"ace/mode/scala","results":{},"enabled":true,"editorSetting":{"language":"scala","editOnDblClick":false},"tableHide":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"TEXT","data":"transformedData: org.apache.spark.sql.DataFrame = [label: double, features: vector ... 2 more fields]\n+-----+--------------------+-------------------+---------------+\n|label|            features|distance_to_cluster|closest_cluster|\n+-----+--------------------+-------------------+---------------+\n|  7.0|(784,[202,203,204...| 1519.6287841796875|            8.0|\n|  2.0|(784,[94,95,96,97...|  1892.086181640625|            7.0|\n|  1.0|(784,[128,129,130...|  943.2987060546875|            9.0|\n|  0.0|(784,[124,125,126...|  1690.706787109375|            4.0|\n|  4.0|(784,[150,151,159...| 1558.3336181640625|            3.0|\n|  1.0|(784,[156,157,158...|     839.3408203125|            9.0|\n|  4.0|(784,[149,150,151...|  1637.839111328125|            3.0|\n|  9.0|(784,[179,180,181...|    1677.2763671875|            3.0|\n|  5.0|(784,[129,130,131...|   2083.83251953125|            3.0|\n|  9.0|(784,[209,210,211...|  1453.274169921875|            8.0|\n|  0.0|(784,[123,124,125...| 1547.7039794921875|            4.0|\n|  6.0|(784,[94,95,96,97...| 1903.3448486328125|            7.0|\n|  9.0|(784,[208,209,210...|  1302.203369140625|            3.0|\n|  0.0|(784,[152,153,154...| 1658.4642333984375|            4.0|\n|  1.0|(784,[125,126,127...|   958.701416015625|            1.0|\n|  5.0|(784,[124,125,126...| 1744.9813232421875|            5.0|\n|  9.0|(784,[179,180,181...|  1434.942138671875|            3.0|\n|  7.0|(784,[200,201,202...|   1723.77490234375|            3.0|\n|  3.0|(784,[118,119,120...|      2085.64453125|            5.0|\n|  4.0|(784,[158,159,185...|  1272.949462890625|            3.0|\n+-----+--------------------+-------------------+---------------+\nonly showing top 20 rows\n\n"}]},"apps":[],"jobName":"paragraph_1524718341813_-2142294887","id":"20171027-195712_1429851239","dateCreated":"2018-04-26T04:52:21+0000","dateStarted":"2018-04-26T05:15:17+0000","dateFinished":"2018-04-26T05:15:34+0000","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:108"},{"text":"%md\n\nThe KMeansSageMakerEstimator is just a SageMakerEstimator with certain default values. You can use the Amazon SageMaker Spark SDK with algorithm and hosting images you have authored by directly instantiating (or extending) the SageMakerEstimator.\n\nIn addition to the training and hosting parameters, you need to pass in your training and model images, training hyperparameters, and a RequestRowSerializer and a ResponseRowDeserializer.\n\nThe RequestRowSerializer is what the SageMakerModel uses upon a call to transform() to serialize Spark Dataframe rows into byte arrays to send to the Amazon SageMaker Endpoint for transformation.\nThe ResponseRowDeserializer is what the SageMakerModel uses upon a call to transform() to the Amazon SageMaker Endpoint's response from a byte array into Rows of a DataFrame.\n\nThe ProtobufRequestRowSerializer serializes Spark Rows into a protobuf format that the KMeans, PCA, and LinearLearner algorithms can consume for inference.\nThe KMeansProtobufResponseRowDeserializer deserializes the protobuf response from the KMeans model image.","user":"anonymous","dateUpdated":"2018-04-26T05:48:38+0000","config":{"tableHide":false,"editorSetting":{"language":"markdown","editOnDblClick":true},"colWidth":12,"editorMode":"ace/mode/markdown","editorHide":true,"results":{},"enabled":true},"settings":{"params":{},"forms":{}},"results":{"code":"SUCCESS","msg":[{"type":"HTML","data":"<p>The KMeansSageMakerEstimator is just a SageMakerEstimator with certain default values. You can use the Amazon SageMaker Spark SDK with algorithm and hosting images you have authored by directly instantiating (or extending) the SageMakerEstimator.</p>\n<p>In addition to the training and hosting parameters, you need to pass in your training and model images, training hyperparameters, and a RequestRowSerializer and a ResponseRowDeserializer.</p>\n<p>The RequestRowSerializer is what the SageMakerModel uses upon a call to transform() to serialize Spark Dataframe rows into byte arrays to send to the Amazon SageMaker Endpoint for transformation.\n<br  />The ResponseRowDeserializer is what the SageMakerModel uses upon a call to transform() to the Amazon SageMaker Endpoint's response from a byte array into Rows of a DataFrame.</p>\n<p>The ProtobufRequestRowSerializer serializes Spark Rows into a protobuf format that the KMeans, PCA, and LinearLearner algorithms can consume for inference.\n<br  />The KMeansProtobufResponseRowDeserializer deserializes the protobuf response from the KMeans model image.</p>\n"}]},"apps":[],"jobName":"paragraph_1524718341814_-2141140640","id":"20171027-194607_461915056","dateCreated":"2018-04-26T04:52:21+0000","dateStarted":"2018-04-26T05:07:15+0000","dateFinished":"2018-04-26T05:07:15+0000","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:111"},{"text":"%spark\n\nimport com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator\nimport com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer\nimport com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.KMeansProtobufResponseRowDeserializer\n\nval kmeans = new SageMakerEstimator(\n      trainingImage = \"382416733822.dkr.ecr.us-east-1.amazonaws.com/kmeans:1\",\n      modelImage = \"382416733822.dkr.ecr.us-east-1.amazonaws.com/kmeans:1\",\n      requestRowSerializer = new ProtobufRequestRowSerializer(),\n      responseRowDeserializer = new KMeansProtobufResponseRowDeserializer(),\n      hyperParameters = Map(\"k\" -> \"10\", \"feature_dim\" -> \"784\"),\n      sagemakerRole = IAMRole(roleArn),\n      trainingInstanceType = \"ml.p2.xlarge\",\n      trainingInstanceCount = 2,\n      endpointInstanceType = \"ml.c4.xlarge\",\n      endpointInitialInstanceCount = 1)","dateUpdated":"2018-04-26T05:49:03+0000","config":{"colWidth":12,"editorMode":"ace/mode/scala","results":{},"enabled":true,"editorSetting":{"language":"scala","editOnDblClick":false},"tableHide":true},"settings":{"params":{},"forms":{}},"apps":[],"jobName":"paragraph_1524718341814_-2141140640","id":"20171027-195104_2011298555","dateCreated":"2018-04-26T04:52:21+0000","status":"READY","errorMessage":"","progressUpdateIntervalMs":500,"$$hashKey":"object:112"},{"text":"%md\n\n\n","dateUpdated":"2018-04-26T05:48:38+0000","config":{"tableHide":false,"editorSetting":{"language":"markdown","editOnDblClick":true},"colWidth":12,"editorMode":"ace/mode/markdown","editorHide":true,"results":{},"enabled":true},"settings":{"params":{},"forms":{}},"apps":[],"jobName":"paragraph_1524718341814_-2141140640","id":"20171027-195210_612973143","dateCreated":"2018-04-26T04:52:21+0000","status":"READY","errorMessage":"","progressUpdateIntervalMs":500,"$$hashKey":"object:113"}],"name":"MNIST-kmeans","id":"2DBQGGZPN","angularObjects":{"2BRWU4WXC:shared_process":[],"2AM1YV5CU:shared_process":[],"2AJXGMUUJ:shared_process":[],"2ANGGHHMQ:shared_process":[],"2AKK3QQXU:shared_process":[]},"config":{"looknfeel":"default","personalizedMode":"false"},"info":{}}
+{
+	"paragraphs": [{
+		"text": "%md\n\nThis notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.\n\nWe will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.\n\nFirst, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://awsai-sparksdk-dataset/mnist_libsvm/",
+		"dateUpdated": "2018-05-03T09:45:06+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "markdown",
+				"editOnDblClick": true
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/markdown",
+			"editorHide": true,
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489632_1556278428",
+		"id": "20171027-200858_635792860",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "FINISHED",
+		"progressUpdateIntervalMs": 500,
+		"focus": true,
+		"$$hashKey": "object:1397",
+		"user": "anonymous",
+		"dateFinished": "2018-05-03T09:44:59+0000",
+		"dateStarted": "2018-05-03T09:44:58+0000",
+		"results": {
+			"code": "SUCCESS",
+			"msg": [{
+				"type": "HTML",
+				"data": "<p>This notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.</p>\n<p>We will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.</p>\n<p>First, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://awsai-sparksdk-dataset/mnist_libsvm/</p>\n"
+			}]
+		}
+	}, {
+		"text": "%spark\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder.getOrCreate\n\nval region = \"us-east-1\"\nval trainingData = spark.read.format(\"libsvm\")\n  .option(\"numFeatures\", \"784\")\n  .load(s\"s3://sagemaker-sample-data-$region/spark/mnist/train/\")\n\nval testData = spark.read.format(\"libsvm\")\n  .option(\"numFeatures\", \"784\")\n  .load(s\"s3://sagemaker-sample-data-$region/spark/mnist/test/\")",
+		"user": "anonymous",
+		"dateUpdated": "2018-05-03T09:45:06+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "scala",
+				"editOnDblClick": false
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/scala",
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489637_1554354684",
+		"id": "20171027-194154_1485869505",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"dateStarted": "2018-05-03T09:24:55+0000",
+		"dateFinished": "2018-05-03T09:25:35+0000",
+		"status": "FINISHED",
+		"errorMessage": "",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1398"
+	}, {
+		"text": "%md\n\nIn order to train and make inferences our input DataFrame must have a column of Doubles (named \"label\" by default) and a column of Vectors of Doubles (named \"features\" by default).\n\nSpark's LibSVM DataFrameReader loads a DataFrame already suitable for training and inference.",
+		"dateUpdated": "2018-05-03T09:45:15+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "markdown",
+				"editOnDblClick": true
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/markdown",
+			"editorHide": true,
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489637_1554354684",
+		"id": "20171027-201017_1626571936",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "FINISHED",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1399",
+		"user": "anonymous",
+		"dateFinished": "2018-05-03T09:45:15+0000",
+		"dateStarted": "2018-05-03T09:45:15+0000",
+		"results": {
+			"code": "SUCCESS",
+			"msg": [{
+				"type": "HTML",
+				"data": "<p>In order to train and make inferences our input DataFrame must have a column of Doubles (named &ldquo;label&rdquo; by default) and a column of Vectors of Doubles (named &ldquo;features&rdquo; by default).</p>\n<p>Spark's LibSVM DataFrameReader loads a DataFrame already suitable for training and inference.</p>\n"
+			}]
+		}
+	}, {
+		"text": "%spark\n\ntrainingData.show()",
+		"user": "anonymous",
+		"dateUpdated": "2018-05-03T09:45:06+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "scala",
+				"editOnDblClick": false
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/scala",
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489638_1555508931",
+		"id": "20171027-194234_1638663044",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"dateStarted": "2018-05-03T09:26:17+0000",
+		"dateFinished": "2018-05-03T09:26:20+0000",
+		"status": "FINISHED",
+		"errorMessage": "",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1400"
+	}, {
+		"text": "%md\n\nNow we create a KMeansSageMakerEstimator, which uses the KMeans Amazon SageMaker Algorithm to train on our input data, and uses the KMeans Amazon SageMaker model image to host our model.\n\nCalling fit() on this estimator will train our model on Amazon SageMaker, and then create an Amazon SageMaker Endpoint to host our model.\n\nWe can then use the SageMakerModel returned by this call to fit() to transform Dataframes using our hosted model.",
+		"dateUpdated": "2018-05-03T09:45:25+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "markdown",
+				"editOnDblClick": true
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/markdown",
+			"editorHide": true,
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489638_1555508931",
+		"id": "20171027-201222_716997275",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "FINISHED",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1401",
+		"user": "anonymous",
+		"dateFinished": "2018-05-03T09:45:25+0000",
+		"dateStarted": "2018-05-03T09:45:25+0000",
+		"results": {
+			"code": "SUCCESS",
+			"msg": [{
+				"type": "HTML",
+				"data": "<p>Now we create a KMeansSageMakerEstimator, which uses the KMeans Amazon SageMaker Algorithm to train on our input data, and uses the KMeans Amazon SageMaker model image to host our model.</p>\n<p>Calling fit() on this estimator will train our model on Amazon SageMaker, and then create an Amazon SageMaker Endpoint to host our model.</p>\n<p>We can then use the SageMakerModel returned by this call to fit() to transform Dataframes using our hosted model.</p>\n"
+			}]
+		}
+	}, {
+		"text": "%spark\nimport com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder\nimport com.amazonaws.services.securitytoken.model.GetCallerIdentityRequest\n\nimport com.amazonaws.services.sagemaker.sparksdk.algorithms.KMeansSageMakerEstimator\nimport com.amazonaws.services.sagemaker.sparksdk.IAMRole\n\nval accountId = AWSSecurityTokenServiceClientBuilder.standard().build()\n    .getCallerIdentity(new GetCallerIdentityRequest()).getAccount()\n\nval roleName = \"SageMakerRole\"\n\nval roleArn = s\"arn:aws:iam::$accountId:role/$roleName\"\n\nval kMeansSageMakerEstimator = new KMeansSageMakerEstimator(\n  sagemakerRole = IAMRole(roleArn),\n  trainingInstanceType = \"ml.p2.xlarge\",\n  trainingInstanceCount = 1,\n  endpointInstanceType = \"ml.m4.xlarge\",\n  endpointInitialInstanceCount = 1)\n  .setK(10).setFeatureDim(784)\n\nval trainedKMeansModel = kMeansSageMakerEstimator.fit(trainingData)",
+		"user": "anonymous",
+		"dateUpdated": "2018-05-03T09:45:06+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "scala",
+				"editOnDblClick": false
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/scala",
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489639_1555124182",
+		"id": "20171027-194247_300882492",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"dateStarted": "2018-05-03T09:31:35+0000",
+		"dateFinished": "2018-05-03T09:31:37+0000",
+		"status": "FINISHED",
+		"errorMessage": "",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1402"
+	}, {
+		"text": "%md\n\nNow we transform our DataFrame.\nTo do this, we serialize each row's \"features\" Vector of Doubles into a Protobuf format for inference against the Amazon SageMaker Endpoint. We deserialize the Protobuf responses back into our DataFrame:",
+		"dateUpdated": "2018-05-03T09:45:33+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "markdown",
+				"editOnDblClick": true
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/markdown",
+			"editorHide": true,
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489639_1555124182",
+		"id": "20171027-201535_1579479",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "FINISHED",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1403",
+		"user": "anonymous",
+		"dateFinished": "2018-05-03T09:45:33+0000",
+		"dateStarted": "2018-05-03T09:45:33+0000",
+		"results": {
+			"code": "SUCCESS",
+			"msg": [{
+				"type": "HTML",
+				"data": "<p>Now we transform our DataFrame.\n<br  />To do this, we serialize each row's &ldquo;features&rdquo; Vector of Doubles into a Protobuf format for inference against the Amazon SageMaker Endpoint. We deserialize the Protobuf responses back into our DataFrame:</p>\n"
+			}]
+		}
+	}, {
+		"text": "%spark\nval transformedData = trainedKMeansModel.transform(testData)\n// This is used in the SQL queries below\ntransformedData.createOrReplaceTempView(\"transformedData\")\ntransformedData.show()",
+		"dateUpdated": "2018-05-03T09:45:06+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "scala",
+				"editOnDblClick": false
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/scala",
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489639_1555124182",
+		"id": "20171027-195712_1429851239",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "READY",
+		"errorMessage": "",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1404"
+	}, {
+		"text": "%md\n\nThe KMeansSageMakerEstimator is just a SageMakerEstimator with certain default values. You can use the Amazon SageMaker Spark SDK with algorithm and hosting images you have authored by directly instantiating (or extending) the SageMakerEstimator.\n\nIn addition to the training and hosting parameters, you need to pass in your training and model images, training hyperparameters, and a RequestRowSerializer and a ResponseRowDeserializer.\n\nThe RequestRowSerializer is what the SageMakerModel uses upon a call to transform() to serialize Spark Dataframe rows into byte arrays to send to the Amazon SageMaker Endpoint for transformation.\nThe ResponseRowDeserializer is what the SageMakerModel uses upon a call to transform() to the Amazon SageMaker Endpoint's response from a byte array into Rows of a DataFrame.\n\nThe ProtobufRequestRowSerializer serializes Spark Rows into a protobuf format that the KMeans, PCA, and LinearLearner algorithms can consume for inference.\nThe KMeansProtobufResponseRowDeserializer deserializes the protobuf response from the KMeans model image.",
+		"dateUpdated": "2018-05-03T09:45:44+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "markdown",
+				"editOnDblClick": true
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/markdown",
+			"editorHide": true,
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489640_1553200437",
+		"id": "20171027-194607_461915056",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "FINISHED",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1405",
+		"user": "anonymous",
+		"dateFinished": "2018-05-03T09:45:44+0000",
+		"dateStarted": "2018-05-03T09:45:44+0000",
+		"results": {
+			"code": "SUCCESS",
+			"msg": [{
+				"type": "HTML",
+				"data": "<p>The KMeansSageMakerEstimator is just a SageMakerEstimator with certain default values. You can use the Amazon SageMaker Spark SDK with algorithm and hosting images you have authored by directly instantiating (or extending) the SageMakerEstimator.</p>\n<p>In addition to the training and hosting parameters, you need to pass in your training and model images, training hyperparameters, and a RequestRowSerializer and a ResponseRowDeserializer.</p>\n<p>The RequestRowSerializer is what the SageMakerModel uses upon a call to transform() to serialize Spark Dataframe rows into byte arrays to send to the Amazon SageMaker Endpoint for transformation.\n<br  />The ResponseRowDeserializer is what the SageMakerModel uses upon a call to transform() to the Amazon SageMaker Endpoint's response from a byte array into Rows of a DataFrame.</p>\n<p>The ProtobufRequestRowSerializer serializes Spark Rows into a protobuf format that the KMeans, PCA, and LinearLearner algorithms can consume for inference.\n<br  />The KMeansProtobufResponseRowDeserializer deserializes the protobuf response from the KMeans model image.</p>\n"
+			}]
+		}
+	}, {
+		"text": "%spark\n\nimport com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator\nimport com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer\nimport com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.KMeansProtobufResponseRowDeserializer\n\nval kmeans = new SageMakerEstimator(\n      trainingImage = \"382416733822.dkr.ecr.us-east-1.amazonaws.com/kmeans:1\",\n      modelImage = \"382416733822.dkr.ecr.us-east-1.amazonaws.com/kmeans:1\",\n      requestRowSerializer = new ProtobufRequestRowSerializer(),\n      responseRowDeserializer = new KMeansProtobufResponseRowDeserializer(),\n      hyperParameters = Map(\"k\" -> \"10\", \"feature_dim\" -> \"784\"),\n      sagemakerRole = IAMRole(roleArn),\n      trainingInstanceType = \"ml.p2.xlarge\",\n      trainingInstanceCount = 2,\n      endpointInstanceType = \"ml.c4.xlarge\",\n      endpointInitialInstanceCount = 1)",
+		"dateUpdated": "2018-05-03T09:45:06+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "scala",
+				"editOnDblClick": false
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/scala",
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489640_1553200437",
+		"id": "20171027-195104_2011298555",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "READY",
+		"errorMessage": "",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1406"
+	}, {
+		"text": "%md\n\n\n",
+		"dateUpdated": "2018-05-03T09:45:06+0000",
+		"config": {
+			"tableHide": false,
+			"editorSetting": {
+				"language": "markdown",
+				"editOnDblClick": true
+			},
+			"colWidth": 12,
+			"editorMode": "ace/mode/markdown",
+			"editorHide": true,
+			"results": {},
+			"enabled": true
+		},
+		"settings": {
+			"params": {},
+			"forms": {}
+		},
+		"apps": [],
+		"jobName": "paragraph_1525339489641_1552815688",
+		"id": "20171027-195210_612973143",
+		"dateCreated": "2018-05-03T09:24:49+0000",
+		"status": "READY",
+		"errorMessage": "",
+		"progressUpdateIntervalMs": 500,
+		"$$hashKey": "object:1407"
+	}],
+	"name": "MNIST-kmeans",
+	"id": "2DCEDKJ3B",
+	"angularObjects": {
+		"2BRWU4WXC:shared_process": [],
+		"2AM1YV5CU:shared_process": [],
+		"2AJXGMUUJ:shared_process": [],
+		"2ANGGHHMQ:shared_process": [],
+		"2AKK3QQXU:shared_process": []
+	},
+	"config": {
+		"looknfeel": "default",
+		"personalizedMode": "false"
+	},
+	"info": {}
+}
