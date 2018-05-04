@@ -30,7 +30,7 @@ import com.amazonaws.services.sagemaker.sparksdk._
 import com.amazonaws.services.sagemaker.sparksdk.EndpointCreationPolicy.EndpointCreationPolicy
 import com.amazonaws.services.sagemaker.sparksdk.transformation.{RequestRowSerializer, ResponseRowDeserializer}
 import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.XGBoostCSVRowDeserializer
-import com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.LibSVMRequestRowSerializer
+import com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.UnlabeledLibSVMRequestRowSerializer
 
 private[algorithms] trait XGBoostParams extends Params {
 
@@ -477,7 +477,7 @@ class XGBoostSageMakerEstimator(
            override val endpointInstanceType : String,
            override val endpointInitialInstanceCount : Int,
            override val requestRowSerializer : RequestRowSerializer =
-             new LibSVMRequestRowSerializer(),
+             new UnlabeledLibSVMRequestRowSerializer(),
            override val responseRowDeserializer : ResponseRowDeserializer =
              new XGBoostCSVRowDeserializer(),
            override val trainingInputS3DataPath : S3Resource = S3AutoCreatePath(),
