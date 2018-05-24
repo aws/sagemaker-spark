@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.1.0
+=====
+
+* spark/pyspark: Enable NRT region support for spark SDK
+
 1.0.5
 =====
 
