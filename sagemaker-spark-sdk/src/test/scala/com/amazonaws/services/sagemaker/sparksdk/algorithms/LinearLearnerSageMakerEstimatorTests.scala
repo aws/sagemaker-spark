@@ -71,6 +71,11 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     val estimatorUSWest2 = createLinearLearnerBinaryClassifier(region = Regions.US_WEST_2.getName)
     assert(estimatorUSWest2.trainingImage ==
       "174872318107.dkr.ecr.us-west-2.amazonaws.com/linear-learner:1")
+
+    val estimatorAPNorthEast1 =
+      createLinearLearnerBinaryClassifier(region = Regions.AP_NORTHEAST_1.getName)
+    assert(estimatorAPNorthEast1.trainingImage ==
+      "351501993468.dkr.ecr.ap-northeast-1.amazonaws.com/linear-learner:1")
   }
 
   it should "use the correct defaults for regressor" in {
@@ -97,6 +102,11 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     val estimatorUSWest2 = createLinearLearnerRegressor(region = Regions.US_WEST_2.getName)
     assert(estimatorUSWest2.trainingImage ==
       "174872318107.dkr.ecr.us-west-2.amazonaws.com/linear-learner:1")
+
+    val estimatorAPNorthEast1 =
+      createLinearLearnerRegressor(region = Regions.AP_NORTHEAST_1.getName)
+    assert(estimatorAPNorthEast1.trainingImage ==
+      "351501993468.dkr.ecr.ap-northeast-1.amazonaws.com/linear-learner:1")
   }
 
   it should "setFeatureDim" in {
