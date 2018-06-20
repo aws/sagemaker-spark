@@ -159,8 +159,6 @@ class SageMakerModelTests extends FlatSpec with MockitoSugar
     val containerDef = captor.getValue.getPrimaryContainer
     assert(containerDef.getImage == model.modelImage.get)
     assert(containerDef.getEnvironment == model.modelEnvironmentVariables.asJava)
-    // no supplemental containers should be set
-    assert(captor.getValue.getSupplementalContainers == null)
   }
 
   it should "use correct name and endpointConfig parameters" in {
