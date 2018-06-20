@@ -2,16 +2,24 @@
 CHANGELOG
 =========
 
+1.1.dev1
+========
+
+* spark/pyspark: Update AWS SDK version to 1.11.350
+
+
 1.1.0
 =====
 
 * spark/pyspark: Enable NRT region support for spark SDK
+
 
 1.0.5
 =====
 
 * pyspark: SageMakerModel: Fix bugs in creating model from training job, s3 file and endpoint
 * spark/pyspark: XGBoostSageMakerEstimator: Fix seed hyperparameter to use correct type (Int)
+
 
 1.0.4
 =====
@@ -53,4 +61,3 @@ CHANGELOG
 =====
 
 * Initial commit
-
