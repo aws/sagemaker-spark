@@ -101,11 +101,11 @@ on EMR by submitting your Spark application jar and any additional dependencies 
 
 SageMaker Spark applications have also been verified to be compatible with EMR-5.6.0 (which runs Spark 2.1) and EMR-5-8.0
 (which runs Spark 2.2). When submitting your Spark application to an earlier EMR release, use the `--packages` flag to
-depend on a recent version of the AWS Java SDK:  
+depend on a recent version of the AWS Java SDK:
 
 ```
 spark-submit
-  --packages com.amazonaws:aws-java-sdk:1.11.238 \
+  --packages com.amazonaws:aws-java-sdk:1.11.350 \
   --deploy-mode cluster \
   --conf spark.driver.userClassPathFirst=true \
   --conf spark.executor.userClassPathFirst=true \
@@ -148,11 +148,11 @@ You can view the [Scala API Documentation for SageMaker Spark here.](https://aws
 You can view the [PySpark API Documentation for SageMaker Spark here.](http://sagemaker-pyspark.readthedocs.io/en/latest/)
 
 ## Getting Started: K-Means Clustering on SageMaker with SageMaker Spark SDK
- 
+
 This example walks through using SageMaker Spark to train on a Spark DataFrame using a SageMaker-provided algorithm,
 host the resulting model on SageMaker Spark, and making predictions on a Spark DataFrame using that hosted model.
 
-We'll cluster handwritten digits in the MNIST dataset, which we've made available in LibSVM format at 
+We'll cluster handwritten digits in the MNIST dataset, which we've made available in LibSVM format at
 `s3://sagemaker-sample-data-us-east-1/spark/mnist/train/mnist_train.libsvm`.
 
 You can start a Spark shell with SageMaker Spark
@@ -319,13 +319,13 @@ val estimator = new SageMakerEstimator(
 
 * `trainingImage` identifies the Docker registry path to the training image containing your custom code. In this case,
 this points to the us-east-1 k-means image.
-* `modelImage` identifies the Docker registry path to the image containing inference code. Amazon SageMaker k-means 
+* `modelImage` identifies the Docker registry path to the image containing inference code. Amazon SageMaker k-means
 uses the same image to train and to host trained models.
 * `requestRowSerializer` implements `com.amazonaws.services.sagemaker.sparksdk.transformation.RequestRowSerializer`.
 A `RequestRowSerializer` serializes `org.apache.spark.sql.Row`s in the input `DataFrame` to send them to the model hosted in Amazon SageMaker for inference.
 This is passed to the SageMakerModel returned by `fit`. In this case, we pass in a `RequestRowSerializer` that serializes
 `Row`s to the Amazon Record protobuf format. See [Serializing and Deserializing for Inference](#serializing-and-deserializing-for-inference)
-for more information on how SageMaker Spark makes inferences. 
+for more information on how SageMaker Spark makes inferences.
 * `responseRowDeserializer` Implements
 `com.amazonaws.services.sagemaker.sparksdk.transformation.ResponseRowDeserializer`. A `ResponseRowDeserializer` deserializes
 responses containing predictions from the Endpoint back into columns in a `DataFrame`.
@@ -480,7 +480,7 @@ transformedData.show()
 projectionColumnName = "projectionDim20")` tells the `SageMakerModel` attached to the PCA endpoint to deserialize
 responses (which contain the lower-dimensional projections of the features vectors) into the column named "projectionDim20"
 * `endpointCreationPolicy = EndpointCreationPolicy.CREATE_ON_TRANSFORM` tells the `SageMakerEstimator` to delay SageMaker
- Endpoint creation until it is needed to transform a `DataFrame`. 
+ Endpoint creation until it is needed to transform a `DataFrame`.
 * `trainingSparkDataFormatOptions = Map("featuresColumnName" -> "projectionDim20"),
    requestRowSerializer = new ProtobufRequestRowSerializer(
        featuresColumnName = "projectionDim20")` these lines tell the `KMeansSageMakerEstimator`
@@ -581,7 +581,7 @@ format serializes a column named "label", expected to contain
 If the features column contains a `SparseVector`, SageMaker Spark sparsely-encodes the `Vector` into the Amazon Record.
 If the features column contains a `DenseVector`, SageMaker Spark densely-encodes the `Vector` into the Amazon Record.
 
-You can choose which columns the `SageMakerEstimator` chooses as its "label" and "features" columns by passing in 
+You can choose which columns the `SageMakerEstimator` chooses as its "label" and "features" columns by passing in
 a `trainingSparkDataFormatOptions` `Map[String, String]` with keys "labelColumnName" and "featuresColumnName" and with
 values corresponding to the names of your chosen label and features columns.
 
@@ -595,8 +595,8 @@ myDataFrame.write
     .save("s3://my-s3-bucket/my-s3-prefix")
 ```
 
-By default, `SageMakerEstimator` deletes the RecordIO-encoded Amazon Records in S3 following training on Amazon 
-SageMaker. You can choose to allow the data to persist in S3 by passing in `deleteStagingDataAfterTraining = true` to 
+By default, `SageMakerEstimator` deletes the RecordIO-encoded Amazon Records in S3 following training on Amazon
+SageMaker. You can choose to allow the data to persist in S3 by passing in `deleteStagingDataAfterTraining = true` to
 `SageMakerEstimator`.
 
 See the [AWS Documentation on Amazon Records](https://aws.amazon.com/sagemaker/latest/dg/cdf-training.html) for
@@ -611,7 +611,7 @@ predictions are deserialized into Spark `Row`s and appended as columns in a `Dat
 
 Internally, `SageMakerModel.transform` calls `mapPartitions` to distribute the work
 of serializing Spark `Row`s, constructing and sending `InvokeEndpointRequest`s to an Endpoint, and deserializing
-`InvokeEndpointResponse`s across a Spark cluster. Because each `InvokeEndpointRequest` can carry only 5MB, each 
+`InvokeEndpointResponse`s across a Spark cluster. Because each `InvokeEndpointRequest` can carry only 5MB, each
 Spark partition creates a
 `com.amazonaws.services.sagemaker.sparksdk.transformation.util.RequestBatchIterator` to iterate over its partition,
 sending prediction requests to the Endpoint in 5MB increments.
@@ -625,7 +625,7 @@ For example, the
 RecordIO-encoded Amazon Record per input row by serializing the "features" column in each row, and wrapping each
 Amazon Record in the RecordIO header.
 
-`ResponseRowDeserializer.deserializeResponse()` converts an `Array[Byte]` containing predictions from an Endpoint to 
+`ResponseRowDeserializer.deserializeResponse()` converts an `Array[Byte]` containing predictions from an Endpoint to
 an `Iterator[Row]`to appends columns containing these predictions to the `DataFrame` being transformed by the
 `SageMakerModel`.
 
