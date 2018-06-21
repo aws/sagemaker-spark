@@ -71,6 +71,11 @@ class LDASageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLDAEstimator(region = Regions.AP_NORTHEAST_1.getName)
     assert(estimatorAPNorthEast1.trainingImage ==
       "258307448986.dkr.ecr.ap-northeast-1.amazonaws.com/lda:1")
+
+    val estimatorAPNorthEast2 =
+      createLDAEstimator(region = Regions.AP_NORTHEAST_2.getName)
+    assert(estimatorAPNorthEast2.trainingImage ==
+      "293181348795.dkr.ecr.ap-northeast-2.amazonaws.com/lda:1")
   }
 
   it should "setFeatureDim" in {

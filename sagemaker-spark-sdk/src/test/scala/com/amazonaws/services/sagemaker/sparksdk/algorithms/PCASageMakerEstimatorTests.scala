@@ -52,6 +52,10 @@ class PCASageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     val estimatorAPNorthEast1 = createPCAEstimator(region = Regions.AP_NORTHEAST_1.getName)
     assert(estimatorAPNorthEast1.trainingImage ==
       "351501993468.dkr.ecr.ap-northeast-1.amazonaws.com/pca:1")
+
+    val estimatorAPNorthEast2 = createPCAEstimator(region = Regions.AP_NORTHEAST_2.getName)
+    assert(estimatorAPNorthEast2.trainingImage ==
+      "835164637446.dkr.ecr.ap-northeast-2.amazonaws.com/pca:1")
   }
 
   it should "use the correct defaults" in {
