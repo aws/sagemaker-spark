@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.1.1
+========
+
+* spark/pyspark: Enable ICN region support for spark SDK
+
 1.1.0
 =====
 
