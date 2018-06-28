@@ -2,10 +2,16 @@
 CHANGELOG
 =========
 
-1.1.dev1
+1.1.2dev
 ========
 
 * spark/pyspark: Update AWS SDK version to 1.11.350
+
+
+1.1.1
+=====
+
+* spark/pyspark: Enable ICN region support for spark SDK
 
 
 1.1.0
