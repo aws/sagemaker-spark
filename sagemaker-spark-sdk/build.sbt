@@ -25,6 +25,7 @@ lazy val SageMakerSpark = (project in file("."))
 
 libraryDependencies ++= Seq(
   "org.apache.hadoop" % "hadoop-aws" % "2.8.1",
+  "com.amazonaws" % "aws-java-sdk-core" % "1.11.350",
   "com.amazonaws" % "aws-java-sdk-s3" % "1.11.350",
   "com.amazonaws" % "aws-java-sdk-sts" % "1.11.350",
   "com.amazonaws" % "aws-java-sdk-sagemaker" % "1.11.350",
