@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.1.2
+=====
+
+* spark/pyspark: Enable FRA and SYD region support for spark SDK
+
 1.1.1
 =====
 
