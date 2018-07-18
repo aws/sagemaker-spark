@@ -156,6 +156,21 @@ class LinearLearnerBinaryClassifierProtobufResponseRowDeserializer
 
 /**
   * Deserializes a Protobuf response from the LinearLearner model image with predictorType
+  *   "multiclass_classifier" into Rows in a Spark Dataframe
+  * @param scoreColumnName name of the column of Vectors indicating the output score for the record.
+  * @param predictedLabelColumnName name of the column of Doubles indicating the predicted label
+  *   for the record.
+  */
+class LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer
+(val scoreColumnName: String = "score",
+ val predictedLabelColumnName: String = "predicted_label")
+  extends ProtobufResponseRowDeserializer(schema =
+    StructType(Array(StructField(scoreColumnName, VectorType),
+      StructField(predictedLabelColumnName, DoubleType))),
+    protobufKeys = Some(Seq("score", "predicted_label")))
+
+/**
+  * Deserializes a Protobuf response from the LinearLearner model image with predictorType
   * "regressor" into Rows in a Spark Dataframe
   *
   * @param scoreColumnName name of the column of Doubles indicating the output score for the record.
