@@ -8,6 +8,7 @@ from sagemaker_pyspark import (SageMakerEstimatorBase, S3AutoCreatePath, Option,
 from sagemaker_pyspark.transformation.serializers import ProtobufRequestRowSerializer
 from sagemaker_pyspark.transformation.deserializers import (
     LinearLearnerBinaryClassifierProtobufResponseRowDeserializer,
+    LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer,
     LinearLearnerRegressorProtobufResponseRowDeserializer)
 
 
@@ -63,12 +64,14 @@ class LinearLearnerParams(Params):
 
     optimizer = Param(Params._dummy(), "optimizer",
                       "Which optimizer is to be used. Supported options: "
-                      "'sgd', 'adam'. ",
+                      "'sgd', 'adam', 'rmsprop' and 'auto'. ",
                       typeConverter=TypeConverters.toString)
 
     loss = Param(Params._dummy(), "loss",
                  "The loss function to apply. Supported options: "
-                 "'logistic', 'squared_loss' and 'auto'.",
+                 "'logistic', 'squared_loss', 'absolute_loss', 'hinge_loss',"
+                 "'eps_insensitive_squared_loss', 'eps_insensitive_absolute_loss', 'quantile_loss',"
+                 "'huber_loss', 'softmax_loss', 'auto'.",
                  typeConverter=TypeConverters.toString)
 
     wd = Param(Params._dummy(), "wd",
@@ -200,6 +203,12 @@ class LinearLearnerParams(Params):
                         "delta. Must be > 0. ",
                         typeConverter=TypeConverters.toFloat)
 
+    f_beta = Param(Params._dummy(), "f_beta",
+                   "The value of beta to use when calculating F score metrics for binary or"
+                   "multiclass classification. Also used if"
+                   "binary_classifier_model_selection_criteria is f_beta. Must be > 0. ",
+                   typeConverter=TypeConverters.toFloat)
+
     def getFeatureDim(self):
         return self.getOrDefault(self.feature_dim)
 
@@ -288,16 +297,21 @@ class LinearLearnerParams(Params):
         return self.getOrDefault(self.optimizer)
 
     def setOptimizer(self, value):
-        if value not in ('sgd', 'adam'):
-            raise ValueError("optimizer must be 'sgd' or 'adam', got: %s" % value)
+        if value not in ('sgd', 'adam', 'rmsprop', 'auto'):
+            raise ValueError("optimizer must be 'sgd', 'adam', 'rmsprop', 'auto', got: %s" % value)
         self._set(optimizer=value)
 
     def getLoss(self):
         return self.getOrDefault(self.loss)
 
     def setLoss(self, value):
-        if value not in ('logistic', 'squared_loss', 'auto'):
-            raise ValueError("loss must be 'auto', 'logistic' or 'squared_loss', "
+        if value not in ('logistic', 'squared_loss', 'absolute_loss', 'hinge_loss',
+                         'eps_insensitive_squared_loss', 'eps_insensitive_absolute_loss',
+                         'quantile_loss', 'huber_loss', 'softmax_loss', 'auto'):
+            raise ValueError("loss must be 'logistic', 'squared_loss', 'absolute_loss',"
+                             "'hinge_loss', 'eps_insensitive_squared_loss',"
+                             "'eps_insensitive_absolute_loss', 'quantile_loss', 'huber_loss',"
+                             "'softmax_loss', 'auto', "
                              "got: %s" % value)
         self._set(loss=value)
 
@@ -507,6 +521,14 @@ class LinearLearnerParams(Params):
             raise ValueError("huber_delta must be > 0, got: %s" % value)
         self._set(huber_delta=value)
 
+    def getFBeta(self):
+        return self.getOrDefault(self.f_beta)
+
+    def setFBeta(self, value):
+        if value <= 0:
+            raise ValueError("f_beta must be > 0, got: %s" % value)
+        self._set(f_beta=value)
+
 
 class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams):
     """
@@ -592,7 +614,7 @@ class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams)
         "binary_classifier_model_selection_criteria",
         "Pick the model with best criteria from the validation dataset for predictor_type = "
         "binary_classifier.  Supported options: 'accuracy', 'f1', 'precision_at_target_recall',"
-        " 'recall_at_target_precision' and 'cross_entropy_loss'. ",
+        " 'recall_at_target_precision', 'cross_entropy_loss', 'f_beta' and 'loss_function'. ",
         typeConverter=TypeConverters.toString)
 
     target_recall = Param(Params._dummy(), "target_recall",
@@ -713,10 +735,11 @@ class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams)
 
     def setBinaryClassifierModelSelectionCriteria(self, value):
         if value not in ('accuracy', 'f1', 'precision_at_target_recall',
-                         'recall_at_target_precision', 'cross_entropy_loss'):
+                         'recall_at_target_precision', 'cross_entropy_loss', 'f_beta',
+                         'loss_function'):
             raise ValueError("binary_classifier_model_selection_criteria must be 'accuracy', 'f1', "
                              "'precision_at_target_recall','recall_at_target_precision',"
-                             " 'cross_entropy_loss', got: %s" % value)
+                             " 'cross_entropy_loss', 'f_beta' and 'loss_function', got: %s" % value)
         self._set(binary_classifier_model_selection_criteria=value)
 
     def getTargetRecall(self):
@@ -750,6 +773,224 @@ class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams)
     @classmethod
     def _from_java(cls, javaObject):
         return LinearLearnerBinaryClassifier(sagemakerRole=None, javaObject=javaObject)
+
+
+class LinearLearnerMultiClassClassifier(SageMakerEstimatorBase, LinearLearnerParams):
+    """
+    A :class:`~sagemaker_pyspark.SageMakerEstimator` that runs a Linear Learner training job in
+    "multiclass classifier" mode in SageMaker and returns :class:`~sagemaker_pyspark.SageMakerModel`
+    that can be used to transform a DataFrame using the hosted Linear Learner model. The Linear
+    Learner Binary Classifier is useful for classifying examples into one of two classes.
+
+    Amazon SageMaker Linear Learner trains on RecordIO-encoded Amazon Record protobuf data.
+    SageMaker pyspark writes a DataFrame to S3 by selecting a column of Vectors named "features"
+    and, if present, a column of Doubles named "label". These names are configurable by passing a
+    dictionary with entries in trainingSparkDataFormatOptions with key "labelColumnName" or
+    "featuresColumnName", with values corresponding to the desired label and features columns.
+
+    Inferences made against an Endpoint hosting a Linear Learner Binary classifier model contain
+    a "score" field and a "predicted_label" field, both appended to the input DataFrame as Doubles.
+
+    Args:
+        sageMakerRole (IAMRole): The SageMaker TrainingJob and Hosting IAM Role. Used by
+            SageMaker to access S3 and ECR Resources. SageMaker hosted Endpoint instances
+            launched by this Estimator run with this role.
+        trainingInstanceType (str): The SageMaker TrainingJob Instance Type to use.
+        trainingInstanceCount (int): The number of instances of instanceType to run an
+            SageMaker Training Job with.
+        endpointInstanceType (str): The SageMaker Endpoint Config instance type.
+        endpointInitialInstanceCount (int): The SageMaker Endpoint Config minimum number of
+            instances that can be used to host modelImage.
+        requestRowSerializer (RequestRowSerializer): Serializes Spark DataFrame Rows for
+            transformation by Models built from this Estimator.
+        responseRowDeserializer (ResponseRowDeserializer): Deserializes an Endpoint response into a
+            series of Rows.
+        trainingInputS3DataPath (S3Resource): An S3 location to upload SageMaker Training Job input
+            data to.
+        trainingOutputS3DataPath (S3Resource): An S3 location for SageMaker to store Training Job
+            output data to.
+        trainingInstanceVolumeSizeInGB (int): The EBS volume size in gigabytes of each instance.
+        trainingProjectedColumns (List): The columns to project from the Dataset being fit before
+            training. If an Optional.empty is passed then no specific projection will occur and
+            all columns will be serialized.
+        trainingChannelName (str): The SageMaker Channel name to input serialized Dataset fit
+            input to.
+        trainingContentType (str): The MIME type of the training data.
+        trainingS3DataDistribution (str): The SageMaker Training Job S3 data distribution scheme.
+        trainingSparkDataFormat (str): The Spark Data Format name used to serialize the Dataset
+            being fit for input to SageMaker.
+        trainingSparkDataFormatOptions (dict): The Spark Data Format Options used during
+            serialization of the Dataset being fit.
+        trainingInputMode (str): The SageMaker Training Job Channel input mode.
+        trainingCompressionCodec (str): The type of compression to use when serializing the
+            Dataset being fit for input to SageMaker.
+        trainingMaxRuntimeInSeconds (int): A SageMaker Training Job Termination Condition
+            MaxRuntimeInHours.
+        trainingKmsKeyId (str): A KMS key ID for the Output Data Source.
+        modelEnvironmentVariables (dict): The environment variables that SageMaker will set on the
+            model container during execution.
+        endpointCreationPolicy (EndpointCreationPolicy): Defines how a SageMaker Endpoint
+            referenced by a SageMakerModel is created.
+        sagemakerClient (AmazonSageMaker) Amazon SageMaker client. Used to send CreateTrainingJob,
+            CreateModel, and CreateEndpoint requests.
+        region (str): The region in which to run the algorithm. If not specified, gets the region
+            from the DefaultAwsRegionProviderChain.
+        s3Client (AmazonS3): Used to create a bucket for staging SageMaker Training Job
+            input and/or output if either are set to S3AutoCreatePath.
+        stsClient (AmazonSTS): Used to resolve the account number when creating staging
+            input / output buckets.
+        modelPrependInputRowsToTransformationRows (bool): Whether the transformation result on
+            Models built by this Estimator should also include the input Rows. If true,
+            each output Row is formed by a concatenation of the input Row with the corresponding
+            Row produced by SageMaker Endpoint invocation, produced by responseRowDeserializer.
+            If false, each output Row is just taken from responseRowDeserializer.
+        deleteStagingDataAfterTraining (bool): Whether to remove the training data on s3 after
+            training is complete or failed.
+        namePolicyFactory (NamePolicyFactory): The NamePolicyFactory to use when naming SageMaker
+            entities created during fit.
+        uid (str): The unique identifier of this Estimator. Used to represent this stage in Spark
+            ML pipelines.
+       """
+    _wrapped_class = \
+        "com.amazonaws.services.sagemaker.sparksdk.algorithms.LinearLearnerMultiClassClassifier"
+
+    num_classes = Param(Params._dummy(), "num_classes",
+                        "The number of classes for the response variable. The classes are assumed"
+                        "to be labeled 0, ..., num_classes - 1. Must be in range [3, 1000000].",
+                        typeConverter=TypeConverters.toInt)
+
+    accuracy_top_k = Param(Params._dummy(), "accuracy_top_k",
+                           "The value of k when computing the Top K Accuracy metric for multiclass"
+                           "classification. An example is scored as correct if the model assigns"
+                           "one of the top k scores to the true label. Must be > 0. ",
+                           typeConverter=TypeConverters.toInt)
+
+    balance_multiclass_weights = Param(Params._dummy(), "balance_multiclass_weights",
+                                       "Whether to use class weights which give each class equal"
+                                       "importance in the loss function.",
+                                       typeConverter=TypeConverters.toString)
+
+    def __init__(
+            self,
+            trainingInstanceType,
+            trainingInstanceCount,
+            endpointInstanceType,
+            endpointInitialInstanceCount,
+            sagemakerRole=IAMRoleFromConfig(),
+            requestRowSerializer=ProtobufRequestRowSerializer(),
+            responseRowDeserializer=LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer(),  # noqa
+            trainingInputS3DataPath=S3AutoCreatePath(),
+            trainingOutputS3DataPath=S3AutoCreatePath(),
+            trainingInstanceVolumeSizeInGB=1024,
+            trainingProjectedColumns=None,
+            trainingChannelName="train",
+            trainingContentType=None,
+            trainingS3DataDistribution="ShardedByS3Key",
+            trainingSparkDataFormat="sagemaker",
+            trainingSparkDataFormatOptions=None,
+            trainingInputMode="File",
+            trainingCompressionCodec=None,
+            trainingMaxRuntimeInSeconds=24*60*60,
+            trainingKmsKeyId=None,
+            modelEnvironmentVariables=None,
+            endpointCreationPolicy=EndpointCreationPolicy.CREATE_ON_CONSTRUCT,
+            sagemakerClient=SageMakerClients.create_sagemaker_client(),
+            region=None,
+            s3Client=SageMakerClients.create_s3_default_client(),
+            stsClient=SageMakerClients.create_sts_default_client(),
+            modelPrependInputRowsToTransformationRows=True,
+            deleteStagingDataAfterTraining=True,
+            namePolicyFactory=RandomNamePolicyFactory(),
+            uid=None,
+            javaObject=None):
+
+        if trainingSparkDataFormatOptions is None:
+            trainingSparkDataFormatOptions = {}
+
+        if modelEnvironmentVariables is None:
+            modelEnvironmentVariables = {}
+
+        if uid is None:
+            uid = Identifiable._randomUID()
+
+        kwargs = locals().copy()
+        del kwargs['self']
+
+        super(LinearLearnerMultiClassClassifier, self).__init__(**kwargs)
+
+        default_params = {
+            'predictor_type': 'multiclass_classifier'
+        }
+
+        self._setDefault(**default_params)
+
+    def _get_java_obj(self, **kwargs):
+        if 'javaObject' in kwargs and kwargs['javaObject'] is not None:
+            return kwargs['javaObject']
+        else:
+            return self._new_java_obj(
+                LinearLearnerMultiClassClassifier._wrapped_class,
+                kwargs['sagemakerRole'],
+                kwargs['trainingInstanceType'],
+                kwargs['trainingInstanceCount'],
+                kwargs['endpointInstanceType'],
+                kwargs['endpointInitialInstanceCount'],
+                kwargs['requestRowSerializer'],
+                kwargs['responseRowDeserializer'],
+                kwargs['trainingInputS3DataPath'],
+                kwargs['trainingOutputS3DataPath'],
+                kwargs['trainingInstanceVolumeSizeInGB'],
+                Option(kwargs['trainingProjectedColumns']),
+                kwargs['trainingChannelName'],
+                Option(kwargs['trainingContentType']),
+                kwargs['trainingS3DataDistribution'],
+                kwargs['trainingSparkDataFormat'],
+                kwargs['trainingSparkDataFormatOptions'],
+                kwargs['trainingInputMode'],
+                Option(kwargs['trainingCompressionCodec']),
+                kwargs['trainingMaxRuntimeInSeconds'],
+                Option(kwargs['trainingKmsKeyId']),
+                kwargs['modelEnvironmentVariables'],
+                kwargs['endpointCreationPolicy'],
+                kwargs['sagemakerClient'],
+                Option(kwargs['region']),
+                kwargs['s3Client'],
+                kwargs['stsClient'],
+                kwargs['modelPrependInputRowsToTransformationRows'],
+                kwargs['deleteStagingDataAfterTraining'],
+                kwargs['namePolicyFactory'],
+                kwargs['uid']
+            )
+
+    def getNumClasses(self):
+        return self.getOrDefault(self.num_classes)
+
+    def setNumClasses(self, value):
+        if value > 1000000 or value < 3:
+            raise ValueError("num_classes must be in [3, 1000000], got: %s" % value)
+        self._set(num_classes=value)
+
+    def getAccuracyTopK(self):
+        return self.getOrDefault(self.accuracy_top_k)
+
+    def setAccuracyTopK(self, value):
+        if value <= 0:
+            raise ValueError("accuracy_top_k must be > 0, got: %s" % value)
+        self._set(accuracy_top_k=value)
+
+    def getBalanceMultiClassWeights(self):
+        value = self.getOrDefault(self.balance_multiclass_weights)
+        if value == 'True':
+            return True
+        else:
+            return False
+
+    def setBalanceMultiClassWeights(self, value):
+        self._set(balance_multiclass_weights=value)
+
+    @classmethod
+    def _from_java(cls, javaObject):
+        return LinearLearnerMultiClassClassifier(sagemakerRole=None, javaObject=javaObject)
 
 
 class LinearLearnerRegressor(SageMakerEstimatorBase, LinearLearnerParams):

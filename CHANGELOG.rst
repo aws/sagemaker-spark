@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.1.3dev
+========
+
+* spark/pyspark feature: LinearLearnerEstimator: Add multi-class classifier
+
 1.1.2
 =====
 

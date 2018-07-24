@@ -175,6 +175,40 @@ class LinearLearnerBinaryClassifierProtobufResponseRowDeserializer(ResponseRowDe
         raise NotImplementedError()
 
 
+class LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer(ResponseRowDeserializer):
+    """
+    Deserializes a Protobuf response from the LinearLearner model image with predictorType
+    "multiclass_classifier" into Rows in a Spark Dataframe.
+
+    Args:
+        score_column_name (str): name of the column indicating the output score for
+            the record.
+        predicted_label_column_name(str): name of the column indicating the predicted
+            label for the record.
+    """
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.transformation." \
+                     "deserializers." \
+                     "LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer"
+
+    def __init__(self, score_column_name="score", predicted_label_column_name="predicted_label"):
+        self.score_column_name = score_column_name
+        self.predicted_label_column_name = predicted_label_column_name
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(
+                LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer._wrapped_class,
+                self.score_column_name,
+                self.predicted_label_column_name)
+
+        return self._java_obj
+
+    @classmethod
+    def _from_java(cls, JavaObject):
+        raise NotImplementedError()
+
+
 class LinearLearnerRegressorProtobufResponseRowDeserializer(ResponseRowDeserializer):
     """
     Deserializes a Protobuf response from the LinearLearner model image with predictorType
