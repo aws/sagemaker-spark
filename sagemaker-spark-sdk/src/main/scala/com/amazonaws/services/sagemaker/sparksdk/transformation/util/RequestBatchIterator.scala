@@ -20,19 +20,21 @@ import java.nio.ByteBuffer
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
+import com.amazonaws.ClientConfiguration
 import com.amazonaws.services.sagemakerruntime.{AmazonSageMakerRuntime, AmazonSageMakerRuntimeClientBuilder}
 import com.amazonaws.services.sagemakerruntime.model.InvokeEndpointRequest
 import com.amazonaws.util.BinaryUtils
-
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
 import org.apache.spark.sql.types.StructType
-
 import com.amazonaws.services.sagemaker.sparksdk.transformation.{RequestRowSerializer, ResponseRowDeserializer}
 
 object RequestBatchIterator {
   var sagemakerRuntime : AmazonSageMakerRuntime =
-    AmazonSageMakerRuntimeClientBuilder.defaultClient
+    AmazonSageMakerRuntimeClientBuilder
+      .standard()
+      .withClientConfiguration(new ClientConfiguration().withSocketTimeout(80 * 1000))
+      .build()
 }
 
 /**
