@@ -24,9 +24,11 @@ import com.amazonaws.ClientConfiguration
 import com.amazonaws.services.sagemakerruntime.{AmazonSageMakerRuntime, AmazonSageMakerRuntimeClientBuilder}
 import com.amazonaws.services.sagemakerruntime.model.InvokeEndpointRequest
 import com.amazonaws.util.BinaryUtils
+
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
 import org.apache.spark.sql.types.StructType
+
 import com.amazonaws.services.sagemaker.sparksdk.transformation.{RequestRowSerializer, ResponseRowDeserializer}
 
 object RequestBatchIterator {
