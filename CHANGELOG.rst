@@ -2,8 +2,13 @@
 CHANGELOG
 =========
 
+1.1.4
+=====
+
+* spark/pyspark bug-fix: Increase default timeout for inference requests
+
 1.1.3
-========
+=====
 
 * spark/pyspark feature: LinearLearnerEstimator: Add multi-class classifier
 
