@@ -23,7 +23,7 @@ import aialgorithms.proto2.RecordProto2
 import aialgorithms.proto2.RecordProto2.{MapEntry, Record, Value}
 import aialgorithms.proto2.RecordProto2.Record.Builder
 
-import org.apache.spark.ml.linalg.{DenseVector, SparseVector, Vector}
+import org.apache.spark.ml.linalg.{DenseMatrix, DenseVector, Matrix, SparseMatrix, SparseVector, Vector}
 import org.apache.spark.sql.Row
 
 /**
@@ -65,8 +65,13 @@ object ProtobufConverter {
     val hasFeaturesColumn = row.schema.fieldNames.contains(featuresFieldName)
 
     if (hasFeaturesColumn) {
-      val vector = row.getAs[Vector](featuresFieldName)
-      setFeatures(protobufBuilder, vector)
+      val idx = row.fieldIndex(featuresFieldName)
+      val target = row.get(idx) match {
+        case v : Vector =>
+          setFeatures(protobufBuilder, v)
+        case m : Matrix =>
+          setFeatures(protobufBuilder, m)
+      }
     } else if (!hasFeaturesColumn) {
       throw new IllegalArgumentException(s"Need a features column with a " +
         s"Vector of doubles named $featuresFieldName to convert row to protobuf")
@@ -170,8 +175,21 @@ object ProtobufConverter {
     protobufBuilder.addLabel(mapEntry)
   }
 
+  /*
+   *  DenseVector is encoded as
+   *      Record.values([value_0, value_1, value_2, ...])
+   *
+   *  SparseVector is encoded as:
+   *      Record.values([value_0, value_1, value_2, ...])
+   *      Record.keys([value_0_idx, value_1_idx, value_2_idx])
+   *      Record.shape(length)
+   *  For instance the SparseVector[0, 1, 0, 2] is encoded as:
+   *      Record.values([1, 2])
+   *      Record.keys([1, 3])
+   *      Record.shape(4)
+   */
   private def setFeatures(protobufBuilder: Record.Builder,
-                                    vector: Vector): Record.Builder = {
+                                   vector: Vector): Record.Builder = {
     val featuresTensorBuilder = Value.newBuilder().getFloat32TensorBuilder()
 
     val featuresTensor = vector match {
@@ -186,6 +204,87 @@ object ProtobufConverter {
           featuresTensorBuilder.addKeys(v.indices(i))
           featuresTensorBuilder.addValues(v.values(i).toFloat)
         }
+        featuresTensorBuilder.build()
+    }
+    val featuresValue = Value.newBuilder().setFloat32Tensor(featuresTensor).build
+    val mapEntry = MapEntry.newBuilder().setKey(ValuesIdentifierString)
+      .setValue(featuresValue).build
+    protobufBuilder.addFeatures(mapEntry)
+  }
+
+  /*
+   *  DenseMatrix is stored in column major as
+   *      Record.values([value_0, value_1, value_2, ...])
+   *      Record.shape([rows, cols])
+   *
+   *  SparseMatrix is stored as Compressed Sparse Column (CSC)
+   *  (See Spark SparseMatrix documentation)
+   *      Record.values([value_0, value_1, value_2, ...])
+   *      Record.shape([rows, cols])
+   *      Record.keys([index_0, index_1, index_2, ...]) where
+   *          row_i = floor(index_i / cols)
+   *          col_i = index_i % cols
+   *
+   *  For instance the SparseMatrix[ 0.0  1.0  4.0  0.0
+   *                                 0.0  2.0  5.0  6.0
+   *                                 0.0  3.0  0.0  0.0 ] is encoded as:
+   *     Record.values[1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+   *     Record.shape[3, 4]
+   *     Record.keys[1, 5, 9, 2, 6, 7]
+   *
+   *  For SparseMatrix, since each key univocally identifyes row/col there is
+   *  no assumed order for the keys or values.
+   */
+  private def setFeatures(protobufBuilder: Record.Builder,
+                          matrix: Matrix): Record.Builder = {
+    val featuresTensorBuilder = Value.newBuilder().getFloat32TensorBuilder()
+
+    // Matrix shape must be recorded for both dense/sparse matrices
+    featuresTensorBuilder.addShape(matrix.numRows)
+    featuresTensorBuilder.addShape(matrix.numCols)
+
+    val featuresTensor = matrix match {
+      case m: DenseMatrix =>
+        if (!m.isTransposed) {
+          // Convert to Row major order
+          for (row <- (0 to m.numRows - 1)) {
+            for (col <- (0 to m.numCols - 1)) {
+              featuresTensorBuilder.addValues(m(row, col).toFloat)
+            }
+          }
+        } else {
+          // When transposed it is already in Row major order
+          for (value <- m.values) {
+            featuresTensorBuilder.addValues(value.toFloat)
+          }
+        }
+
+        featuresTensorBuilder.build()
+
+      case m: SparseMatrix =>
+        // Construct the index for each value so that
+        // row = floor(index / cols)
+        // col = index % cols
+        var rowIdx = 0
+        var colIdx = 0
+        for (colStart <- m.colPtrs.slice(1, m.colPtrs.size)) {
+          while (rowIdx < colStart) {
+            if (m.isTransposed) {
+              // When transposed, rowIndices behave are colIndices, and colPtrs and rowPtrs
+              // and rowIdx, colIdx are swapped
+              featuresTensorBuilder.addKeys((colIdx * m.numCols) + m.rowIndices(rowIdx))
+            } else {
+              featuresTensorBuilder.addKeys((m.rowIndices(rowIdx) * m.numCols) + colIdx)
+            }
+            rowIdx += 1
+          }
+          colIdx += 1
+        }
+
+        for (value <- m.values) {
+          featuresTensorBuilder.addValues(value.toFloat)
+        }
+
         featuresTensorBuilder.build()
     }
     val featuresValue = Value.newBuilder().setFloat32Tensor(featuresTensor).build
