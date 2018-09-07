@@ -91,9 +91,9 @@ try:  # noqa
             "numpy",
         ],
 
-        setup_requires=["pyspark", "pypandoc", "pytest==3.6.3", "numpy==1.14.5"],
+        setup_requires=["pyspark", "pypandoc", "pytest", "numpy"],
         tests_require=["pytest==3.6.3", "pytest-cov==2.5.1", "pytest-xdist==1.22.2",
-                       "coverage==4.0.2", "teamcity-messages==1.21"]
+                       "coverage==4.0.2", "teamcity-messages==1.21", "six==1.11.0"]
 
     )
 
