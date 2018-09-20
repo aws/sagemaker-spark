@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.1.5dev
+========
+
+* spark/pyspark: Enable PDT region support for spark SDK
+
 1.1.4
 =====
 
