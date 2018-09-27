@@ -5,7 +5,7 @@ CHANGELOG
 1.1.5
 =====
 
-* spark/pyspark: Enable PDT region support for spark SDK
+* spark/pyspark: add support for GovCloud
 
 1.1.4
 =====
