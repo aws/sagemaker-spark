@@ -101,6 +101,11 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerBinaryClassifier(region = Regions.AP_SOUTHEAST_2.getName)
     assert(estimatorAPSouthEast2.trainingImage ==
       "712309505854.dkr.ecr.ap-southeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorGovCloud =
+      createLinearLearnerBinaryClassifier(region = Regions.GovCloud.getName)
+    assert(estimatorGovCloud.trainingImage ==
+      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/linear-learner:1")
   }
 
   it should "use the correct defaults for multiclass classifier" in {
@@ -151,6 +156,11 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerMultiClassClassifier(region = Regions.AP_SOUTHEAST_2.getName)
     assert(estimatorAPSouthEast2.trainingImage ==
       "712309505854.dkr.ecr.ap-southeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorGovCloud =
+      createLinearLearnerMultiClassClassifier(region = Regions.GovCloud.getName)
+    assert(estimatorGovCloud.trainingImage ==
+      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/linear-learner:1")
   }
 
   it should "use the correct defaults for regressor" in {
@@ -197,6 +207,11 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerRegressor(region = Regions.AP_SOUTHEAST_2.getName)
     assert(estimatorAPSouthEast2.trainingImage ==
       "712309505854.dkr.ecr.ap-southeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorGovCloud =
+      createLinearLearnerRegressor(region = Regions.GovCloud.getName)
+    assert(estimatorGovCloud.trainingImage ==
+      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/linear-learner:1")
   }
 
   it should "setFeatureDim" in {
