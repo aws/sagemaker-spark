@@ -2,10 +2,15 @@
 CHANGELOG
 =========
 
-1.1.5
-=====
+1.2.1dev
+========
 
 * Encode DenseMatrix and SparseMatrix in probobuf Record format
+
+1.2.0
+=====
+
+* spark/pyspark: add support for GovCloud
 
 1.1.4
 =====

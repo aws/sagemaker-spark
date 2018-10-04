@@ -1,6 +1,6 @@
 {
 	"paragraphs": [{
-		"text": "%md\n\nThis notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.\n\nWe will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.\n\nFirst, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://awsai-sparksdk-dataset/mnist_libsvm/",
+		"text": "%md\n\nThis notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.\n\nWe will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.\n\nFirst, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://sagemaker-sample-data-{REGION}/spark/mnist/",
 		"dateUpdated": "2018-05-03T09:45:06+0000",
 		"config": {
 			"tableHide": false,
@@ -33,7 +33,7 @@
 			"code": "SUCCESS",
 			"msg": [{
 				"type": "HTML",
-				"data": "<p>This notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.</p>\n<p>We will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.</p>\n<p>First, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://awsai-sparksdk-dataset/mnist_libsvm/</p>\n"
+				"data": "<p>This notebook will show how to classify handwritten digits using the KMeans clustering algorithm through the SageMakerSparkSDK.</p>\n<p>We will train on Amazon SageMaker using the KMeans Clustering on the MNIST dataset, host the trained model on Amazon SageMaker, and then make predictions against that hosted model.</p>\n<p>First, we load the MNIST dataset into a Spark Dataframe, which dataset is available in LibSVM format at s3://sagemaker-sample-data-{REGION}/spark/mnist/</p>\n"
 			}]
 		}
 	}, {
