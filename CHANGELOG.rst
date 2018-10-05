@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.2.1dev
+========
+
+* Encode DenseMatrix and SparseMatrix in probobuf Record format
+
 1.2.0
 =====
 
@@ -78,4 +83,3 @@ CHANGELOG
 =====
 
 * Initial commit
-
