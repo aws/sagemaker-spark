@@ -22,7 +22,7 @@ import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 
 import com.amazonaws.services.sagemaker.sparksdk.IAMRole
-import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.{LinearLearnerBinaryClassifierProtobufResponseRowDeserializer, LinearLearnerRegressorProtobufResponseRowDeserializer}
+import com.amazonaws.services.sagemaker.sparksdk.transformation.deserializers.{LinearLearnerBinaryClassifierProtobufResponseRowDeserializer, LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer, LinearLearnerRegressorProtobufResponseRowDeserializer}
 import com.amazonaws.services.sagemaker.sparksdk.transformation.serializers.ProtobufRequestRowSerializer
 
 class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
@@ -40,6 +40,16 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
   def createLinearLearnerBinaryClassifier(region: String =
                                    Regions.US_WEST_2.getName) : LinearLearnerBinaryClassifier = {
     new LinearLearnerBinaryClassifier(sagemakerRole = IAMRole("role"),
+      trainingInstanceType = "ml.c4.xlarge",
+      trainingInstanceCount = 2,
+      endpointInstanceType = "ml.c4.xlarge",
+      endpointInitialInstanceCount = 1,
+      region = Some(region))
+  }
+
+  def createLinearLearnerMultiClassClassifier(region: String =
+                                Regions.US_WEST_2.getName) : LinearLearnerMultiClassClassifier = {
+    new LinearLearnerMultiClassClassifier(sagemakerRole = IAMRole("role"),
       trainingInstanceType = "ml.c4.xlarge",
       trainingInstanceCount = 2,
       endpointInstanceType = "ml.c4.xlarge",
@@ -81,6 +91,76 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerBinaryClassifier(region = Regions.AP_NORTHEAST_2.getName)
     assert(estimatorAPNorthEast2.trainingImage ==
       "835164637446.dkr.ecr.ap-northeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorEUCentral1 =
+      createLinearLearnerBinaryClassifier(region = Regions.EU_CENTRAL_1.getName)
+    assert(estimatorEUCentral1.trainingImage ==
+      "664544806723.dkr.ecr.eu-central-1.amazonaws.com/linear-learner:1")
+
+    val estimatorAPSouthEast2 =
+      createLinearLearnerBinaryClassifier(region = Regions.AP_SOUTHEAST_2.getName)
+    assert(estimatorAPSouthEast2.trainingImage ==
+      "712309505854.dkr.ecr.ap-southeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorGovCloud =
+      createLinearLearnerBinaryClassifier(region = Regions.GovCloud.getName)
+    assert(estimatorGovCloud.trainingImage ==
+      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/linear-learner:1")
+  }
+
+  it should "use the correct defaults for multiclass classifier" in {
+    val estimator = createLinearLearnerMultiClassClassifier()
+    assert(estimator.trainingSparkDataFormat == "sagemaker")
+    assert(estimator.requestRowSerializer.isInstanceOf[ProtobufRequestRowSerializer])
+    assert(estimator.responseRowDeserializer.
+      isInstanceOf[LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer])
+  }
+
+  it should "use the correct images in all regions for multiclass classifier" in {
+    val estimatorUSEast1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.US_EAST_1.getName)
+    assert(estimatorUSEast1.trainingImage ==
+      "382416733822.dkr.ecr.us-east-1.amazonaws.com/linear-learner:1")
+
+    val estimatorUSEast2 =
+      createLinearLearnerMultiClassClassifier(region = Regions.US_EAST_2.getName)
+    assert(estimatorUSEast2.trainingImage ==
+      "404615174143.dkr.ecr.us-east-2.amazonaws.com/linear-learner:1")
+
+    val estimatorEUWest1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.EU_WEST_1.getName)
+    assert(estimatorEUWest1.trainingImage ==
+      "438346466558.dkr.ecr.eu-west-1.amazonaws.com/linear-learner:1")
+
+    val estimatorUSWest2 =
+      createLinearLearnerMultiClassClassifier(region = Regions.US_WEST_2.getName)
+    assert(estimatorUSWest2.trainingImage ==
+      "174872318107.dkr.ecr.us-west-2.amazonaws.com/linear-learner:1")
+
+    val estimatorAPNorthEast1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.AP_NORTHEAST_1.getName)
+    assert(estimatorAPNorthEast1.trainingImage ==
+      "351501993468.dkr.ecr.ap-northeast-1.amazonaws.com/linear-learner:1")
+
+    val estimatorAPNorthEast2 =
+      createLinearLearnerMultiClassClassifier(region = Regions.AP_NORTHEAST_2.getName)
+    assert(estimatorAPNorthEast2.trainingImage ==
+      "835164637446.dkr.ecr.ap-northeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorEUCentral1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.EU_CENTRAL_1.getName)
+    assert(estimatorEUCentral1.trainingImage ==
+      "664544806723.dkr.ecr.eu-central-1.amazonaws.com/linear-learner:1")
+
+    val estimatorAPSouthEast2 =
+      createLinearLearnerMultiClassClassifier(region = Regions.AP_SOUTHEAST_2.getName)
+    assert(estimatorAPSouthEast2.trainingImage ==
+      "712309505854.dkr.ecr.ap-southeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorGovCloud =
+      createLinearLearnerMultiClassClassifier(region = Regions.GovCloud.getName)
+    assert(estimatorGovCloud.trainingImage ==
+      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/linear-learner:1")
   }
 
   it should "use the correct defaults for regressor" in {
@@ -117,6 +197,21 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerRegressor(region = Regions.AP_NORTHEAST_2.getName)
     assert(estimatorAPNorthEast2.trainingImage ==
       "835164637446.dkr.ecr.ap-northeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorEUCentral1 =
+      createLinearLearnerRegressor(region = Regions.EU_CENTRAL_1.getName)
+    assert(estimatorEUCentral1.trainingImage ==
+      "664544806723.dkr.ecr.eu-central-1.amazonaws.com/linear-learner:1")
+
+    val estimatorAPSouthEast2 =
+      createLinearLearnerRegressor(region = Regions.AP_SOUTHEAST_2.getName)
+    assert(estimatorAPSouthEast2.trainingImage ==
+      "712309505854.dkr.ecr.ap-southeast-2.amazonaws.com/linear-learner:1")
+
+    val estimatorGovCloud =
+      createLinearLearnerRegressor(region = Regions.GovCloud.getName)
+    assert(estimatorGovCloud.trainingImage ==
+      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/linear-learner:1")
   }
 
   it should "setFeatureDim" in {
@@ -414,7 +509,35 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     assert(huberDelta == estimator.getHuberDelta)
   }
 
-  it should "create correct hyper-parameter map" in {
+  it should "setFBeta" in {
+    val estimator = createLinearLearnerBinaryClassifier()
+    val fBeta = 5.0
+    estimator.setFBeta(fBeta)
+    assert(fBeta == estimator.getFBeta)
+  }
+
+  it should "setNumClasses" in {
+    val estimator = createLinearLearnerMultiClassClassifier()
+    val numClasses = 5
+    estimator.setNumClasses(numClasses)
+    assert(numClasses == estimator.getNumClasses)
+  }
+
+  it should "setAccuracyTopK" in {
+    val estimator = createLinearLearnerMultiClassClassifier()
+    val accuracyTopK = 5
+    estimator.setAccuracyTopK(accuracyTopK)
+    assert(accuracyTopK == estimator.getAccuracyTopK)
+  }
+
+  it should "setBalanceMultiClassWeights" in {
+    val estimator = createLinearLearnerMultiClassClassifier()
+    val balanceMultiClassWeights = false
+    estimator.setBalanceMultiClassWeights(balanceMultiClassWeights)
+    assert(balanceMultiClassWeights == estimator.getBalanceMultiClassWeights)
+  }
+
+  it should "create correct binary classifier hyper-parameter map" in {
     val estimator = createLinearLearnerBinaryClassifier()
     estimator.setEpochs(2)
     estimator.setFeatureDim(2)
@@ -455,6 +578,7 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     estimator.setQuantile(0.5)
     estimator.setLossInsensitivity(0.05)
     estimator.setHuberDelta(0.5)
+    estimator.setFBeta(0.5)
 
     val hyperParamMap = Map(
       "predictor_type" -> "binary_classifier",
@@ -496,7 +620,96 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       "margin" -> "0.5",
       "quantile" -> "0.5",
       "loss_insensitivity" -> "0.05",
-      "huber_delta" -> "0.5"
+      "huber_delta" -> "0.5",
+      "f_beta" -> "0.5"
+    )
+
+    assert(hyperParamMap.asJava == estimator.makeHyperParameters())
+  }
+
+  it should "create correct multiclass classifier hyper-parameter map" in {
+    val estimator = createLinearLearnerMultiClassClassifier()
+    estimator.setEpochs(2)
+    estimator.setFeatureDim(2)
+    estimator.setMiniBatchSize(2)
+    estimator.setUseBias(false)
+    estimator.setNumClasses(5)
+    estimator.setAccuracyTopK(5)
+    estimator.setBalanceMultiClassWeights(true)
+    estimator.setNumModels("auto")
+    estimator.setNumCalibrationSamples(5)
+    estimator.setInitMethod("uniform")
+    estimator.setInitScale(0.07)
+    estimator.setInitSigma(0.01)
+    estimator.setInitBias(0)
+    estimator.setOptimizer("sgd")
+    estimator.setLoss("squared_loss")
+    estimator.setWd(0.5)
+    estimator.setL1(0.5)
+    estimator.setMomentum(0)
+    estimator.setLearningRate(0.5)
+    estimator.setBeta1(0.9)
+    estimator.setBeta2(0.999)
+    estimator.setBiasLrMult(0.5)
+    estimator.setBiasWdMult(0.5)
+    estimator.setUseLrScheduler(false)
+    estimator.setLrSchedulerStep(5)
+    estimator.setLrSchedulerFactor(0.5)
+    estimator.setLrSchedulerMinimumLr(0.5)
+    estimator.setNormalizeData(false)
+    estimator.setNormalizeLabel(false)
+    estimator.setUnbiasData(false)
+    estimator.setUnbiasLabel(false)
+    estimator.setNumPointForScaler(100)
+    estimator.setEarlyStoppingPatience(5)
+    estimator.setEarlyStoppingTolerance(0.1)
+    estimator.setMargin(0.5)
+    estimator.setQuantile(0.5)
+    estimator.setLossInsensitivity(0.05)
+    estimator.setHuberDelta(0.5)
+    estimator.setFBeta(0.5)
+
+    val hyperParamMap = Map(
+      "predictor_type" -> "multiclass_classifier",
+      "epochs" -> "2",
+      "feature_dim" -> "2",
+      "mini_batch_size" -> "2",
+      "use_bias" -> "False",
+      "num_classes" -> "5",
+      "accuracy_top_k" -> "5",
+      "balance_multiclass_weights" -> "True",
+      "num_models" -> "auto",
+      "num_calibration_samples" -> "5",
+      "init_method" -> "uniform",
+      "init_scale" -> "0.07",
+      "init_sigma" -> "0.01",
+      "init_bias" -> "0.0",
+      "optimizer" -> "sgd",
+      "loss" -> "squared_loss",
+      "wd" -> "0.5",
+      "l1" -> "0.5",
+      "momentum" -> "0.0",
+      "learning_rate" -> "0.5",
+      "beta_1" -> "0.9",
+      "beta_2" -> "0.999",
+      "bias_lr_mult" -> "0.5",
+      "bias_wd_mult" -> "0.5",
+      "use_lr_scheduler" -> "False",
+      "lr_scheduler_step" -> "5",
+      "lr_scheduler_factor" -> "0.5",
+      "lr_scheduler_minimum_lr" -> "0.5",
+      "normalize_data" -> "False",
+      "normalize_label" -> "False",
+      "unbias_data" -> "False",
+      "unbias_label" -> "False",
+      "num_point_for_scaler" -> "100",
+      "early_stopping_patience" -> "5",
+      "early_stopping_tolerance" -> "0.1",
+      "margin" -> "0.5",
+      "quantile" -> "0.5",
+      "loss_insensitivity" -> "0.05",
+      "huber_delta" -> "0.5",
+      "f_beta" -> "0.5"
     )
 
     assert(hyperParamMap.asJava == estimator.makeHyperParameters())
@@ -749,6 +962,27 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
     val estimator = createLinearLearnerRegressor()
     val huberDelta = intercept[IllegalArgumentException] {
       estimator.setHuberDelta(-1.0)
+    }
+  }
+
+  it should "validate fBeta" in {
+    val estimator = createLinearLearnerBinaryClassifier()
+    val fBeta = intercept[IllegalArgumentException] {
+      estimator.setFBeta(-1.0)
+    }
+  }
+
+  it should "validate numClasses" in {
+    val estimator = createLinearLearnerMultiClassClassifier()
+    val numClasses = intercept[IllegalArgumentException] {
+      estimator.setNumClasses(-1)
+    }
+  }
+
+  it should "validate accuracyTopK" in {
+    val estimator = createLinearLearnerMultiClassClassifier()
+    val accuracyTopK = intercept[IllegalArgumentException] {
+      estimator.setAccuracyTopK(-1)
     }
   }
 }

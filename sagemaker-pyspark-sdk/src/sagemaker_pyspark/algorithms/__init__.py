@@ -12,7 +12,8 @@
 # permissions and limitations under the License.
 
 from .KMeansSageMakerEstimator import KMeansSageMakerEstimator
-from .LinearLearnerSageMakerEstimator import LinearLearnerRegressor, LinearLearnerBinaryClassifier
+from .LinearLearnerSageMakerEstimator import (
+    LinearLearnerRegressor, LinearLearnerBinaryClassifier, LinearLearnerMultiClassClassifier)
 from .FactorizationMachinesSageMakerEstimator import (
     FactorizationMachinesBinaryClassifier,
     FactorizationMachinesRegressor)
@@ -23,6 +24,7 @@ from .XGBoostSageMakerEstimator import XGBoostSageMakerEstimator
 __all__ = ['KMeansSageMakerEstimator',
            'LinearLearnerRegressor',
            'LinearLearnerBinaryClassifier',
+           'LinearLearnerMultiClassClassifier',
            'LDASageMakerEstimator',
            'FactorizationMachinesBinaryClassifier',
            'FactorizationMachinesRegressor',

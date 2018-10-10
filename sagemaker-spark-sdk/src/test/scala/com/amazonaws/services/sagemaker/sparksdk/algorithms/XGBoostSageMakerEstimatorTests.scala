@@ -75,6 +75,18 @@ class XGBoostSageMakerEstimatorTests extends FlatSpec with Matchers with Mockito
     val estimatorAPNorthEast2 = createXGBoostEstimator(region = Regions.AP_NORTHEAST_2.getName)
     assert(estimatorAPNorthEast2.trainingImage ==
       "306986355934.dkr.ecr.ap-northeast-2.amazonaws.com/xgboost:1")
+
+    val estimatorEUCentral1 = createXGBoostEstimator(region = Regions.EU_CENTRAL_1.getName)
+    assert(estimatorEUCentral1.trainingImage ==
+      "813361260812.dkr.ecr.eu-central-1.amazonaws.com/xgboost:1")
+
+    val estimatorAPSouthEast2 = createXGBoostEstimator(region = Regions.AP_SOUTHEAST_2.getName)
+    assert(estimatorAPSouthEast2.trainingImage ==
+      "544295431143.dkr.ecr.ap-southeast-2.amazonaws.com/xgboost:1")
+
+    val estimatorGovCloud = createXGBoostEstimator(region = Regions.GovCloud.getName)
+    assert(estimatorGovCloud.trainingImage ==
+      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/xgboost:1")
   }
 
   it should "setBooster" in {

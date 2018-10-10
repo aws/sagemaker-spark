@@ -2,11 +2,31 @@
 CHANGELOG
 =========
 
-1.1.2dev
+1.2.1dev
 ========
 
+* Encode DenseMatrix and SparseMatrix in probobuf Record format
 * spark/pyspark: Update AWS SDK version to 1.11.350
 
+1.2.0
+=====
+
+* spark/pyspark: add support for GovCloud
+
+1.1.4
+=====
+
+* spark/pyspark bug-fix: Increase default timeout for inference requests
+
+1.1.3
+=====
+
+* spark/pyspark feature: LinearLearnerEstimator: Add multi-class classifier
+
+1.1.2
+=====
+
+* spark/pyspark: Enable FRA and SYD region support for spark SDK
 
 1.1.1
 =====

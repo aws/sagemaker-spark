@@ -5,11 +5,11 @@ from pyspark import SparkConf, SparkContext
 
 from sagemaker_pyspark import (S3DataPath, EndpointCreationPolicy, RandomNamePolicyFactory,
                                SageMakerClients, IAMRole, classpath_jars)
-from sagemaker_pyspark.algorithms import LinearLearnerBinaryClassifier
+from sagemaker_pyspark.algorithms import LinearLearnerMultiClassClassifier
 
 from sagemaker_pyspark.transformation.serializers import ProtobufRequestRowSerializer
 from sagemaker_pyspark.transformation.deserializers \
-    import LinearLearnerBinaryClassifierProtobufResponseRowDeserializer
+    import LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer
 
 
 @pytest.fixture(autouse=True)
@@ -27,12 +27,12 @@ def with_spark_context():
     SparkContext.stop(SparkContext._active_spark_context)
 
 
-def get_linear_learner_binary_classifier():
+def get_linear_learner_multi_class_classifier():
     training_instance_type = "c4.8xlarge"
     training_instance_count = 3
     endpoint_instance_type = "c4.8xlarge"
     endpoint_initial_instance_count = 3
-    estimator = LinearLearnerBinaryClassifier(
+    estimator = LinearLearnerMultiClassClassifier(
         trainingInstanceType=training_instance_type,
         trainingInstanceCount=training_instance_count,
         endpointInstanceType=endpoint_instance_type,
@@ -53,7 +53,7 @@ def test_can_create_classifier_from_configured_iam_role():
     training_instance_count = 3
     endpoint_instance_type = "c4.8xlarge"
     endpoint_initial_instance_count = 3
-    estimator = LinearLearnerBinaryClassifier(
+    estimator = LinearLearnerMultiClassClassifier(
         trainingInstanceType=training_instance_type,
         trainingInstanceCount=training_instance_count,
         endpointInstanceType=endpoint_instance_type,
@@ -68,12 +68,12 @@ def test_can_create_classifier_from_configured_iam_role():
     return estimator
 
 
-def test_linear_learner_binary_classifier_has_correct_defaults():
-    estimator = get_linear_learner_binary_classifier()
+def test_linear_learner_multi_class_classifier_has_correct_defaults():
+    estimator = get_linear_learner_multi_class_classifier()
     assert estimator.trainingSparkDataFormat == "sagemaker"
 
 
-def test_linearLearnerBinaryClassifier_passes_correct_params_to_scala():
+def test_linearLearnerMultiClassClassifier_passes_correct_params_to_scala():
 
     training_instance_type = "c4.8xlarge"
     training_instance_count = 3
@@ -81,18 +81,18 @@ def test_linearLearnerBinaryClassifier_passes_correct_params_to_scala():
     endpoint_initial_instance_count = 3
 
     training_bucket = "random-bucket"
-    input_prefix = "linear-learner-binary-classifier-training"
-    output_prefix = "linear-learner-binary-classifier-out"
+    input_prefix = "linear-learner-multi-class-classifier-training"
+    output_prefix = "linear-learner-multi-class-classifier-out"
     integTestingRole = "arn:aws:iam::123456789:role/SageMakerRole"
 
-    estimator = LinearLearnerBinaryClassifier(
+    estimator = LinearLearnerMultiClassClassifier(
         trainingInstanceType=training_instance_type,
         trainingInstanceCount=training_instance_count,
         endpointInstanceType=endpoint_instance_type,
         endpointInitialInstanceCount=endpoint_initial_instance_count,
         sagemakerRole=IAMRole(integTestingRole),
         requestRowSerializer=ProtobufRequestRowSerializer(),
-        responseRowDeserializer=LinearLearnerBinaryClassifierProtobufResponseRowDeserializer(),
+        responseRowDeserializer=LinearLearnerMultiClassClassifierProtobufResponseRowDeserializer(),
         trainingInstanceVolumeSizeInGB=2048,
         trainingInputS3DataPath=S3DataPath(training_bucket, input_prefix),
         trainingOutputS3DataPath=S3DataPath(training_bucket, output_prefix),
@@ -116,9 +116,9 @@ def test_linearLearnerBinaryClassifier_passes_correct_params_to_scala():
     assert estimator.trainingKmsKeyId is None
 
 
-def test_linearLearnerBinaryClassifier_validates_feature_dim():
+def test_linearLearnerMultiClassClassifier_validates_feature_dim():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
 
     estimator.setFeatureDim(2)
     assert estimator.getFeatureDim() == 2
@@ -136,9 +136,9 @@ def test_linearLearnerBinaryClassifier_validates_feature_dim():
     assert estimator.getFeatureDim() == estimator._call_java("getFeatureDim")
 
 
-def test_linearLearnerBinaryClassifier_validates_mini_batch_size():
+def test_linearLearnerMultiClassClassifier_validates_mini_batch_size():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setMiniBatchSize(3)
     assert estimator.getMiniBatchSize() == 3
 
@@ -150,9 +150,9 @@ def test_linearLearnerBinaryClassifier_validates_mini_batch_size():
     assert estimator.getMiniBatchSize() == estimator._call_java("getMiniBatchSize")
 
 
-def test_linearLearnerBinaryClassifier_validates_epochs():
+def test_linearLearnerMultiClassClassifier_validates_epochs():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setEpochs(3)
     assert estimator.getEpochs() == 3
 
@@ -164,9 +164,9 @@ def test_linearLearnerBinaryClassifier_validates_epochs():
     assert estimator.getEpochs() == estimator._call_java("getEpochs")
 
 
-def test_linearLearnerBinaryClassifier_validates_use_bias():
+def test_linearLearnerMultiClassClassifier_validates_use_bias():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setUseBias("True")
     assert estimator.getUseBias() is True
 
@@ -178,9 +178,9 @@ def test_linearLearnerBinaryClassifier_validates_use_bias():
     assert estimator.getUseBias() == estimator._call_java("getUseBias")
 
 
-def test_linearLearnerBinaryClassifier_validates_num_models():
+def test_linearLearnerMultiClassClassifier_validates_num_models():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setNumModels(3)
     assert estimator.getNumModels() == "3"
 
@@ -198,9 +198,9 @@ def test_linearLearnerBinaryClassifier_validates_num_models():
     assert estimator.getNumModels() == estimator._call_java("getNumModels")
 
 
-def test_linearLearnerBinaryClassifier_validates_num_calibration_samples():
+def test_linearLearnerMultiClassClassifier_validates_num_calibration_samples():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setNumCalibrationSamples(3)
     assert estimator.getNumCalibrationSamples() == 3
 
@@ -212,9 +212,9 @@ def test_linearLearnerBinaryClassifier_validates_num_calibration_samples():
     assert estimator.getNumCalibrationSamples() == estimator._call_java("getNumCalibrationSamples")
 
 
-def test_linearLearnerBinaryClassifier_validates_init_method():
+def test_linearLearnerMultiClassClassifier_validates_init_method():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setInitMethod("uniform")
     assert estimator.getInitMethod() == "uniform"
 
@@ -226,9 +226,9 @@ def test_linearLearnerBinaryClassifier_validates_init_method():
     assert estimator.getInitMethod() == estimator._call_java("getInitMethod")
 
 
-def test_linearLearnerBinaryClassifier_validates_init_scale():
+def test_linearLearnerMultiClassClassifier_validates_init_scale():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setInitScale(1)
     assert estimator.getInitScale() == 1
 
@@ -240,9 +240,9 @@ def test_linearLearnerBinaryClassifier_validates_init_scale():
     assert estimator.getInitScale() == estimator._call_java("getInitScale")
 
 
-def test_linearLearnerBinaryClassifier_validates_init_sigma():
+def test_linearLearnerMultiClassClassifier_validates_init_sigma():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setInitSigma(0.5)
     assert estimator.getInitSigma() == 0.5
 
@@ -254,9 +254,9 @@ def test_linearLearnerBinaryClassifier_validates_init_sigma():
     assert estimator.getInitSigma() == estimator._call_java("getInitSigma")
 
 
-def test_linearLearnerBinaryClassifier_validates_optimizer():
+def test_linearLearnerMultiClassClassifier_validates_optimizer():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setOptimizer("adam")
     assert estimator.getOptimizer() == "adam"
 
@@ -268,9 +268,9 @@ def test_linearLearnerBinaryClassifier_validates_optimizer():
     assert estimator.getOptimizer() == estimator._call_java("getOptimizer")
 
 
-def test_linearLearnerBinaryClassifier_validates_loss():
+def test_linearLearnerMultiClassClassifier_validates_loss():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setLoss("auto")
     assert estimator.getLoss() == "auto"
 
@@ -282,9 +282,9 @@ def test_linearLearnerBinaryClassifier_validates_loss():
     assert estimator.getLoss() == estimator._call_java("getLoss")
 
 
-def test_linearLearnerBinaryClassifier_validates_wd():
+def test_linearLearnerMultiClassClassifier_validates_wd():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setWd(0.5)
     assert estimator.getWd() == 0.5
 
@@ -296,9 +296,9 @@ def test_linearLearnerBinaryClassifier_validates_wd():
     assert estimator.getWd() == estimator._call_java("getWd")
 
 
-def test_linearLearnerBinaryClassifier_validates_l1():
+def test_linearLearnerMultiClassClassifier_validates_l1():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setL1(0.5)
     assert estimator.getL1() == 0.5
 
@@ -310,9 +310,9 @@ def test_linearLearnerBinaryClassifier_validates_l1():
     assert estimator.getL1() == estimator._call_java("getL1")
 
 
-def test_linearLearnerBinaryClassifier_validates_momentum():
+def test_linearLearnerMultiClassClassifier_validates_momentum():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setMomentum(0.5)
     assert estimator.getMomentum() == 0.5
 
@@ -324,9 +324,9 @@ def test_linearLearnerBinaryClassifier_validates_momentum():
     assert estimator.getMomentum() == estimator._call_java("getMomentum")
 
 
-def test_linearLearnerBinaryClassifier_validates_learning_rate():
+def test_linearLearnerMultiClassClassifier_validates_learning_rate():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setLearningRate(0.5)
     assert estimator.getLearningRate() == "0.5"
 
@@ -344,9 +344,9 @@ def test_linearLearnerBinaryClassifier_validates_learning_rate():
     assert estimator.getLearningRate() == estimator._call_java("getLearningRate")
 
 
-def test_linearLearnerBinaryClassifier_validates_beta_1():
+def test_linearLearnerMultiClassClassifier_validates_beta_1():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setBeta1(0.5)
     assert estimator.getBeta1() == 0.5
 
@@ -358,9 +358,9 @@ def test_linearLearnerBinaryClassifier_validates_beta_1():
     assert estimator.getBeta1() == estimator._call_java("getBeta1")
 
 
-def test_linearLearnerBinaryClassifier_validates_beta_2():
+def test_linearLearnerMultiClassClassifier_validates_beta_2():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setBeta2(0.5)
     assert estimator.getBeta2() == 0.5
 
@@ -372,9 +372,9 @@ def test_linearLearnerBinaryClassifier_validates_beta_2():
     assert estimator.getBeta2() == estimator._call_java("getBeta2")
 
 
-def test_linearLearnerBinaryClassifier_validates_bias_lr_mult():
+def test_linearLearnerMultiClassClassifier_validates_bias_lr_mult():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setBiasLrMult(0.5)
     assert estimator.getBiasLrMult() == 0.5
 
@@ -386,9 +386,9 @@ def test_linearLearnerBinaryClassifier_validates_bias_lr_mult():
     assert estimator.getBiasLrMult() == estimator._call_java("getBiasLrMult")
 
 
-def test_linearLearnerBinaryClassifier_validates_bias_wd_mult():
+def test_linearLearnerMultiClassClassifier_validates_bias_wd_mult():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setBiasWdMult(0.5)
     assert estimator.getBiasWdMult() == 0.5
 
@@ -400,9 +400,9 @@ def test_linearLearnerBinaryClassifier_validates_bias_wd_mult():
     assert estimator.getBiasWdMult() == estimator._call_java("getBiasWdMult")
 
 
-def test_linearLearnerBinaryClassifier_validates_use_lr_scheduler():
+def test_linearLearnerMultiClassClassifier_validates_use_lr_scheduler():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setUseLrScheduler("True")
     assert estimator.getUseLrScheduler() is True
 
@@ -414,9 +414,9 @@ def test_linearLearnerBinaryClassifier_validates_use_lr_scheduler():
     assert estimator.getUseLrScheduler() == estimator._call_java("getUseLrScheduler")
 
 
-def test_linearLearnerBinaryClassifier_validates_lr_scheduler_step():
+def test_linearLearnerMultiClassClassifier_validates_lr_scheduler_step():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setLrSchedulerStep(5)
     assert estimator.getLrSchedulerStep() == 5
 
@@ -428,9 +428,9 @@ def test_linearLearnerBinaryClassifier_validates_lr_scheduler_step():
     assert estimator.getLrSchedulerStep() == estimator._call_java("getLrSchedulerStep")
 
 
-def test_linearLearnerBinaryClassifier_validates_lr_scheduler_factor():
+def test_linearLearnerMultiClassClassifier_validates_lr_scheduler_factor():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setLrSchedulerFactor(0.5)
     assert estimator.getLrSchedulerFactor() == 0.5
 
@@ -442,9 +442,9 @@ def test_linearLearnerBinaryClassifier_validates_lr_scheduler_factor():
     assert estimator.getLrSchedulerFactor() == estimator._call_java("getLrSchedulerFactor")
 
 
-def test_linearLearnerBinaryClassifier_validates_lr_scheduler_minimum_lr():
+def test_linearLearnerMultiClassClassifier_validates_lr_scheduler_minimum_lr():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setLrSchedulerMinimumLr(0.5)
     assert estimator.getLrSchedulerMinimumLr() == 0.5
 
@@ -456,70 +456,53 @@ def test_linearLearnerBinaryClassifier_validates_lr_scheduler_minimum_lr():
     assert estimator.getLrSchedulerMinimumLr() == estimator._call_java("getLrSchedulerMinimumLr")
 
 
-def test_linearLearnerBinaryClassifier_validates_binary_classifier_model_selection_criteria():
+def test_linearLearnerMultiClassClassifier_validates_num_classes():
 
-    estimator = get_linear_learner_binary_classifier()
-    estimator.setBinaryClassifierModelSelectionCriteria("accuracy")
-    assert estimator.getBinaryClassifierModelSelectionCriteria() == "accuracy"
+    estimator = get_linear_learner_multi_class_classifier()
+    estimator.setNumClasses(5)
+    assert estimator.getNumClasses() == 5
 
     with pytest.raises(ValueError):
-        estimator.setBinaryClassifierModelSelectionCriteria("some-value")
+        estimator.setNumClasses(2)
 
-    estimator.setBinaryClassifierModelSelectionCriteria("f1")
+    estimator.setNumClasses(3)
     estimator._transfer_params_to_java()
-    assert estimator.getBinaryClassifierModelSelectionCriteria() \
-        == estimator._call_java("getBinaryClassifierModelSelectionCriteria")
+    assert estimator.getNumClasses() \
+        == estimator._call_java("getNumClasses")
 
 
-def test_linearLearnerBinaryClassifier_validates_target_recall():
+def test_linearLearnerMultiClassClassifier_validates_accuracy_top_k():
 
-    estimator = get_linear_learner_binary_classifier()
-    estimator.setTargetRecall(0.5)
-    assert estimator.getTargetRecall() == 0.5
+    estimator = get_linear_learner_multi_class_classifier()
+    estimator.setAccuracyTopK(5)
+    assert estimator.getAccuracyTopK() == 5
 
     with pytest.raises(ValueError):
-        estimator.setTargetRecall(3)
+        estimator.setAccuracyTopK(0)
 
-    estimator.setTargetRecall(0.1)
+    estimator.setAccuracyTopK(2)
     estimator._transfer_params_to_java()
-    assert estimator.getTargetRecall() == estimator._call_java("getTargetRecall")
+    assert estimator.getAccuracyTopK() == estimator._call_java("getAccuracyTopK")
 
 
-def test_linearLearnerBinaryClassifier_validates_target_precision():
+def test_linearLearnerMultiClassClassifier_validates_balance_multiclass_weights():
 
-    estimator = get_linear_learner_binary_classifier()
-    estimator.setTargetPrecision(0.5)
-    assert estimator.getTargetPrecision() == 0.5
+    estimator = get_linear_learner_multi_class_classifier()
+    estimator.setBalanceMultiClassWeights("True")
+    assert estimator.getBalanceMultiClassWeights() is True
 
-    with pytest.raises(ValueError):
-        estimator.setTargetPrecision(3)
+    with pytest.raises(TypeError):
+        estimator.setBalanceMultiClassWeights(3)
 
-    estimator.setTargetPrecision(0.1)
+    estimator.setBalanceMultiClassWeights("False")
     estimator._transfer_params_to_java()
-    assert estimator.getTargetPrecision() == estimator._call_java("getTargetPrecision")
-
-
-def test_linearLearnerBinaryClassifier_validates_positive_example_weight_mult():
-
-    estimator = get_linear_learner_binary_classifier()
-    estimator.setPositiveExampleWeightMult("balanced")
-    assert estimator.getPositiveExampleWeightMult() == "balanced"
-
-    with pytest.raises(ValueError):
-        estimator.setPositiveExampleWeightMult("some-value")
-
-    with pytest.raises(ValueError):
-        estimator.setPositiveExampleWeightMult(0)
-
-    estimator.setTargetPrecision(0.1)
-    estimator._transfer_params_to_java()
-    assert estimator.getPositiveExampleWeightMult() == \
-        estimator._call_java("getPositiveExampleWeightMult")
+    assert estimator.getBalanceMultiClassWeights() ==\
+        estimator._call_java("getBalanceMultiClassWeights")
 
 
 def test_linearLearnerRegressor_validates_normalize_data():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setNormalizeData("True")
     assert estimator.getNormalizeData() is True
 
@@ -533,7 +516,7 @@ def test_linearLearnerRegressor_validates_normalize_data():
 
 def test_linearLearnerRegressor_validates_normalize_label():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setNormalizeLabel("True")
     assert estimator.getNormalizeLabel() is True
 
@@ -547,7 +530,7 @@ def test_linearLearnerRegressor_validates_normalize_label():
 
 def test_linearLearnerRegressor_validates_unbias_data():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setUnbiasData("True")
     assert estimator.getUnbiasData() is True
 
@@ -561,7 +544,7 @@ def test_linearLearnerRegressor_validates_unbias_data():
 
 def test_linearLearnerRegressor_validates_unbias_label():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setUnbiasLabel("True")
     assert estimator.getUnbiasLabel() is True
 
@@ -573,9 +556,9 @@ def test_linearLearnerRegressor_validates_unbias_label():
     assert estimator.getUnbiasLabel() == estimator._call_java("getUnbiasLabel")
 
 
-def test_linearLearnerBinaryClassifier_num_point_for_scaler():
+def test_linearLearnerMultiClassClassifier_num_point_for_scaler():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setNumPointForScaler(5)
     assert estimator.getNumPointForScaler() == 5
 
@@ -587,9 +570,9 @@ def test_linearLearnerBinaryClassifier_num_point_for_scaler():
     assert estimator.getNumPointForScaler() == estimator._call_java("getNumPointForScaler")
 
 
-def test_linearLearnerBinaryClassifier_early_stopping_patience():
+def test_linearLearnerMultiClassClassifier_early_stopping_patience():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setEarlyStoppingPatience(5)
     assert estimator.getEarlyStoppingPatience() == 5
 
@@ -601,9 +584,9 @@ def test_linearLearnerBinaryClassifier_early_stopping_patience():
     assert estimator.getEarlyStoppingPatience() == estimator._call_java("getEarlyStoppingPatience")
 
 
-def test_linearLearnerBinaryClassifier_early_stopping_tolerance():
+def test_linearLearnerMultiClassClassifier_early_stopping_tolerance():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setEarlyStoppingTolerance(5.0)
     assert estimator.getEarlyStoppingTolerance() == 5.0
 
@@ -616,9 +599,9 @@ def test_linearLearnerBinaryClassifier_early_stopping_tolerance():
         estimator._call_java("getEarlyStoppingTolerance")
 
 
-def test_linearLearnerBinaryClassifier_margin():
+def test_linearLearnerMultiClassClassifier_margin():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setMargin(5.0)
     assert estimator.getMargin() == 5.0
 
@@ -630,9 +613,9 @@ def test_linearLearnerBinaryClassifier_margin():
     assert estimator.getMargin() == estimator._call_java("getMargin")
 
 
-def test_linearLearnerBinaryClassifier_quantile():
+def test_linearLearnerMultiClassClassifier_quantile():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setQuantile(0.5)
     assert estimator.getQuantile() == 0.5
 
@@ -647,9 +630,9 @@ def test_linearLearnerBinaryClassifier_quantile():
     assert estimator.getQuantile() == estimator._call_java("getQuantile")
 
 
-def test_linearLearnerBinaryClassifier_loss_insensitivity():
+def test_linearLearnerMultiClassClassifier_loss_insensitivity():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setLossInsensitivity(0.5)
     assert estimator.getLossInsensitivity() == 0.5
 
@@ -661,9 +644,9 @@ def test_linearLearnerBinaryClassifier_loss_insensitivity():
     assert estimator.getLossInsensitivity() == estimator._call_java("getLossInsensitivity")
 
 
-def test_linearLearnerBinaryClassifier_huber_delta():
+def test_linearLearnerMultiClassClassifier_huber_delta():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setHuberDelta(5.0)
     assert estimator.getHuberDelta() == 5.0
 
@@ -675,9 +658,9 @@ def test_linearLearnerBinaryClassifier_huber_delta():
     assert estimator.getHuberDelta() == estimator._call_java("getHuberDelta")
 
 
-def test_linearLearnerBinaryClassClassifier_f_beta():
+def test_linearLearnerMultiClassClassifier_f_beta():
 
-    estimator = get_linear_learner_binary_classifier()
+    estimator = get_linear_learner_multi_class_classifier()
     estimator.setFBeta(5.0)
     assert estimator.getFBeta() == 5.0
 

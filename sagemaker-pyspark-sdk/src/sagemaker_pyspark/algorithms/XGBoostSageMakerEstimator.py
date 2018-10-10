@@ -135,8 +135,9 @@ class XGBoostSageMakerEstimator(SageMakerEstimatorBase):
 
     max_depth = Param(
         Params._dummy(), "max_depth",
-        "Minimum loss reduction required to make a further partition on a leaf node of the tree. "
-        "The larger the value, the more conservative the algorithm will be. Must be >= 0",
+        "Maximum depth of a tree. Increasing this value makes the model more complex and "
+        "likely to be overfitted. 0 indicates no limit. A limit is required when"
+        "grow_policy=depth-wise. Must be >= 0. Default value is 6",
         typeConverter=TypeConverters.toInt)
 
     min_child_weight = Param(
