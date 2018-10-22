@@ -46,4 +46,63 @@ class NamePolicyTests extends FlatSpec with Matchers with MockitoSugar {
     assert(policy.endpointConfigName.startsWith("prefix"))
     assert(policy.endpointName.startsWith("prefix"))
   }
+
+  "CustomNamePolicy" should "have custom names" in {
+    val policy = new CustomNamePolicy("jobName", "modelName", "endpointConfig", "endpointName")
+    assert(policy.trainingJobName.equals("jobName"))
+    assert(policy.modelName.equals("modelName"))
+    assert(policy.endpointConfigName.equals("endpointConfig"))
+    assert(policy.endpointName.startsWith("endpointName"))
+  }
+
+  "CustomNamePolicyWithTimeStampSuffix" should "have custom names with proper suffix" in {
+    val policy = new CustomNamePolicyWithTimeStampSuffix("jobName", "modelName",
+                                                              "endpointConfig", "endpointName")
+    assert(!policy.trainingJobName.equals("jobName"))
+    assert(!policy.modelName.equals("modelName"))
+    assert(!policy.endpointConfigName.equals("endpointConfig"))
+    assert(!policy.endpointName.equals("endpointName"))
+
+    assert(policy.trainingJobName.startsWith("jobName"))
+    assert(policy.modelName.startsWith("modelName"))
+    assert(policy.endpointConfigName.startsWith("endpointConfig"))
+    assert(policy.endpointName.startsWith("endpointName"))
+  }
+
+  "CustomNamePolicyFactory" should "return a custom name policy with correct params" in {
+    val jobName = "jobName"
+    val modelName = "modelName"
+    val endpointConfigName = "endpointConfigName"
+    val endpointName = "endpointName"
+    val factory = new CustomNamePolicyFactory(jobName, modelName, endpointConfigName, endpointName)
+    val policy = factory.createNamePolicy
+    assert(policy.isInstanceOf[CustomNamePolicy])
+    assert(policy.trainingJobName.equals(jobName))
+    assert(policy.modelName.equals(modelName))
+    assert(policy.endpointConfigName.equals(endpointConfigName))
+    assert(policy.endpointName.equals(endpointName))
+  }
+
+  "CustomNamePolicyWithTimeStampSuffixFactory" should
+    "return a custom name policy with timestamp suffix" in {
+    val jobName = "jobName"
+    val modelName = "modelName"
+    val endpointConfigName = "endpointConfigName"
+    val endpointName = "endpointName"
+    val factory = new CustomNamePolicyWithTimeStampSuffixFactory(jobName, modelName,
+                                                                  endpointConfigName, endpointName)
+    val policy = factory.createNamePolicy
+    assert(policy.isInstanceOf[CustomNamePolicyWithTimeStampSuffix])
+
+    assert(!policy.trainingJobName.equals(jobName))
+    assert(!policy.modelName.equals(modelName))
+    assert(!policy.endpointConfigName.equals(endpointConfigName))
+    assert(!policy.endpointName.equals(endpointName))
+
+    assert(policy.trainingJobName.startsWith(jobName))
+    assert(policy.modelName.startsWith(modelName))
+    assert(policy.endpointConfigName.startsWith(endpointConfigName))
+    assert(policy.endpointName.startsWith(endpointName))
+  }
+
 }
