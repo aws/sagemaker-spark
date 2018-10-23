@@ -26,20 +26,42 @@ def with_spark_context():
 
 
 def test_CustomNamePolicyFactory():
-    java_obj = CustomNamePolicyFactory("jobName", "modelname", "epconfig", "ep")
-    assert(isinstance(java_obj._to_java(), JavaObject))
+    policy_factory = CustomNamePolicyFactory("jobName", "modelname", "epconfig", "ep")
+    java_obj = policy_factory._to_java()
+    assert(isinstance(java_obj, JavaObject))
+    assert(java_obj.getClass().getSimpleName() == "CustomNamePolicyFactory")
+    policy_name = java_obj.createNamePolicy().getClass().getSimpleName()
+    assert(policy_name == "CustomNamePolicy")
 
 
 def test_CustomNamePolicyWithTimeStampSuffixFactory():
-    java_obj = CustomNamePolicyWithTimeStampSuffixFactory("jobName", "modelname", "epconfig", "ep")
-    assert(isinstance(java_obj._to_java(), JavaObject))
+    policy_factory = CustomNamePolicyWithTimeStampSuffixFactory("jobName", "modelname",
+                                                                "epconfig", "ep")
+    java_obj = policy_factory._to_java()
+    assert(isinstance(java_obj, JavaObject))
+    assert (java_obj.getClass().getSimpleName() == "CustomNamePolicyWithTimeStampSuffixFactory")
+    policy_name = java_obj.createNamePolicy().getClass().getSimpleName()
+    assert(policy_name == "CustomNamePolicyWithTimeStampSuffix")
 
 
 def test_CustomNamePolicyWithTimeStampSuffix():
-    java_obj = CustomNamePolicyWithTimeStampSuffix("jobName", "modelname", "epconfig", "ep")
-    assert(isinstance(java_obj._to_java(), JavaObject))
+    name_policy = CustomNamePolicyWithTimeStampSuffix("jobName", "modelname", "epconfig", "ep")
+    assert(isinstance(name_policy._to_java(), JavaObject))
+    assert(name_policy._call_java("trainingJobName") != "jobName")
+    assert(name_policy._call_java("modelName") != "modelname")
+    assert(name_policy._call_java("endpointConfigName") != "epconfig")
+    assert(name_policy._call_java("endpointName") != "ep")
+
+    assert (name_policy._call_java("trainingJobName").startswith("jobName"))
+    assert (name_policy._call_java("modelName").startswith("modelname"))
+    assert (name_policy._call_java("endpointConfigName").startswith("epconfig"))
+    assert (name_policy._call_java("endpointName").startswith("ep"))
 
 
 def test_CustomNamePolicy():
-    java_obj = CustomNamePolicy("jobName", "modelname", "epconfig", "ep")
-    assert (isinstance(java_obj._to_java(), JavaObject))
+    name_policy = CustomNamePolicy("jobName", "modelname", "epconfig", "ep")
+    assert (isinstance(name_policy._to_java(), JavaObject))
+    assert (name_policy._call_java("trainingJobName") == "jobName")
+    assert (name_policy._call_java("modelName") == "modelname")
+    assert (name_policy._call_java("endpointConfigName") == "epconfig")
+    assert (name_policy._call_java("endpointName") == "ep")
