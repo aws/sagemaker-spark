@@ -37,6 +37,46 @@ class RandomNamePolicyFactory(val prefix: String = "") extends NamePolicyFactory
 }
 
 /**
+  * Creates a [[CustomNamePolicy]] upon a call to [[CustomNamePolicyFactory#createNamePolicy]]
+  *
+  * @param trainingJobName The job name of the SageMaker entity with this NamePolicy
+  * @param modelName The model name of the SageMaker entity with this NamePolicy
+  * @param endpointConfigName The endpoint config name of the SageMaker entity with this NamePolicy
+  * @param endpointName The endpoint name of the SageMaker entity with this NamePolicy
+  */
+class CustomNamePolicyFactory(trainingJobName: String,
+                              modelName: String,
+                              endpointConfigName: String,
+                              endpointName: String) extends NamePolicyFactory {
+
+  override def createNamePolicy: NamePolicy = {
+    new CustomNamePolicy(trainingJobName, modelName, endpointConfigName, endpointName)
+  }
+
+}
+
+
+/**
+  * Creates a [[CustomNamePolicyWithTimeStampSuffixFactory]] upon a call to
+  * [[CustomNamePolicyWithTimeStampSuffix#createNamePolicy]]
+  *
+  * @param trainingJobName The job name of the SageMaker entity with this NamePolicy
+  * @param modelName The model name of the SageMaker entity with this NamePolicy
+  * @param endpointConfigName The endpoint config name of the SageMaker entity with this NamePolicy
+  * @param endpointName The endpoint name of the SageMaker entity with this NamePolicy
+  *
+  */
+class CustomNamePolicyWithTimeStampSuffixFactory(trainingJobName: String,
+                                                 modelName: String,
+                                                 endpointConfigName: String,
+                                                 endpointName: String) extends NamePolicyFactory {
+  override def createNamePolicy: NamePolicy = {
+    new CustomNamePolicyWithTimeStampSuffix(trainingJobName, modelName,
+                                            endpointConfigName, endpointName)
+  }
+}
+
+/**
   * Provides names for SageMaker entities created during fit in
   * [[com.amazonaws.services.sagemaker.sparksdk.SageMakerEstimator]]
   */
@@ -63,4 +103,40 @@ case class RandomNamePolicy(val prefix : String = "") extends NamePolicy {
   val modelName = s"${prefix}model-$uid-$timestamp"
   val endpointConfigName = s"${prefix}endpointConfig-$uid-$timestamp"
   val endpointName = s"${prefix}endpoint-$uid-$timestamp"
+}
+
+
+/**
+  * Provides user sepecified SageMaker entity names.
+  *
+  * @param trainingJobName The job name of the SageMaker entity with this NamePolicy
+  * @param modelName The model name of the SageMaker entity with this NamePolicy
+  * @param endpointConfigName The endpoint config name of the SageMaker entity with this NamePolicy
+  * @param endpointName The endpoint name of the SageMaker entity with this NamePolicy
+  */
+case class CustomNamePolicy(trainingJobName: String, modelName: String,
+                            endpointConfigName: String, endpointName: String) extends NamePolicy
+
+
+
+/**
+  * Provides user sepecified SageMaker entity names with a common timestamp suffix.
+  *
+  * @param _trainingJobName The job name of the SageMaker entity with this NamePolicy
+  * @param _modelName The model name of the SageMaker entity with this NamePolicy
+  * @param _endpointConfigName The endpoint config name of the SageMaker entity with this NamePolicy
+  * @param _endpointName The endpoint name of the SageMaker entity with this NamePolicy
+  */
+case class CustomNamePolicyWithTimeStampSuffix(private val _trainingJobName: String,
+                                               private val _modelName: String,
+                                               private val _endpointConfigName: String,
+                                               private val _endpointName: String
+                                              ) extends NamePolicy {
+  private val timestamp : String =
+    LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME).replace(":", "-").replace(".", "-")
+
+  val trainingJobName = s"${_trainingJobName}-$timestamp"
+  val modelName = s"${_modelName}-$timestamp"
+  val endpointConfigName = s"${_endpointConfigName}-$timestamp"
+  val endpointName = s"${_endpointName}-$timestamp"
 }

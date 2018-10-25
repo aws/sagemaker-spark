@@ -47,6 +47,68 @@ class RandomNamePolicy(NamePolicy):
         pass
 
 
+class CustomNamePolicy(NamePolicy):
+    """
+    Provides custom SageMaker entity names.
+
+    Args:
+        trainingJobName (str): The name of the SageMaker entity
+        modelName (str): The model name of the SageMaker entity
+        endpointConfigName (str): The endpoint config name of the SageMaker entity
+        endpointName (str): The endpoint name of the SageMaker entity
+    """
+
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.CustomNamePolicy"
+
+    def __init__(self, trainingJobName, modelName, endpointConfigName, endpointName):
+        self.trainingJobName = trainingJobName
+        self.modelName = modelName
+        self.endpointConfigName = endpointConfigName
+        self.endpointName = endpointName
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(CustomNamePolicy._wrapped_class,
+                                                self.trainingJobName, self.modelName,
+                                                self.endpointConfigName, self.endpointName)
+        return self._java_obj
+
+    def _from_java(cls, JavaObject):
+        pass
+
+
+class CustomNamePolicyWithTimeStampSuffix(NamePolicy):
+    """
+    Provides custom SageMaker entity names with timestamp suffix.
+
+    Args:
+        trainingJobName (str): The job name of the SageMaker entity
+        modelName (str): The model name of the SageMaker entity
+        endpointConfigName (str): The endpoint config name of the SageMaker entity
+        endpointName (str): The endpoint name of the SageMaker entity
+    """
+
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.CustomNamePolicyWithTimeStampSuffix"
+
+    def __init__(self, trainingJobName, modelName, endpointConfigName, endpointName):
+        self.trainingJobName = trainingJobName
+        self.modelName = modelName
+        self.endpointConfigName = endpointConfigName
+        self.endpointName = endpointName
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(CustomNamePolicyWithTimeStampSuffix._wrapped_class,
+                                                self.trainingJobName, self.modelName,
+                                                self.endpointConfigName, self.endpointName)
+        return self._java_obj
+
+    def _from_java(cls, JavaObject):
+        pass
+
+
 class NamePolicyFactory(SageMakerJavaWrapper):
     """
     Creates a NamePolicy upon a call to createNamePolicy
@@ -84,3 +146,75 @@ class RandomNamePolicyFactory(NamePolicyFactory):
 
     def createNamePolicy(self):
         return self._call_java("createNamePolicy", self.prefix)
+
+
+class CustomNamePolicyFactory(NamePolicyFactory):
+    """
+    Creates a CustomNamePolicy upon a call to createNamePolicy
+
+    Args:
+        trainingJobName (str): The job name of the SageMaker entity with this NamePolicy.
+        modelName (str): The job name of the SageMaker entity with this NamePolicy.
+        endpointConfigName (str): The job name of the SageMaker entity with this NamePolicy.
+        endpointName (str): The job name of the SageMaker entity with this NamePolicy.
+    """
+
+    _wrapped_class = "com.amazonaws.services.sagemaker.sparksdk.CustomNamePolicyFactory"
+
+    def __init__(self, trainingJobName, modelName, endpointConfigName, endpointName):
+        self.trainingJobName = trainingJobName
+        self.modelName = modelName
+        self.endpointConfigName = endpointConfigName
+        self.endpointName = endpointName
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(CustomNamePolicyFactory._wrapped_class,
+                                                self.trainingJobName, self.modelName,
+                                                self.endpointConfigName, self.endpointName)
+        return self._java_obj
+
+    def _from_java(cls, JavaObject):
+        pass
+
+    def createNamePolicy(self):
+        return self._call_java("createNamePolicy", self.trainingJobName,
+                               self.modelName, self.endpointConfigName, self.endpointName)
+
+
+class CustomNamePolicyWithTimeStampSuffixFactory(NamePolicyFactory):
+    """
+    Creates a CustomNamePolicyFactoryWithTimeStampSuffix upon a call to createNamePolicy
+
+    Args:
+        trainingJobName (str): The job name of the SageMaker entity with this NamePolicy.
+        modelName (str): The job name of the SageMaker entity with this NamePolicy.
+        endpointConfigName (str): The job name of the SageMaker entity with this NamePolicy.
+        endpointName (str): The job name of the SageMaker entity with this NamePolicy.
+    """
+
+    _wrapped_class = \
+        "com.amazonaws.services.sagemaker.sparksdk.CustomNamePolicyWithTimeStampSuffixFactory"
+
+    def __init__(self, trainingJobName, modelName, endpointConfigName, endpointName):
+        self.trainingJobName = trainingJobName
+        self.modelName = modelName
+        self.endpointConfigName = endpointConfigName
+        self.endpointName = endpointName
+        self._java_obj = None
+
+    def _to_java(self):
+        if self._java_obj is None:
+            self._java_obj = self._new_java_obj(
+                CustomNamePolicyWithTimeStampSuffixFactory._wrapped_class,
+                self.trainingJobName, self.modelName,
+                self.endpointConfigName, self.endpointName)
+        return self._java_obj
+
+    def _from_java(cls, JavaObject):
+        pass
+
+    def createNamePolicy(self):
+        return self._call_java("createNamePolicy", self.trainingJobName,
+                               self.modelName, self.endpointConfigName, self.endpointName)
