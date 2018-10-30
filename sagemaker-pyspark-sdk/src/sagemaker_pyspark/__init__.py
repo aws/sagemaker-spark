@@ -20,7 +20,11 @@ from .wrapper import SageMakerJavaWrapper, Option
 from .IAMRoleResource import IAMRole, IAMRoleFromConfig
 from .SageMakerClients import SageMakerClients
 from .S3Resources import S3DataPath, S3Resource, S3AutoCreatePath
-from .NamePolicy import RandomNamePolicy, RandomNamePolicyFactory
+from .NamePolicy import RandomNamePolicy, RandomNamePolicyFactory, \
+                        CustomNamePolicy, CustomNamePolicyFactory, \
+                        CustomNamePolicyWithTimeStampSuffix, \
+                        CustomNamePolicyWithTimeStampSuffixFactory
+
 from .SageMakerEstimator import EndpointCreationPolicy, SageMakerEstimator, SageMakerEstimatorBase
 from .SageMakerModel import SageMakerModel
 from .SageMakerResourceCleanup import SageMakerResourceCleanup, CreatedResources
@@ -60,6 +64,10 @@ __all__ = ['SageMakerJavaWrapper',
            'Option',
            'RandomNamePolicy',
            'RandomNamePolicyFactory',
+           'CustomNamePolicy',
+           'CustomNamePolicyFactory',
+           'CustomNamePolicyWithTimeStampSuffix',
+           'CustomNamePolicyWithTimeStampSuffixFactory',
            'classpath_jars',
            'SageMakerResourceCleanup',
            'CreatedResources',
