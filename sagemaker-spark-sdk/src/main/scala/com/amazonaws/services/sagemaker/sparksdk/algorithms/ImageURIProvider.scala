@@ -41,7 +41,12 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.AP_NORTHEAST_2.getName -> "835164637446",
     Regions.EU_CENTRAL_1.getName -> "664544806723",
     Regions.AP_SOUTHEAST_2.getName -> "712309505854",
-    Regions.GovCloud.getName -> "226302683700"
+    Regions.GovCloud.getName -> "226302683700",
+    Regions.AP_SOUTH_1.getName -> "991648021394",
+    Regions.AP_SOUTHEAST_1.getName -> "475088953585",
+    Regions.CA_CENTRAL_1.getName -> "469771592824",
+    Regions.EU_WEST_2.getName -> "644912444149",
+    Regions.US_WEST_1.getName -> "632365934929"
   )
 
   // For LDA
@@ -53,7 +58,13 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.AP_NORTHEAST_1.getName -> "258307448986",
     Regions.AP_NORTHEAST_2.getName -> "293181348795",
     Regions.EU_CENTRAL_1.getName -> "353608530281",
-    Regions.AP_SOUTHEAST_2.getName -> "297031611018"
+    Regions.AP_SOUTHEAST_2.getName -> "297031611018",
+    Regions.GovCloud.getName -> "226302683700",
+    Regions.AP_SOUTH_1.getName -> "991648021394",
+    Regions.AP_SOUTHEAST_1.getName -> "475088953585",
+    Regions.CA_CENTRAL_1.getName -> "469771592824",
+    Regions.EU_WEST_2.getName -> "644912444149",
+    Regions.US_WEST_1.getName -> "632365934929"
   )
 
   // For XGBoost
@@ -66,7 +77,12 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.AP_NORTHEAST_2.getName -> "306986355934",
     Regions.EU_CENTRAL_1.getName -> "813361260812",
     Regions.AP_SOUTHEAST_2.getName -> "544295431143",
-    Regions.GovCloud.getName -> "226302683700"
+    Regions.GovCloud.getName -> "226302683700",
+    Regions.AP_SOUTH_1.getName -> "991648021394",
+    Regions.AP_SOUTHEAST_1.getName -> "475088953585",
+    Regions.CA_CENTRAL_1.getName -> "469771592824",
+    Regions.EU_WEST_2.getName -> "644912444149",
+    Regions.US_WEST_1.getName -> "632365934929"
   )
 }
 
