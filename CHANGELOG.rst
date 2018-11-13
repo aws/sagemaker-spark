@@ -2,11 +2,17 @@
 CHANGELOG
 =========
 
-1.2.1dev
+1.2.2dev
 ========
 
-* Encode DenseMatrix and SparseMatrix in probobuf Record format
 * spark/pyspark: Update AWS SDK version to 1.11.350
+
+1.2.1
+=====
+
+* spark/pyspark: encode DenseMatrix and SparseMatrix in probobuf Record format
+* spark/pyspark: add new region support for BOM/SIN/LHR/YUL/SFO
+
 
 1.2.0
 =====
