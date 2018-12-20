@@ -5,7 +5,7 @@ CHANGELOG
 1.2.2dev
 ========
 
-* spark/pyspark: Update AWS SDK version to 1.11.350
+* spark/pyspark: Update AWS SDK version to 1.11.470 and hadoop version to 3.1.1
 
 1.2.1
 =====

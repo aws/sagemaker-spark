@@ -24,11 +24,11 @@ version := "spark_" + sparkVersion + "-1.2.1"
 lazy val SageMakerSpark = (project in file("."))
 
 libraryDependencies ++= Seq(
-  "org.apache.hadoop" % "hadoop-aws" % "2.8.1",
-  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.350",
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.350",
-  "com.amazonaws" % "aws-java-sdk-sagemaker" % "1.11.350",
-  "com.amazonaws" % "aws-java-sdk-sagemakerruntime" % "1.11.350",
+  "org.apache.hadoop" % "hadoop-aws" % "3.1.1",
+  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.470",
+  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.470",
+  "com.amazonaws" % "aws-java-sdk-sagemaker" % "1.11.470",
+  "com.amazonaws" % "aws-java-sdk-sagemakerruntime" % "1.11.470",
   "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-mllib" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",

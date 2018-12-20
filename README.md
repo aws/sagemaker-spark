@@ -105,7 +105,7 @@ depend on a recent version of the AWS Java SDK:
 
 ```
 spark-submit
-  --packages com.amazonaws:aws-java-sdk:1.11.350 \
+  --packages com.amazonaws:aws-java-sdk:1.11.470 \
   --deploy-mode cluster \
   --conf spark.driver.userClassPathFirst=true \
   --conf spark.executor.userClassPathFirst=true \
