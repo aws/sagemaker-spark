@@ -20,4 +20,4 @@ cov_html/
 **/.DS_Store
 **/html/
 **/htmlcov/
-
+sbt-*.tgz
