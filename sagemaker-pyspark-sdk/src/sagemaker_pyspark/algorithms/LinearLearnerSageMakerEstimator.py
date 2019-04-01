@@ -226,7 +226,7 @@ class LinearLearnerParams(Params):
         self._set(mini_batch_size=size)
 
     def getEpochs(self):
-            return self.getOrDefault(self.epochs)
+        return self.getOrDefault(self.epochs)
 
     def setEpochs(self, value):
         if value < 1:
@@ -474,7 +474,7 @@ class LinearLearnerParams(Params):
         self._set(num_point_for_scaler=value)
 
     def getEarlyStoppingPatience(self):
-            return self.getOrDefault(self.early_stopping_patience)
+        return self.getOrDefault(self.early_stopping_patience)
 
     def setEarlyStoppingPatience(self, value):
         if value <= 0:
@@ -482,7 +482,7 @@ class LinearLearnerParams(Params):
         self._set(early_stopping_patience=value)
 
     def getEarlyStoppingTolerance(self):
-            return self.getOrDefault(self.early_stopping_tolerance)
+        return self.getOrDefault(self.early_stopping_tolerance)
 
     def setEarlyStoppingTolerance(self, value):
         if value <= 0:
@@ -506,7 +506,7 @@ class LinearLearnerParams(Params):
         self._set(quantile=value)
 
     def getLossInsensitivity(self):
-            return self.getOrDefault(self.loss_insensitivity)
+        return self.getOrDefault(self.loss_insensitivity)
 
     def setLossInsensitivity(self, value):
         if value <= 0:
@@ -759,7 +759,7 @@ class LinearLearnerBinaryClassifier(SageMakerEstimatorBase, LinearLearnerParams)
         self._set(target_precision=value)
 
     def getPositiveExampleWeightMult(self):
-            return self.getOrDefault(self.positive_example_weight_mult)
+        return self.getOrDefault(self.positive_example_weight_mult)
 
     def setPositiveExampleWeightMult(self, value):
         if isinstance(value, numbers.Real) and value <= 0:
