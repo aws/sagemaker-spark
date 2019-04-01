@@ -92,7 +92,7 @@ try:  # noqa
         ],
 
         setup_requires=["pyspark", "pypandoc", "pytest-runner", "numpy"],
-        tests_require=["pytest", "pytest-cov", "pytest-xdist", "coverage", "teamcity-messages"]
+        tests_require=["pytest", "pytest-cov", "pytest-xdist", "coverage"]
 
     )
 

@@ -1,0 +1,66 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # install openjdk-8
+      - apt-get update
+      - apt-get -y install openjdk-8-jdk
+      - update-java-alternatives -s java-1.8.0-openjdk-amd64
+      - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/bin
+
+      # install sbt launcher
+      - curl -LO https://github.com/sbt/sbt/releases/download/v1.1.6/sbt-1.1.6.tgz
+      - tar -xf sbt-*.tgz
+      - export PATH=$CODEBUILD_SRC_DIR/sbt/bin/:$PATH
+      - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
+      - sbt -Dsbt.log.noformat=true sbtVersion scalaVersion
+
+  pre_build:
+    commands:
+      # clone the integration test repo
+      - cd $CODEBUILD_SRC_DIR
+      - GITHUB_OAUTH_TOKEN=$(aws secretsmanager get-secret-value --secret-id /codebuild/github/oauth --query SecretString --output text)
+      - INTEGRATION_TEST_REPO_URI="https://${GITHUB_OAUTH_TOKEN}@github.com/jesterhazy/PRIVATE-sagemaker-spark-integ-tests.git"
+      - git clone --depth 1 --single-branch $INTEGRATION_TEST_REPO_URI integration-tests
+
+  build:
+    commands:
+      # build spark sdk first, since pyspark package depends on it (even linters)
+
+      # spark unit tests
+      - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
+      - AWS_ACCESS_KEY_ID= AWS_SECRET_ACCESS_KEY= AWS_SESSION_TOKEN=
+        AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=
+        sbt -Dsbt.log.noformat=true clean coverage test coverageReport
+
+      # rebuild without coverage instrumentation
+      - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
+      - sbt -Dsbt.log.noformat=true clean package
+
+      # pyspark linters and unit tests
+      - cd $CODEBUILD_SRC_DIR/sagemaker-pyspark-sdk
+      - tox -e flake8,docs
+      - AWS_ACCESS_KEY_ID= AWS_SECRET_ACCESS_KEY= AWS_SESSION_TOKEN=
+        AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=
+        tox -e py27,py36,stats -- tests/
+
+      # spark integration tests
+      - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
+      - |
+        if has-matching-changes "src/" "test/" "build.sbt"; then
+          cd $CODEBUILD_SRC_DIR/integration-tests/sagemaker-spark-sdk
+          sbt -Dsbt.log.noformat=true it:test
+        else
+          echo "skipping spark integration tests"
+        fi
+
+      # pyspark integration tests
+      - cd $CODEBUILD_SRC_DIR/sagemaker-pyspark-sdk
+      - |
+        if has-matching-changes "src/" "tests/" "setup.*" "requirements.txt" "tox.ini"; then
+          IGNORE_COVERAGE=- \
+          tox -e py36 -- $CODEBUILD_SRC_DIR/integration-tests/sagemaker-pyspark-sdk/tests/ -n 10 --boxed --reruns 2
+        else
+          echo "skipping pyspark integration tests"
+        fi
