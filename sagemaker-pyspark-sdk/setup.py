@@ -87,13 +87,12 @@ try:  # noqa
         scripts=["bin/sagemakerpyspark-jars", "bin/sagemakerpyspark-emr-jars"],
 
         install_requires=[
-            "pyspark",
+            "pyspark>=2.3.2",
             "numpy",
         ],
 
-        setup_requires=["pyspark", "pypandoc", "pytest-runner", "numpy"],
+        setup_requires=["pyspark>=2.3.2", "pypandoc", "pytest-runner", "numpy"],
         tests_require=["pytest", "pytest-cov", "pytest-xdist", "coverage"]
-
     )
 
 finally:
