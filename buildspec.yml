@@ -40,7 +40,7 @@ phases:
 
       # pyspark linters and unit tests
       - cd $CODEBUILD_SRC_DIR/sagemaker-pyspark-sdk
-      - tox -e flake8,docs
+      - tox -e flake8,twine,sphinx
       - AWS_ACCESS_KEY_ID= AWS_SECRET_ACCESS_KEY= AWS_SESSION_TOKEN=
         AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=
         tox -e py27,py36,stats -- tests/

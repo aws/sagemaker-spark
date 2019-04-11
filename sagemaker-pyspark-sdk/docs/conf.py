@@ -4,11 +4,15 @@
 # -- General configuration ------------------------------------------------
 
 import os
+import pkg_resources
 import sys
 import subprocess
 
 from unittest.mock import MagicMock
 sys.path.insert(0, os.path.abspath('../src/'))
+
+
+
 
 if "READTHEDOCS" in os.environ:
     # pyspark can't be installed on the readthedocs build system
@@ -46,15 +50,9 @@ master_doc = 'index'
 project = 'sagemaker_pyspark'
 copyright = '2017, Amazon Web Services'
 author = 'Amazon Web Services'
+version = pkg_resources.require(project)[0].version
+release = version
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = '1.0'
-# The full version, including alpha/beta/rc tags.
-release = '1.0'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

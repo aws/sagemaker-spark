@@ -19,7 +19,8 @@ scalaVersion := "2.11.7"
 // to change the version of spark add -DSPARK_VERSION=2.x.x when running sbt
 // for example: "sbt -DSPARK_VERSION=2.1.1 clean compile test doc package"
 val sparkVersion = System.getProperty("SPARK_VERSION", "2.2.0")
-version := "spark_" + sparkVersion + "-1.2.1"
+val packageVersion = IO.read(file("../VERSION")).trim
+version := s"spark_$sparkVersion-$packageVersion"
 
 lazy val SageMakerSpark = (project in file("."))
 
@@ -58,6 +59,9 @@ coverageFailOnMinimum := true
 }
 
 parallelExecution in Test := false
+
+// https://github.com/sbt/sbt/issues/3570
+updateOptions := updateOptions.value.withGigahorse(false)
 
 // publishing configuration
 publishMavenStyle := true

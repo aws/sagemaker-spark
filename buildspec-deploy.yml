@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # install openjdk-8
+      - apt-get update
+      - apt-get -y install openjdk-8-jdk
+      - update-java-alternatives -s java-1.8.0-openjdk-amd64
+      - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/bin
+
+      # install sbt launcher
+      - curl -LO https://github.com/sbt/sbt/releases/download/v1.1.6/sbt-1.1.6.tgz
+      - tar -xf sbt-*.tgz
+      - export PATH=$CODEBUILD_SRC_DIR/sbt/bin/:$PATH
+      - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
+      - sbt -Dsbt.log.noformat=true sbtVersion scalaVersion
+
+  build:
+    commands:
+      - publish-pypi-package $CODEBUILD_SRC_DIR_ARTIFACT_1/sagemaker-pyspark-sdk/dist/sagemaker_pyspark-*.tar.gz
+      - publish-sonatype-package $CODEBUILD_SRC_DIR_ARTIFACT_1/sagemaker-spark-sdk
