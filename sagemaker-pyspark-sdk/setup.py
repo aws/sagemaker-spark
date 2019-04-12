@@ -7,16 +7,29 @@ import sys
 from setuptools import setup
 
 
-VERSION = "1.2.1"
-
+VERSION_PATH = "VERSION"
 TEMP_PATH = "deps"
 JARS_TARGET = os.path.join(TEMP_PATH, "jars")
 
 in_sagemaker_sdk = os.path.isfile("../sagemaker-spark-sdk/build.sbt")
 
 
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+
+def read_version():
+    return read(VERSION_PATH).strip()
+
+
 try:  # noqa
     if in_sagemaker_sdk:
+        try:
+            shutil.copyfile(os.path.join("..", VERSION_PATH), VERSION_PATH)
+        except OSError:
+            print("Could not copy VERSION file")
+            exit(1)
+
         try:
             os.mkdir(TEMP_PATH)
         except OSError:
@@ -49,6 +62,7 @@ try:  # noqa
         if len(classpath) == 0:
             print("Failed to retrieve the jar classpath. Can't package")
             exit(-1)
+
     else:
         if not os.path.exists(JARS_TARGET):
             print("You need to be in the sagemaker-pyspark-sdk root folder to package",
@@ -57,7 +71,7 @@ try:  # noqa
 
     setup(
         name="sagemaker_pyspark",
-        version=VERSION,
+        version=read_version(),
         description="Amazon SageMaker PySpark Bindings",
         author="Amazon Web Services",
         url="https://github.com/aws/sagemaker-spark",
@@ -102,3 +116,6 @@ finally:
 
         if os.path.exists(TEMP_PATH):
             os.rmdir(TEMP_PATH)
+
+        if os.path.exists(VERSION_PATH):
+            os.remove(VERSION_PATH)
