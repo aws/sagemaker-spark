@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.2 (2019-04-12)
+
+### Bug fixes and other changes
+
+ * setup for automated release builds
+ * set version of pyspark setup.py
+ * update for new ci environment
+
 ## v1.2.1 (2018-11-05)
 
 * encode DenseMatrix and SparseMatrix in probobuf Record format
