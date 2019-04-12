@@ -11,9 +11,6 @@ import subprocess
 from unittest.mock import MagicMock
 sys.path.insert(0, os.path.abspath('../src/'))
 
-
-
-
 if "READTHEDOCS" in os.environ:
     # pyspark can't be installed on the readthedocs build system
     # due to out of memory errors. And we can't mock it either due to
