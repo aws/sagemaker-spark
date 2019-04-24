@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.2.post0 (2019-04-24)
+
+### Documentation changes
+
+ * fix version handling in docbuild
+
 ## v1.2.2 (2019-04-12)
 
 ### Bug fixes and other changes
