@@ -11,7 +11,7 @@ import subprocess
 from unittest.mock import MagicMock
 sys.path.insert(0, os.path.abspath('../src/'))
 
-VERSION_PATH = "../../VERSION"
+VERSION_PATH = '../../VERSION'
 
 
 def read(fname):
