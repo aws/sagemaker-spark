@@ -11,6 +11,17 @@ import subprocess
 from unittest.mock import MagicMock
 sys.path.insert(0, os.path.abspath('../src/'))
 
+VERSION_PATH = '../../VERSION'
+
+
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+
+def read_version():
+    return read(VERSION_PATH).strip()
+
+
 if "READTHEDOCS" in os.environ:
     # pyspark can't be installed on the readthedocs build system
     # due to out of memory errors. And we can't mock it either due to
@@ -47,7 +58,7 @@ master_doc = 'index'
 project = 'sagemaker_pyspark'
 copyright = '2017, Amazon Web Services'
 author = 'Amazon Web Services'
-version = pkg_resources.require(project)[0].version
+version = read_version()
 release = version
 
 
