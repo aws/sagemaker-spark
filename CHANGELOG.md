@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.3 (2019-04-30)
+
+### Bug fixes and other changes
+
+ * add --ignore-reuse-error to pypi publish
+
 ## v1.2.2.post0 (2019-04-24)
 
 ### Documentation changes
