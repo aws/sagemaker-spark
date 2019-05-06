@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.4 (2019-05-06)
+
+### Bug fixes and other changes
+
+ * freeze pyspark version to 2.3.2
+
 ## v1.2.3 (2019-04-30)
 
 ### Bug fixes and other changes
