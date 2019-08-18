@@ -131,6 +131,26 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerBinaryClassifier(region = Regions.US_WEST_1.getName)
     assert(estimatorUSWest1.trainingImage ==
       "632365934929.dkr.ecr.us-west-1.amazonaws.com/linear-learner:1")
+
+    val estimatorAPEast1 =
+      createLinearLearnerBinaryClassifier(region = Regions.AP_EAST_1.getName)
+    assert(estimatorAPEast1.trainingImage ==
+      "286214385809.dkr.ecr.ap-east-1.amazonaws.com/linear-learner:1")
+
+    val estimatorSAEast1 =
+      createLinearLearnerBinaryClassifier(region = Regions.SA_EAST_1.getName)
+    assert(estimatorSAEast1.trainingImage ==
+      "855470959533.dkr.ecr.sa-east-1.amazonaws.com/linear-learner:1")
+
+    val estimatorEUNorth1 =
+      createLinearLearnerBinaryClassifier(region = Regions.EU_NORTH_1.getName)
+    assert(estimatorEUNorth1.trainingImage ==
+      "669576153137.dkr.ecr.eu-north-1.amazonaws.com/linear-learner:1")
+
+    val estimatorEUWest3 =
+      createLinearLearnerBinaryClassifier(region = Regions.EU_WEST_3.getName)
+    assert(estimatorEUWest3.trainingImage ==
+      "749696950732.dkr.ecr.eu-west-3.amazonaws.com/linear-learner:1")
   }
 
   it should "use the correct defaults for multiclass classifier" in {
@@ -211,6 +231,26 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerMultiClassClassifier(region = Regions.US_WEST_1.getName)
     assert(estimatorUSWest1.trainingImage ==
       "632365934929.dkr.ecr.us-west-1.amazonaws.com/linear-learner:1")
+
+    val estimatorAPEast1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.AP_EAST_1.getName)
+    assert(estimatorAPEast1.trainingImage ==
+      "286214385809.dkr.ecr.ap-east-1.amazonaws.com/linear-learner:1")
+
+    val estimatorSAEast1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.SA_EAST_1.getName)
+    assert(estimatorSAEast1.trainingImage ==
+      "855470959533.dkr.ecr.sa-east-1.amazonaws.com/linear-learner:1")
+
+    val estimatorEUNorth1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.EU_NORTH_1.getName)
+    assert(estimatorEUNorth1.trainingImage ==
+      "669576153137.dkr.ecr.eu-north-1.amazonaws.com/linear-learner:1")
+
+    val estimatorEUWest3 =
+      createLinearLearnerMultiClassClassifier(region = Regions.EU_WEST_3.getName)
+    assert(estimatorEUWest3.trainingImage ==
+      "749696950732.dkr.ecr.eu-west-3.amazonaws.com/linear-learner:1")
   }
 
   it should "use the correct defaults for regressor" in {
@@ -287,6 +327,26 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerRegressor(region = Regions.US_WEST_1.getName)
     assert(estimatorUSWest1.trainingImage ==
       "632365934929.dkr.ecr.us-west-1.amazonaws.com/linear-learner:1")
+
+    val estimatorAPEast1 =
+      createLinearLearnerRegressor(region = Regions.AP_EAST_1.getName)
+    assert(estimatorAPEast1.trainingImage ==
+      "286214385809.dkr.ecr.ap-east-1.amazonaws.com/linear-learner:1")
+
+    val estimatorSAEast1 =
+      createLinearLearnerRegressor(region = Regions.SA_EAST_1.getName)
+    assert(estimatorSAEast1.trainingImage ==
+      "855470959533.dkr.ecr.sa-east-1.amazonaws.com/linear-learner:1")
+
+    val estimatorEUNorth1 =
+      createLinearLearnerRegressor(region = Regions.EU_NORTH_1.getName)
+    assert(estimatorEUNorth1.trainingImage ==
+      "669576153137.dkr.ecr.eu-north-1.amazonaws.com/linear-learner:1")
+
+    val estimatorEUWest3 =
+      createLinearLearnerRegressor(region = Regions.EU_WEST_3.getName)
+    assert(estimatorEUWest3.trainingImage ==
+      "749696950732.dkr.ecr.eu-west-3.amazonaws.com/linear-learner:1")
   }
 
   it should "setFeatureDim" in {
