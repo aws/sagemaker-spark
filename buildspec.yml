@@ -21,7 +21,7 @@ phases:
       # clone the integration test repo
       - cd $CODEBUILD_SRC_DIR
       - GITHUB_OAUTH_TOKEN=$(aws secretsmanager get-secret-value --secret-id /codebuild/github/oauth --query SecretString --output text)
-      - INTEGRATION_TEST_REPO_URI="https://${GITHUB_OAUTH_TOKEN}@github.com/jesterhazy/PRIVATE-sagemaker-spark-integ-tests.git"
+      - INTEGRATION_TEST_REPO_URI="https://${GITHUB_OAUTH_TOKEN}@github.com/aws/PRIVATE-sagemaker-spark-integ-tests.git"
       - git clone --depth 1 --single-branch $INTEGRATION_TEST_REPO_URI integration-tests
 
   build:
