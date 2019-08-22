@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.5 (2019-08-22)
+
+### Bug fixes and other changes
+
+ * add region support to HKG/GRU/CDG/ARN
+ * update AWS Java SDK to 1.11.613
+
 ## v1.2.4 (2019-05-06)
 
 ### Bug fixes and other changes
