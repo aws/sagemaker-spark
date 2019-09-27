@@ -50,7 +50,8 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.AP_EAST_1.getName -> "286214385809",
     Regions.SA_EAST_1.getName -> "855470959533",
     Regions.EU_NORTH_1.getName -> "669576153137",
-    Regions.EU_WEST_3.getName -> "749696950732"
+    Regions.EU_WEST_3.getName -> "749696950732",
+    Regions.ME_SOUTH_1.getName -> "249704162688"
   )
 
   // For LDA
@@ -90,7 +91,8 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.AP_EAST_1.getName -> "286214385809",
     Regions.SA_EAST_1.getName -> "855470959533",
     Regions.EU_NORTH_1.getName -> "669576153137",
-    Regions.EU_WEST_3.getName -> "749696950732"
+    Regions.EU_WEST_3.getName -> "749696950732",
+    Regions.ME_SOUTH_1.getName -> "249704162688"
   )
 }
 

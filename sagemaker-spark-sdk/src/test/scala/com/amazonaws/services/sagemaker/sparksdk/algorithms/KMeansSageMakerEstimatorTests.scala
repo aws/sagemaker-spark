@@ -124,6 +124,10 @@ class KMeansSageMakerEstimatorTests extends FlatSpec with Matchers with MockitoS
     val estimatorEUWest3 = createKMeansEstimator(region = Regions.EU_WEST_3.getName)
     assert(estimatorEUWest3.trainingImage ==
       "749696950732.dkr.ecr.eu-west-3.amazonaws.com/kmeans:1")
+
+    val estimatorMESouth1 = createKMeansEstimator(region = Regions.ME_SOUTH_1.getName)
+    assert(estimatorMESouth1.trainingImage ==
+      "249704162688.dkr.ecr.me-south-1.amazonaws.com/kmeans:1")
   }
 
   it should "setK" in {
