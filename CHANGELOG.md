@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.6 (2019-10-22)
+
+### Bug fixes and other changes
+
+ * add 1p algorithm support for me-south-1
+
 ## v1.2.5 (2019-08-22)
 
 ### Bug fixes and other changes
