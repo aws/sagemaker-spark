@@ -72,7 +72,7 @@ publishMavenStyle := true
 pomIncludeRepository := { _ => false }
 publishArtifact in Test := false
 publishTo := {
-  val nexus = "https://oss.sonatype.org/"
+  val nexus = "https://aws.oss.sonatype.org/"
   if (isSnapshot.value)
     Some("snapshots" at nexus + "content/repositories/snapshots")
   else
