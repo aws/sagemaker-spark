@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.7 (2019-12-12)
+
+### Bug fixes and other changes
+
+ * Migrate sonatype endpoint
+
 ## v1.2.6 (2019-10-22)
 
 ### Bug fixes and other changes
