@@ -47,8 +47,9 @@ phases:
 
       # spark integration tests
       - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
+      - HAS_MATCHING_CHANGES_OUTPUT=$(has-matching-changes "src/" "test/" "build.sbt")
       - |
-        if has-matching-changes "src/" "test/" "build.sbt"; then
+        if [ "$HAS_MATCHING_CHANGES" = "Changes Found" ] ; then
           cd $CODEBUILD_SRC_DIR/integration-tests/sagemaker-spark-sdk
           sbt -Dsbt.log.noformat=true it:test
         else
@@ -57,8 +58,9 @@ phases:
 
       # pyspark integration tests
       - cd $CODEBUILD_SRC_DIR/sagemaker-pyspark-sdk
+      - HAS_MATCHING_CHANGES_OUTPUT=$(has-matching-changes "src/" "tests/" "setup.*" "requirements.txt" "tox.ini)
       - |
-        if has-matching-changes "src/" "tests/" "setup.*" "requirements.txt" "tox.ini"; then
+        if [ "$HAS_MATCHING_CHANGES" = "Changes Found" ] ; then
           IGNORE_COVERAGE=- \
           tox -e py36 -- $CODEBUILD_SRC_DIR/integration-tests/sagemaker-pyspark-sdk/tests/ -n 10 --boxed --reruns 2
         else
