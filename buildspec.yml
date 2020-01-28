@@ -48,9 +48,9 @@ phases:
       # spark integration tests
       - cd $CODEBUILD_SRC_DIR/integration-tests/sagemaker-spark-sdk
       - test_cmd="sbt -Dsbt.log.noformat=true it:test"
-      - execute-command-if-has-matching-changes "$test_cmd" "src/" "test/" "build.sbt"
+      - execute-command-if-has-matching-changes "$test_cmd" "src/" "test/" "build.sbt" "buildspec.yml"
 
       # pyspark integration tests
       - cd $CODEBUILD_SRC_DIR/sagemaker-pyspark-sdk
       - test_cmd="IGNORE_COVERAGE=- && tox -e py36 -- $CODEBUILD_SRC_DIR/integration-tests/sagemaker-pyspark-sdk/tests/ -n 10 --boxed --reruns 2"
-      - execute-command-if-has-matching-changes "$test_cmd" "src/" "tests/" "setup.*" "requirements.txt" "tox.ini"
+      - execute-command-if-has-matching-changes "$test_cmd" "src/" "tests/" "setup.*" "requirements.txt" "tox.ini" "buildspec.yml"
