@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.8 (2020-02-04)
+
+### Bug Fixes and Other Changes
+
+ * fix has-matching-changes to reflect latest script changes
+
 ## v1.2.7 (2019-12-12)
 
 ### Bug fixes and other changes
