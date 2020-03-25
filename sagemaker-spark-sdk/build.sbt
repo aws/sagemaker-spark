@@ -71,13 +71,20 @@ updateOptions := updateOptions.value.withGigahorse(false)
 publishMavenStyle := true
 pomIncludeRepository := { _ => false }
 publishArtifact in Test := false
+val nexusUriHost = "aws.oss.sonatype.org"
+val nexusUriHostWithScheme = "https://" + nexusUriHost + "/"
 publishTo := {
-  val nexus = "https://aws.oss.sonatype.org/"
   if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
+    Some("snapshots" at nexusUriHostWithScheme + "content/repositories/snapshots")
   else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    Some("releases"  at nexusUriHostWithScheme + "service/local/staging/deploy/maven2")
 }
+credentials += Credentials(
+  "Sonatype Nexus Repository Manager",
+  nexusUriHost,
+  sys.env("SONATYPE_USERNAME"),
+  sys.env("SONATYPE_PASSWORD")
+)
 pomExtra := (
   <developers>
     <developer>
