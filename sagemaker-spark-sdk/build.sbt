@@ -82,8 +82,8 @@ publishTo := {
 credentials += Credentials(
   "Sonatype Nexus Repository Manager",
   nexusUriHost,
-  sys.env("SONATYPE_USERNAME"),
-  sys.env("SONATYPE_PASSWORD")
+  sys.env.getOrElse("SONATYPE_USERNAME", "NOT_A_PUBLISH_BUILD"),
+  sys.env.getOrElse("SONATYPE_PASSWORD", "NOT_A_PUBLISH_BUILD")
 )
 pomExtra := (
   <developers>
