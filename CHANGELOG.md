@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.8.post0 (2020-03-25)
+
+### Testing and Release Infrastructure
+
+ * correctly pipe credentials for Maven publish
+
 ## v1.2.8 (2020-02-04)
 
 ### Bug Fixes and Other Changes
