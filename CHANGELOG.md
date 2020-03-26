@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.8.post1 (2020-03-26)
+
+### Testing and Release Infrastructure
+
+ * correctly pipe credentials for Maven release
+
 ## v1.2.8.post0 (2020-03-25)
 
 ### Testing and Release Infrastructure
