@@ -73,12 +73,18 @@ pomIncludeRepository := { _ => false }
 publishArtifact in Test := false
 val nexusUriHost = "aws.oss.sonatype.org"
 val nexusUriHostWithScheme = "https://" + nexusUriHost + "/"
+val snapshotUrl = nexusUriHostWithScheme + "content/repositories/snapshots"
+val localReleaseUrl = nexusUriHostWithScheme + "service/local"
+val releaseUrl = localReleaseUrl + "/staging/deploy/maven2"
 publishTo := {
   if (isSnapshot.value)
-    Some("snapshots" at nexusUriHostWithScheme + "content/repositories/snapshots")
+    Some("snapshots" at snapshotUrl)
   else
-    Some("releases"  at nexusUriHostWithScheme + "service/local/staging/deploy/maven2")
+    Some("releases" at releaseUrl)
 }
+Sonatype.SonatypeKeys.sonatypeRepository := localReleaseUrl
+Sonatype.SonatypeKeys.sonatypeCredentialHost := nexusUriHost
+
 credentials += Credentials(
   "Sonatype Nexus Repository Manager",
   nexusUriHost,
