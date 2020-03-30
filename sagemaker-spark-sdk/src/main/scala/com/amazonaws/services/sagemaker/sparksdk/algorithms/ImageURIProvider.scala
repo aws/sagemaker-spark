@@ -19,13 +19,24 @@ import com.amazonaws.regions.Regions
 
 private[algorithms] object SageMakerImageURIProvider {
 
+  def isChinaRegion(region: String): Boolean = {
+    val chinaRegions = Set(
+      Regions.CN_NORTH_1.getName,
+      Regions.CN_NORTHWEST_1.getName
+    )
+    chinaRegions.contains(region)
+  }
+
   def getImage(region: String, regionAccountMap: Map[String, String],
                algorithmName: String, algorithmTag: String): String = {
     val account = regionAccountMap.get(region)
     account match {
       case None => throw new RuntimeException(s"The region $region is not supported." +
         s"Supported Regions: ${regionAccountMap.keys.mkString(", ")}")
-      case _ => s"${account.get}.dkr.ecr.${region}.amazonaws.com/${algorithmName}:${algorithmTag}"
+      case _ if isChinaRegion(region) =>
+        s"${account.get}.dkr.ecr.${region}.amazonaws.com.cn/${algorithmName}:${algorithmTag}"
+      case _ =>
+        s"${account.get}.dkr.ecr.${region}.amazonaws.com/${algorithmName}:${algorithmTag}"
     }
   }
 }
@@ -52,7 +63,9 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.EU_NORTH_1.getName -> "669576153137",
     Regions.EU_WEST_3.getName -> "749696950732",
     Regions.EU_WEST_3.getName -> "749696950732",
-    Regions.ME_SOUTH_1.getName -> "249704162688"
+    Regions.ME_SOUTH_1.getName -> "249704162688",
+    Regions.CN_NORTH_1.getName -> "390948362332",
+    Regions.CN_NORTHWEST_1.getName -> "387376663083"
   )
 
   // For LDA
@@ -94,7 +107,9 @@ private[algorithms] object SagerMakerRegionAccountMaps {
     Regions.EU_NORTH_1.getName -> "669576153137",
     Regions.EU_WEST_3.getName -> "749696950732",
     Regions.EU_WEST_3.getName -> "749696950732",
-    Regions.ME_SOUTH_1.getName -> "249704162688"
+    Regions.ME_SOUTH_1.getName -> "249704162688",
+    Regions.CN_NORTH_1.getName -> "390948362332",
+    Regions.CN_NORTHWEST_1.getName -> "387376663083"
   )
 }
 

@@ -156,6 +156,16 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerBinaryClassifier(region = Regions.ME_SOUTH_1.getName)
     assert(estimatorMESouth1.trainingImage ==
       "249704162688.dkr.ecr.me-south-1.amazonaws.com/linear-learner:1")
+
+    val estimatorCNNorth1 =
+      createLinearLearnerBinaryClassifier(region = Regions.CN_NORTH_1.getName)
+    assert(estimatorCNNorth1.trainingImage ==
+      "390948362332.dkr.ecr.cn-north-1.amazonaws.com.cn/linear-learner:1")
+
+    val estimatorCNNorthWest1 =
+      createLinearLearnerBinaryClassifier(region = Regions.CN_NORTHWEST_1.getName)
+    assert(estimatorCNNorthWest1.trainingImage ==
+      "387376663083.dkr.ecr.cn-northwest-1.amazonaws.com.cn/linear-learner:1")
   }
 
   it should "use the correct defaults for multiclass classifier" in {
@@ -261,6 +271,16 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerMultiClassClassifier(region = Regions.ME_SOUTH_1.getName)
     assert(estimatorMESouth1.trainingImage ==
       "249704162688.dkr.ecr.me-south-1.amazonaws.com/linear-learner:1")
+
+    val estimatorCNNorth1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.CN_NORTH_1.getName)
+    assert(estimatorCNNorth1.trainingImage ==
+      "390948362332.dkr.ecr.cn-north-1.amazonaws.com.cn/linear-learner:1")
+
+    val estimatorCNNorthWest1 =
+      createLinearLearnerMultiClassClassifier(region = Regions.CN_NORTHWEST_1.getName)
+    assert(estimatorCNNorthWest1.trainingImage ==
+      "387376663083.dkr.ecr.cn-northwest-1.amazonaws.com.cn/linear-learner:1")
   }
 
   it should "use the correct defaults for regressor" in {
@@ -362,6 +382,16 @@ class LinearLearnerSageMakerEstimatorTests extends FlatSpec with MockitoSugar {
       createLinearLearnerRegressor(region = Regions.ME_SOUTH_1.getName)
     assert(estimatorMESouth1.trainingImage ==
       "249704162688.dkr.ecr.me-south-1.amazonaws.com/linear-learner:1")
+
+    val estimatorCNNorth1 =
+      createLinearLearnerRegressor(region = Regions.CN_NORTH_1.getName)
+    assert(estimatorCNNorth1.trainingImage ==
+      "390948362332.dkr.ecr.cn-north-1.amazonaws.com.cn/linear-learner:1")
+
+    val estimatorCNNorthWest1 =
+      createLinearLearnerRegressor(region = Regions.CN_NORTHWEST_1.getName)
+    assert(estimatorCNNorthWest1.trainingImage ==
+      "387376663083.dkr.ecr.cn-northwest-1.amazonaws.com.cn/linear-learner:1")
   }
 
   it should "setFeatureDim" in {

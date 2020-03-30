@@ -151,6 +151,16 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
       createFactorizationMachinesBinaryClassifier(region = Regions.ME_SOUTH_1.getName)
     assert(estimatorMESouth1.trainingImage ==
       "249704162688.dkr.ecr.me-south-1.amazonaws.com/factorization-machines:1")
+
+    val estimatorCNNorth1 =
+      createFactorizationMachinesBinaryClassifier(region = Regions.CN_NORTH_1.getName)
+    assert(estimatorCNNorth1.trainingImage ==
+      "390948362332.dkr.ecr.cn-north-1.amazonaws.com.cn/factorization-machines:1")
+
+    val estimatorCNNorthWest1 =
+      createFactorizationMachinesBinaryClassifier(region = Regions.CN_NORTHWEST_1.getName)
+    assert(estimatorCNNorthWest1.trainingImage ==
+      "387376663083.dkr.ecr.cn-northwest-1.amazonaws.com.cn/factorization-machines:1")
   }
 
   it should "use the correct defaults for regressor" in {
@@ -253,6 +263,16 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
       createFactorizationMachinesRegressor(region = Regions.ME_SOUTH_1.getName)
     assert(estimatorMESouth1.trainingImage ==
       "249704162688.dkr.ecr.me-south-1.amazonaws.com/factorization-machines:1")
+
+    val estimatorCNNorth1 =
+      createFactorizationMachinesRegressor(region = Regions.CN_NORTH_1.getName)
+    assert(estimatorCNNorth1.trainingImage ==
+      "390948362332.dkr.ecr.cn-north-1.amazonaws.com.cn/factorization-machines:1")
+
+    val estimatorCNNorthWest1 =
+      createFactorizationMachinesRegressor(region = Regions.CN_NORTHWEST_1.getName)
+    assert(estimatorCNNorthWest1.trainingImage ==
+      "387376663083.dkr.ecr.cn-northwest-1.amazonaws.com.cn/factorization-machines:1")
   }
 
   it should "setFeatureDim" in {
