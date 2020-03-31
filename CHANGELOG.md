@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.3.0 (2020-03-31)
+
+### Features
+
+ * add support for cn-north-1 and cn-northwest-1
+
+### Bug Fixes and Other Changes
+
+ * Upgrade pyspark version to 2.3.4
+
 ## v1.2.8.post1 (2020-03-26)
 
 ### Testing and Release Infrastructure
