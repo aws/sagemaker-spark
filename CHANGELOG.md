@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1 (2020-04-21)
+
+### Bug Fixes and Other Changes
+
+ * update to pyspark 2.4.5
+
 ## v1.3.0 (2020-03-31)
 
 ### Features
