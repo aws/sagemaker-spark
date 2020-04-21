@@ -105,7 +105,7 @@ try:  # noqa
             "numpy",
         ],
 
-        setup_requires=["pyspark>=2.3.4", "pypandoc", "pytest-runner", "numpy"],
+        setup_requires=["pyspark>=2.4.5", "pypandoc", "pytest-runner", "numpy"],
         tests_require=["pytest", "pytest-cov", "pytest-xdist", "coverage"]
     )
 
