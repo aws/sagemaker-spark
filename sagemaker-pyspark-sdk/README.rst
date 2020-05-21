@@ -161,7 +161,7 @@ Training and Hosting an XGBoost model using SageMaker PySpark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A XGBoostSageMakerEstimator runs a training job using the Amazon SageMaker XGBoost algorithm upon
-invocation of fit(), returning a SageMakerModel. 
+invocation of fit(), returning a SageMakerModel.
 
 .. code-block:: python
 
@@ -173,16 +173,16 @@ invocation of fit(), returning a SageMakerModel.
     # there is no need to do this in code.
     conf = (SparkConf()
             .set("spark.driver.extraClassPath", ":".join(classpath_jars())))
-    SparkContext(conf=conf)
+    SparkContext.getOrCreate(conf=conf)
 
     iam_role = "arn:aws:iam:0123456789012:role/MySageMakerRole"
 
     region = "us-east-1"
-    training_data = spark.read.format("libsvm").option("numFeatures", "784")
-      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region))
+    training_data = (spark.read.format("libsvm").option("numFeatures", "784")
+      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region)))
 
-    test_data = spark.read.format("libsvm").option("numFeatures", "784")
-      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region))
+    test_data = (spark.read.format("libsvm").option("numFeatures", "784")
+      .load("s3a://sagemaker-sample-data-{}/spark/mnist/train/".format(region)))
 
     xgboost_estimator = XGBoostSageMakerEstimator(
         trainingInstanceType="ml.m4.xlarge",
@@ -265,7 +265,7 @@ Create a bootstrap script to install sagemaker_pyspark in your new EMR cluster:
     #!/bin/bash
 
     sudo pip install sagemaker_pyspark
-    sudo /usr/bin/pip-3.4 install sagemaker_pyspark
+    sudo pip3 install sagemaker_pyspark
 
 
 Upload this script to an S3 bucket:
@@ -274,7 +274,7 @@ Upload this script to an S3 bucket:
 
     $ aws s3 cp bootstrap.sh s3://your-bucket/prefix/
 
-In the AWS Console launch a new EMR Spark Cluster,  set s3://your-bucket/prefix/bootstrap.sh  as the
+In the AWS Console launch a new EMR Spark Cluster, set s3://your-bucket/prefix/bootstrap.sh as the
 bootstrap script. Make sure to:
 
 - Run the Cluster in the same VPC as your SageMaker Notebook Instance.
@@ -315,15 +315,13 @@ Configure your SageMaker Notebook instance to connect to the cluster
 
 Open a terminal session in your notebook: new->terminal
 
-Copy the default `sparkmagic config <https://github
-.com/jupyter-incubator/sparkmagic/blob/master/sparkmagic/example_config.json>`__
+Copy the default `sparkmagic config <https://github.com/jupyter-incubator/sparkmagic/blob/master/sparkmagic/example_config.json>`__
 
 You can download it in your terminal using:
 
 .. code-block:: sh
 
-    $ wget https://raw.githubusercontent
-    .com/jupyter-incubator/sparkmagic/master/sparkmagic/example_config.json
+    $ wget https://raw.githubusercontent.com/jupyter-incubator/sparkmagic/master/sparkmagic/example_config.json
 
 In the ``kernel_python_credentials`` section, replace the ``url`` with
 ``http://your-cluster-private-dns-name:8998``.
@@ -335,7 +333,7 @@ Override the default spark magic config
     $ cp example_config.json ~/.sparkmagic/config.json
 
 
-Launch a notebook using either the ``pyspark2`` or ``pyspark3`` Kernel. As soon as you try to run
+Launch a notebook using ``Sparkmagic (Pyspark)`` Kernel. As soon as you try to run
 any code block, the notebook will connect to your spark cluster and get a ``SparkSession`` for you.
 
 
