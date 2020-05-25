@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1.post0 (2020-05-25)
+
+### Documentation Changes
+
+ * update documentation about using sagemaker-pyspark with EMR
+
 ## v1.3.1 (2020-04-21)
 
 ### Bug Fixes and Other Changes
