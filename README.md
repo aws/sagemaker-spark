@@ -100,7 +100,7 @@ SageMaker Spark is pre-installed on EMR releases since 5.11.0. You can run your 
 on EMR by submitting your Spark application jar and any additional dependencies your Spark application uses.
 
 SageMaker Spark applications have also been verified to be compatible with EMR-5.6.0 (which runs Spark 2.1) and EMR-5-8.0
-(which runs Spark 2.2). When submitting your Spark application to an earlier EMR release, use the `--packages` flag to
+(which runs Spark 2.2) The lasted compatible version is EMR-5.19.x (which runs Spark 2.3.2). When submitting your Spark application to an earlier EMR release, use the `--packages` flag to
 depend on a recent version of the AWS Java SDK:  
 
 ```
