@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1.post1 (2020-06-18)
+
+### Documentation Changes
+
+ * update latest compatible EMR version
+
 ## v1.3.1.post0 (2020-05-25)
 
 ### Documentation Changes
