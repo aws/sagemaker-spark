@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.2 (2020-07-21)
+
+### Bug Fixes and Other Changes
+
+ * Update README.md
+
 ## v1.3.1.post1 (2020-06-18)
 
 ### Documentation Changes
