@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.2.post0 (2020-07-23)
+
+### Testing and Release Infrastructure
+
+ * consolidate dependency lists
+
 ## v1.3.2 (2020-07-21)
 
 ### Bug Fixes and Other Changes
