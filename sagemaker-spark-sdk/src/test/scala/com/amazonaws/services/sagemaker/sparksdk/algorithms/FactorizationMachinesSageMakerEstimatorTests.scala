@@ -164,7 +164,7 @@ class FactorizationMachinesSageMakerEstimatorTests extends FlatSpec with Mockito
 
     val estimatorAFSouth1 =
       createFactorizationMachinesBinaryClassifier(region = Regions.AF_SOUTH_1.getName)
-    assert(estimatorEUSouth1.trainingImage ==
+    assert(estimatorAFSouth1.trainingImage ==
       "455444449433.dkr.ecr.af-south-1.amazonaws.com/factorization-machines:1")
 
     val estimatorEUSouth1 =
