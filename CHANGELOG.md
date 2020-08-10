@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.0 (2020-08-10)
+
+### Features
+
+ * add support for af-south-1 and eu-south-1
+
 ## v1.3.2.post0 (2020-07-23)
 
 ### Testing and Release Infrastructure
