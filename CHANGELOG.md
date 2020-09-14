@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.1 (2020-09-14)
+
+### Bug Fixes and Other Changes
+
+ * upgrade jquery to version 1.9.0
+
 ## v1.4.0 (2020-08-10)
 
 ### Features
