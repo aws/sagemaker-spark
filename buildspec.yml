@@ -43,7 +43,7 @@ phases:
       - tox -e flake8,twine,sphinx
       - AWS_ACCESS_KEY_ID= AWS_SECRET_ACCESS_KEY= AWS_SESSION_TOKEN=
         AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=
-        tox -e py27,py36,stats -- tests/
+        tox -e py36,stats -- tests/
 
       # spark integration tests
       - cd $CODEBUILD_SRC_DIR/integration-tests/sagemaker-spark-sdk
