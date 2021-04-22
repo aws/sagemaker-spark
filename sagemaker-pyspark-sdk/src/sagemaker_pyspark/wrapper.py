@@ -116,6 +116,7 @@ class Option(SageMakerJavaWrapper):
 
     def __init__(self, value):
         self.value = value
+        self._java_obj = None
 
     @classmethod
     def empty(cls):
@@ -147,6 +148,7 @@ class ScalaMap(SageMakerJavaWrapper):
 
     def __init__(self, dictionary):
         self.dictionary = dictionary
+        self._java_obj = None
 
     def _to_java(self):
         map = self._new_java_obj(ScalaMap._wrapped_class)
@@ -169,6 +171,7 @@ class ScalaList(SageMakerJavaWrapper):
 
     def __init__(self, p_list):
         self.p_list = p_list
+        self._java_obj = None
 
     def _to_java(self):
         # Since py4j cannot deal with scala list directly
