@@ -175,8 +175,8 @@ class XGBoostSageMakerEstimator(SageMakerEstimatorBase):
         "Subsample ratio of columns for each split, in each level. Must be in (0, 1].",
         typeConverter=TypeConverters.toFloat)
 
-    _lambda = Param(
-        Params._dummy(), "lambda",
+    lambda_weights = Param(
+        Params._dummy(), "lambda_weights",
         "L2 regularization term on weights, increase this value"
         " will make model more conservative.",
         typeConverter=TypeConverters.toFloat)
@@ -508,10 +508,10 @@ class XGBoostSageMakerEstimator(SageMakerEstimatorBase):
         self._set(colsample_bylevel=value)
 
     def getLambda(self):
-        return self.getOrDefault(self._lambda)
+        return self.getOrDefault(self.lambda_weights)
 
     def setLambda(self, value):
-        self._set(_lambda=value)
+        self._set(lambda_weights=value)
 
     def getAlpha(self):
         return self.getOrDefault(self.alpha)
