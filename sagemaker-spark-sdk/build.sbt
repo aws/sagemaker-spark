@@ -18,7 +18,7 @@ scalaVersion := "2.11.7"
 
 // to change the version of spark add -DSPARK_VERSION=2.x.x when running sbt
 // for example: "sbt -DSPARK_VERSION=2.1.1 clean compile test doc package"
-val sparkVersion = System.getProperty("SPARK_VERSION", "2.4.0")
+val sparkVersion = System.getProperty("SPARK_VERSION", "2.4.2")
 
 lazy val SageMakerSpark = (project in file("."))
 
