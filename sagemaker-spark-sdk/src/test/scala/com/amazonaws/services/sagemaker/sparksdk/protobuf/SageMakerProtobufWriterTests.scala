@@ -19,7 +19,7 @@ import java.io._
 import java.nio.file.{Files, Paths}
 import java.util.ServiceLoader
 
-import scala.collection.JavaConversions._
+import scala.jdk.CollectionConverters._
 
 import aialgorithms.proto2.RecordProto2.Record
 import org.apache.hadoop.mapreduce.TaskAttemptContext
@@ -58,13 +58,15 @@ class SageMakerProtobufWriterTests extends FlatSpec with MockitoSugar with Befor
 
   it should "write a row" in {
     val label = 1.0
-    val values = (1d to 1000000d by 1d).toArray
+    val values = (BigDecimal(1.0) to BigDecimal(1000000.0) by BigDecimal(1.0))
+      .map(_.toDouble).toArray
     runSerializationTest(label, values, 1)
   }
 
   it should "write two rows" in {
     val label = 1.0
-    val values = (1d to 1000000d by 1d).toArray
+    val values = (BigDecimal(1.0) to BigDecimal(1000000.0) by BigDecimal(1.0))
+      .map(_.toDouble).toArray
     runSerializationTest(label, values, 2)
   }
 
@@ -155,7 +157,7 @@ class SageMakerProtobufWriterTests extends FlatSpec with MockitoSugar with Befor
     while (recordIterator.hasNext) {
       val record = recordIterator.next
       assert(label == getLabel(record))
-      for ((features, recordFeatures) <- getFeatures(record) zip values) {
+      for ((features, recordFeatures) <- getFeatures(record).toArray.zip(values)) {
         assert(features == recordFeatures)
       }
     }

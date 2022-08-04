@@ -18,8 +18,8 @@ package com.amazonaws.services.sagemaker.sparksdk
 import java.time.Duration
 import java.util.UUID
 
-import scala.collection.JavaConversions._
 import scala.collection.immutable.Map
+import scala.jdk.CollectionConverters._
 
 import com.amazonaws.SdkBaseException
 import com.amazonaws.retry.RetryUtils
@@ -225,14 +225,15 @@ class SageMakerEstimator(val trainingImage: String,
     * @return a SageMaker hyper-parameter map
     */
   private[sparksdk] def makeHyperParameters() : java.util.Map[String, String] = {
-    val trainingJobHyperParameters : java.util.Map[String, String] =
-      new java.util.HashMap(hyperParameters)
+    val trainingJobHyperParameters : scala.collection.mutable.Map[String, String] =
+      scala.collection.mutable.Map() ++ hyperParameters
+
     params.filter(p => hasDefault(p) || isSet(p)) map {
       case p => (p.name, this.getOrDefault(p).toString)
     } foreach {
       case (key, value) => trainingJobHyperParameters.put(key, value)
     }
-    trainingJobHyperParameters
+    trainingJobHyperParameters.asJava
   }
 
   private[sparksdk] def resolveS3Path(s3Resource : S3Resource,
@@ -462,8 +463,8 @@ class SageMakerEstimator(val trainingImage: String,
 
     try {
       val objectList = s3Client.listObjects(s3Bucket, s3Prefix)
-      for (s3Object <- objectList.getObjectSummaries) {
-        s3Client.deleteObject(s3Bucket, s3Object.getKey)
+      objectList.getObjectSummaries.forEach{
+        s3Object => s3Client.deleteObject(s3Bucket, s3Object.getKey)
       }
       s3Client.deleteObject(s3Bucket, s3Prefix)
     } catch {

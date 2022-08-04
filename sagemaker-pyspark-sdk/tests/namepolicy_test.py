@@ -28,29 +28,29 @@ def with_spark_context():
 def test_CustomNamePolicyFactory():
     policy_factory = CustomNamePolicyFactory("jobName", "modelname", "epconfig", "ep")
     java_obj = policy_factory._to_java()
-    assert(isinstance(java_obj, JavaObject))
-    assert(java_obj.getClass().getSimpleName() == "CustomNamePolicyFactory")
+    assert (isinstance(java_obj, JavaObject))
+    assert (java_obj.getClass().getSimpleName() == "CustomNamePolicyFactory")
     policy_name = java_obj.createNamePolicy().getClass().getSimpleName()
-    assert(policy_name == "CustomNamePolicy")
+    assert (policy_name == "CustomNamePolicy")
 
 
 def test_CustomNamePolicyWithTimeStampSuffixFactory():
     policy_factory = CustomNamePolicyWithTimeStampSuffixFactory("jobName", "modelname",
                                                                 "epconfig", "ep")
     java_obj = policy_factory._to_java()
-    assert(isinstance(java_obj, JavaObject))
+    assert (isinstance(java_obj, JavaObject))
     assert (java_obj.getClass().getSimpleName() == "CustomNamePolicyWithTimeStampSuffixFactory")
     policy_name = java_obj.createNamePolicy().getClass().getSimpleName()
-    assert(policy_name == "CustomNamePolicyWithTimeStampSuffix")
+    assert (policy_name == "CustomNamePolicyWithTimeStampSuffix")
 
 
 def test_CustomNamePolicyWithTimeStampSuffix():
     name_policy = CustomNamePolicyWithTimeStampSuffix("jobName", "modelname", "epconfig", "ep")
-    assert(isinstance(name_policy._to_java(), JavaObject))
-    assert(name_policy._call_java("trainingJobName") != "jobName")
-    assert(name_policy._call_java("modelName") != "modelname")
-    assert(name_policy._call_java("endpointConfigName") != "epconfig")
-    assert(name_policy._call_java("endpointName") != "ep")
+    assert (isinstance(name_policy._to_java(), JavaObject))
+    assert (name_policy._call_java("trainingJobName") != "jobName")
+    assert (name_policy._call_java("modelName") != "modelname")
+    assert (name_policy._call_java("endpointConfigName") != "epconfig")
+    assert (name_policy._call_java("endpointName") != "ep")
 
     assert (name_policy._call_java("trainingJobName").startswith("jobName"))
     assert (name_policy._call_java("modelName").startswith("modelname"))

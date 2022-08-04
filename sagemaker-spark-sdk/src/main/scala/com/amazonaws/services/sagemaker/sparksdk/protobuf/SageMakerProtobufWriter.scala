@@ -72,6 +72,10 @@ class SageMakerProtobufWriter(path : String, context : TaskAttemptContext, dataS
     write(converter(row))
   }
 
+  override def path(): String = {
+    return path;
+  }
+
   /**
     * Writes a row to an underlying RecordWriter
     *
