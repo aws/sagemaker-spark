@@ -18,6 +18,8 @@ phases:
 
   build:
     commands:
+      - export SBT_OPTS="-Xms1024M -Xmx4G -Xss2M -XX:MaxMetaspaceSize=2G"
+
       # prepare the release (update versions, changelog etc.)
       - git-release --prepare
 
@@ -30,7 +32,7 @@ phases:
       - tox -e flake8,twine,sphinx
 
       # pyspark unit tests (no coverage)
-      - tox -e py38 -- tests/
+      - tox -e py37 -- tests/
 
       # todo consider adding subset of integration tests
 
