@@ -17,7 +17,8 @@ package com.amazonaws.services.sagemaker.sparksdk.transformation
 
 import java.io.{File, FileWriter}
 
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
+
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 import org.scalatest.mock.MockitoSugar
 

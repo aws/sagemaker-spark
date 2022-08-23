@@ -22,7 +22,7 @@ import java.util.NoSuchElementException
 import com.amazonaws.{AmazonWebServiceRequest, ResponseMetadata}
 import com.amazonaws.regions.Region
 import com.amazonaws.services.sagemakerruntime.AmazonSageMakerRuntime
-import com.amazonaws.services.sagemakerruntime.model.{InvokeEndpointRequest, InvokeEndpointResult}
+import com.amazonaws.services.sagemakerruntime.model.{InvokeEndpointAsyncRequest, InvokeEndpointAsyncResult, InvokeEndpointRequest, InvokeEndpointResult}
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 import org.scalatest.mock.MockitoSugar
 
@@ -52,6 +52,13 @@ class RequestBatchIteratorTests extends FlatSpec with Matchers with MockitoSugar
       new InvokeEndpointResult()
          .withBody(byteBuffer)
          .withContentType(invokeEndpointRequest.getContentType)
+    }
+    override def invokeEndpointAsync(invokeEndpointAsyncRequest: InvokeEndpointAsyncRequest):
+    InvokeEndpointAsyncResult = {
+      val inputLocation = invokeEndpointAsyncRequest.getInputLocation
+      val invokeEndpointAsyncResult = new InvokeEndpointAsyncResult()
+      invokeEndpointAsyncResult.setOutputLocation(inputLocation)
+      return invokeEndpointAsyncResult
     }
     override def shutdown(): Unit = {}
     override def getCachedResponseMetadata(request: AmazonWebServiceRequest): ResponseMetadata =

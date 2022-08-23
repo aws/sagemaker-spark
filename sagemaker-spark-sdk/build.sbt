@@ -14,11 +14,11 @@ scmInfo := Some(
 )
 licenses := Seq("Apache License, Version 2.0" -> url("https://aws.amazon.com/apache2.0"))
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.16"
 
 // to change the version of spark add -DSPARK_VERSION=2.x.x when running sbt
 // for example: "sbt -DSPARK_VERSION=2.1.1 clean compile test doc package"
-val sparkVersion = System.getProperty("SPARK_VERSION", "2.4.0")
+val sparkVersion = System.getProperty("SPARK_VERSION", "3.3.0")
 
 lazy val SageMakerSpark = (project in file("."))
 
@@ -29,16 +29,18 @@ version := {
 }
 
 libraryDependencies ++= Seq(
-  "org.apache.hadoop" % "hadoop-aws" % "2.8.1",
-  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.835",
-  "com.amazonaws" % "aws-java-sdk-sts" % "1.11.835",
-  "com.amazonaws" % "aws-java-sdk-sagemaker" % "1.11.835",
-  "com.amazonaws" % "aws-java-sdk-sagemakerruntime" % "1.11.835",
+  "org.apache.hadoop" % "hadoop-aws" % "3.3.1",
+  "com.amazonaws" % "aws-java-sdk-s3" % "1.12.262",
+  "com.amazonaws" % "aws-java-sdk-sts" % "1.12.262",
+  "com.amazonaws" % "aws-java-sdk-sagemaker" % "1.12.262",
+  "com.amazonaws" % "aws-java-sdk-sagemakerruntime" % "1.12.262",
   "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-mllib" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
-  "org.scalatest" %% "scalatest" % "3.0.4" % "test",
-  "org.mockito" % "mockito-all" % "1.10.19" % "test"
+  "org.scoverage" %% "scalac-scoverage-plugin" % "1.4.2" % "provided",
+  "org.scalatest" %% "scalatest" % "3.0.9" % "test",
+  "org.scala-sbt" %% "compiler-bridge" % "1.7.1" % "test",
+  "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
 )
 
 // add a task to print the classpath. Also use the packaged JAR instead
@@ -48,8 +50,11 @@ lazy val printClasspath = taskKey[Unit]("Dump classpath")
 printClasspath := (fullClasspath in Runtime value) foreach { e => println(e.data) }
 
 // set coverage threshold
-coverageMinimum := 90
 coverageFailOnMinimum := true
+coverageMinimumStmtTotal := 90
+coverageMinimumBranchTotal := 90
+coverageMinimumStmtPerPackage := 83
+coverageMinimumBranchPerPackage := 75
 
 // make scalastyle gate the build
 (compile in Compile) := {

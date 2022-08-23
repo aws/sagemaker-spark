@@ -25,7 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.sql._

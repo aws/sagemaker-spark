@@ -17,8 +17,7 @@ package com.amazonaws.services.sagemaker.sparksdk.protobuf
 
 import java.nio.{ByteBuffer, ByteOrder}
 
-import scala.collection.JavaConversions._
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import aialgorithms.proto2.RecordProto2
 import aialgorithms.proto2.RecordProto2.Record
@@ -36,12 +35,17 @@ import com.amazonaws.services.sagemaker.sparksdk.protobuf.ProtobufConverter._
 class ProtobufConverterTests extends FlatSpec with MockitoSugar with BeforeAndAfter {
 
   val label : Double = 1.0
-  val denseFeatures : DenseVector = new DenseVector((1d to 100d by 1d).toArray)
+  val denseFeatures : DenseVector =
+    new DenseVector((BigDecimal(1.0) to BigDecimal(100.0) by BigDecimal(1.0))
+      .map(_.toDouble).toArray)
   val sparseFeatures : SparseVector = new SparseVector(100, (1 to 100 by 10).toArray,
-    (1d to 100d by 10d).toArray)
-  val denseMatrixFeatures : DenseMatrix = new DenseMatrix(10, 20, (1d to 200d by 1d).toArray)
+    (BigDecimal(1.0) to BigDecimal(100.0) by BigDecimal(10.0)).map(v => v.toDouble).toArray)
+  val denseMatrixFeatures : DenseMatrix =
+    new DenseMatrix(10, 20, (BigDecimal(1.0) to BigDecimal(200.0) by BigDecimal(1.0))
+      .map(_.toDouble).toArray)
   val denseMatrixFeaturesTrans : DenseMatrix =
-    new DenseMatrix(10, 20, (1d to 200d by 1d).toArray, true)
+    new DenseMatrix(10, 20, (BigDecimal(1.0) to BigDecimal(200.0) by BigDecimal(1.0))
+      .map(_.toDouble).toArray, true)
   val sparseMatrixFeatures : SparseMatrix = new SparseMatrix(3, 3,
     Array(0, 2, 3, 6),
     Array(0, 2, 1, 0, 1, 2),
@@ -187,7 +191,7 @@ class ProtobufConverterTests extends FlatSpec with MockitoSugar with BeforeAndAf
     val recordValuesList = recordToValuesList(record)
     val denseVectorArray = denseVector.toArray
     assert(recordValuesList.size == denseVectorArray.length)
-    for ((recordValue, value) <- recordValuesList zip denseVectorArray) {
+    for ((recordValue, value) <- recordValuesList.toArray.zip(denseVectorArray)) {
       assert(value == recordValue)
     }
   }
@@ -195,8 +199,8 @@ class ProtobufConverterTests extends FlatSpec with MockitoSugar with BeforeAndAf
   private def validateDense(record: Record, denseMatrix: DenseMatrix) : Unit = {
     val recordValuesList = recordToValuesList(record)
     val recordShape = recordToMatrixShape(record)
-    assert(recordShape(0) == denseMatrix.numRows)
-    assert(recordShape(1) == denseMatrix.numCols)
+    assert(recordShape.get(0) == denseMatrix.numRows)
+    assert(recordShape.get(1) == denseMatrix.numCols)
 
     // We always store in CSR, thus we need to pass isTransposed=true in order
     // to re-generate the original matrix
@@ -208,11 +212,11 @@ class ProtobufConverterTests extends FlatSpec with MockitoSugar with BeforeAndAf
   private def validateSparse(record: Record, sparseVector: SparseVector) : Unit = {
     val recordValuesList = recordToValuesList(record)
     val recordKeysList = recordToKeysList(record)
-    for ((recordValue, value) <- recordValuesList zip sparseVector.values) {
+    for ((recordValue, value) <- recordValuesList.toArray.zip(sparseVector.values)) {
       assert(value == recordValue)
     }
 
-    for ((recordIndex, index) <- recordKeysList zip sparseVector.indices) {
+    for ((recordIndex, index) <- recordKeysList.toArray.zip(sparseVector.indices)) {
       assert(index == recordIndex)
     }
 
@@ -223,20 +227,21 @@ class ProtobufConverterTests extends FlatSpec with MockitoSugar with BeforeAndAf
     val recordValuesList = recordToValuesList(record)
     val recordKeysList = matrixRecordToKeysList(record)
     val recordShape = recordToMatrixShape(record)
-    val numRows = recordShape(0).toInt
-    val numCols = recordShape(1).toInt
+    val numRows = recordShape.get(0).toInt
+    val numCols = recordShape.get(1).toInt
 
     // Read tuples (row, col, value). The encoding is:
     // row[i] = floor(key[i] / cols)
     // col[i] = key[i] % cols
     val coordinates : java.util.List[scala.Tuple3[Int, Int, Double]] = new java.util.ArrayList()
     for(idx <- (0 to recordValuesList.size - 1)) {
-      coordinates.add((recordKeysList(idx).toInt / numCols, recordKeysList(idx).toInt % numCols,
-        recordValuesList(idx).toDouble))
+      coordinates.add((recordKeysList.get(idx).toInt / numCols,
+        recordKeysList.get(idx).toInt % numCols,
+        recordValuesList.get(idx).toDouble))
     }
 
     // Reconstruct SparseMatrix from the coordinates
-    val newSparseMatrix = SparseMatrix.fromCOO(numRows, numCols, coordinates.toIterable)
+    val newSparseMatrix = SparseMatrix.fromCOO(numRows, numCols, coordinates.asScala.toIterable)
 
     assert(sparseMatrix.equals(newSparseMatrix))
   }
@@ -283,10 +288,11 @@ class ProtobufConverterTests extends FlatSpec with MockitoSugar with BeforeAndAf
 
   private def getFeaturesTensorFromRecord(record: Record) : RecordProto2.Float32Tensor = {
     val featuresList = record.getFeaturesList
-    for (featureEntry: RecordProto2.MapEntry <- featuresList) {
-      if (featureEntry.getKey.equals(ValuesIdentifierString)) {
-        return featureEntry.getValue.getFloat32Tensor
-      }
+    featuresList.forEach {
+      featureEntry: RecordProto2.MapEntry =>
+        if (featureEntry.getKey.equals(ValuesIdentifierString)) {
+          return featureEntry.getValue.getFloat32Tensor
+        }
     }
     throw new IllegalArgumentException("Record does not have a features tensor.")
   }
