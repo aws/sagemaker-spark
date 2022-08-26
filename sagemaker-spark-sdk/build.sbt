@@ -37,9 +37,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-mllib" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
-  "org.scoverage" %% "scalac-scoverage-plugin" % "1.4.2" % "provided",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
-  "org.scala-sbt" %% "compiler-bridge" % "1.7.1" % "test",
   "org.mockito" % "mockito-all" % "2.0.2-beta" % "test"
 )
 
