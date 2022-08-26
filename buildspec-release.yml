@@ -10,7 +10,7 @@ phases:
       - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/bin
 
       # install sbt launcher
-      - curl -LO https://github.com/sbt/sbt/releases/download/v1.1.6/sbt-1.1.6.tgz
+      - curl -LO https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
       - tar -xf sbt-*.tgz
       - export PATH=$CODEBUILD_SRC_DIR/sbt/bin/:$PATH
       - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
