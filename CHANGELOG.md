@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.5 (2022-08-26)
+
+### Bug Fixes and Other Changes
+
+ * remove compiler-bridge dependency
+
 ## v1.4.4 (2022-08-26)
 
 ### Bug Fixes and Other Changes
