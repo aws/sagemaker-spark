@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.4 (2022-08-26)
+
+### Bug Fixes and Other Changes
+
+ * Upgrade sbt version to 1.7.1
+
 ## v1.4.3 (2022-08-23)
 
 ### Bug Fixes and Other Changes
