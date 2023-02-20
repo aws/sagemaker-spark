@@ -14,10 +14,9 @@
  */
 
 package com.amazonaws.services.sagemaker.sparksdk;
-
-import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
+import org.scalatest.FlatSpec
 
 class NamePolicyTests extends FlatSpec with Matchers with MockitoSugar {
 
