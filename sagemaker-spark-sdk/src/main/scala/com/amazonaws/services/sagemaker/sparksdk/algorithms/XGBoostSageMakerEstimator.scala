@@ -392,7 +392,7 @@ private[algorithms] trait XGBoostParams extends Params {
 }
 
 object XGBoostSageMakerEstimator {
-  val algorithmName = "xgboost"
+  val algorithmName = "sagemaker-xgboost"
   val algorithmTag = "1.5-1"
   val regionAccountMap = SagerMakerRegionAccountMaps.ApplicationsAccountMap
 }

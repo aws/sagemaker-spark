@@ -54,95 +54,95 @@ class XGBoostSageMakerEstimatorTests extends FlatSpec with Matchers with Mockito
   it should "use the correct images in all regions" in {
     val estimatorUSEast1 = createXGBoostEstimator(region = Regions.US_EAST_1.getName)
     assert(estimatorUSEast1.trainingImage ==
-      "811284229777.dkr.ecr.us-east-1.amazonaws.com/xgboost:1.5-1")
+      "683313688378.dkr.ecr.us-east-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorUSEast2 = createXGBoostEstimator(region = Regions.US_EAST_2.getName)
     assert(estimatorUSEast2.trainingImage ==
-      "825641698319.dkr.ecr.us-east-2.amazonaws.com/xgboost:1.5-1")
+      "257758044811.dkr.ecr.us-east-2.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorEUWest1 = createXGBoostEstimator(region = Regions.EU_WEST_1.getName)
     assert(estimatorEUWest1.trainingImage ==
-      "685385470294.dkr.ecr.eu-west-1.amazonaws.com/xgboost:1.5-1")
+      "141502667606.dkr.ecr.eu-west-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorUSWest2 = createXGBoostEstimator(region = Regions.US_WEST_2.getName)
     assert(estimatorUSWest2.trainingImage ==
-      "433757028032.dkr.ecr.us-west-2.amazonaws.com/xgboost:1.5-1")
+      "246618743249.dkr.ecr.us-west-2.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorAPNorthEast1 = createXGBoostEstimator(region = Regions.AP_NORTHEAST_1.getName)
     assert(estimatorAPNorthEast1.trainingImage ==
-      "501404015308.dkr.ecr.ap-northeast-1.amazonaws.com/xgboost:1.5-1")
+      "354813040037.dkr.ecr.ap-northeast-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorAPNorthEast2 = createXGBoostEstimator(region = Regions.AP_NORTHEAST_2.getName)
     assert(estimatorAPNorthEast2.trainingImage ==
-      "306986355934.dkr.ecr.ap-northeast-2.amazonaws.com/xgboost:1.5-1")
+      "366743142698.dkr.ecr.ap-northeast-2.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorEUCentral1 = createXGBoostEstimator(region = Regions.EU_CENTRAL_1.getName)
     assert(estimatorEUCentral1.trainingImage ==
-      "813361260812.dkr.ecr.eu-central-1.amazonaws.com/xgboost:1.5-1")
+      "492215442770.dkr.ecr.eu-central-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorAPSouthEast2 = createXGBoostEstimator(region = Regions.AP_SOUTHEAST_2.getName)
     assert(estimatorAPSouthEast2.trainingImage ==
-      "544295431143.dkr.ecr.ap-southeast-2.amazonaws.com/xgboost:1.5-1")
+      "783357654285.dkr.ecr.ap-southeast-2.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorGovCloud = createXGBoostEstimator(region = Regions.GovCloud.getName)
     assert(estimatorGovCloud.trainingImage ==
-      "226302683700.dkr.ecr.us-gov-west-1.amazonaws.com/xgboost:1.5-1")
+      "414596584902.dkr.ecr.us-gov-west-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorAPSouth1 = createXGBoostEstimator(region = Regions.AP_SOUTH_1.getName)
     assert(estimatorAPSouth1.trainingImage ==
-      "991648021394.dkr.ecr.ap-south-1.amazonaws.com/xgboost:1.5-1")
+      "720646828776.dkr.ecr.ap-south-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorAPSouthEast1 = createXGBoostEstimator(region = Regions.AP_SOUTHEAST_1.getName)
     assert(estimatorAPSouthEast1.trainingImage ==
-      "475088953585.dkr.ecr.ap-southeast-1.amazonaws.com/xgboost:1.5-1")
+      "121021644041.dkr.ecr.ap-southeast-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorEUWest2 = createXGBoostEstimator(region = Regions.EU_WEST_2.getName)
     assert(estimatorEUWest2.trainingImage ==
-      "644912444149.dkr.ecr.eu-west-2.amazonaws.com/xgboost:1.5-1")
+      "764974769150.dkr.ecr.eu-west-2.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorCACentral1 = createXGBoostEstimator(region = Regions.CA_CENTRAL_1.getName)
     assert(estimatorCACentral1.trainingImage ==
-      "469771592824.dkr.ecr.ca-central-1.amazonaws.com/xgboost:1.5-1")
+      "341280168497.dkr.ecr.ca-central-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorUSWest1 = createXGBoostEstimator(region = Regions.US_WEST_1.getName)
     assert(estimatorUSWest1.trainingImage ==
-      "632365934929.dkr.ecr.us-west-1.amazonaws.com/xgboost:1.5-1")
+      "746614075791.dkr.ecr.us-west-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorAPEast1 = createXGBoostEstimator(region = Regions.AP_EAST_1.getName)
     assert(estimatorAPEast1.trainingImage ==
-      "286214385809.dkr.ecr.ap-east-1.amazonaws.com/xgboost:1.5-1")
+      "651117190479.dkr.ecr.ap-east-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorSAEast1 = createXGBoostEstimator(region = Regions.SA_EAST_1.getName)
     assert(estimatorSAEast1.trainingImage ==
-      "855470959533.dkr.ecr.sa-east-1.amazonaws.com/xgboost:1.5-1")
+      "737474898029.dkr.ecr.sa-east-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorEUNorth1 = createXGBoostEstimator(region = Regions.EU_NORTH_1.getName)
     assert(estimatorEUNorth1.trainingImage ==
-      "669576153137.dkr.ecr.eu-north-1.amazonaws.com/xgboost:1.5-1")
+      "662702820516.dkr.ecr.eu-north-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorEUWest3 = createXGBoostEstimator(region = Regions.EU_WEST_3.getName)
     assert(estimatorEUWest3.trainingImage ==
-      "749696950732.dkr.ecr.eu-west-3.amazonaws.com/xgboost:1.5-1")
+      "659782779980.dkr.ecr.eu-west-3.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorMESouth1 = createXGBoostEstimator(region = Regions.ME_SOUTH_1.getName)
     assert(estimatorMESouth1.trainingImage ==
-      "249704162688.dkr.ecr.me-south-1.amazonaws.com/xgboost:1.5-1")
+      "801668240914.dkr.ecr.me-south-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorCNNorth1 = createXGBoostEstimator(region = Regions.CN_NORTH_1.getName)
     assert(estimatorCNNorth1.trainingImage ==
-      "390948362332.dkr.ecr.cn-north-1.amazonaws.com.cn/xgboost:1.5-1")
+      "450853457545.dkr.ecr.cn-north-1.amazonaws.com.cn/sagemaker-xgboost:1.5-1")
 
     val estimatorCNNorthWest1 = createXGBoostEstimator(region = Regions.CN_NORTHWEST_1.getName)
     assert(estimatorCNNorthWest1.trainingImage ==
-      "387376663083.dkr.ecr.cn-northwest-1.amazonaws.com.cn/xgboost:1.5-1")
+      "451049120500.dkr.ecr.cn-northwest-1.amazonaws.com.cn/sagemaker-xgboost:1.5-1")
 
     val estimatorAFSouth1 = createXGBoostEstimator(region = Regions.AF_SOUTH_1.getName)
     assert(estimatorAFSouth1.trainingImage ==
-      "455444449433.dkr.ecr.af-south-1.amazonaws.com/xgboost:1.5-1")
+      "510948584623.dkr.ecr.af-south-1.amazonaws.com/sagemaker-xgboost:1.5-1")
 
     val estimatorEUSouth1 = createXGBoostEstimator(region = Regions.EU_SOUTH_1.getName)
     assert(estimatorEUSouth1.trainingImage ==
-      "257386234256.dkr.ecr.eu-south-1.amazonaws.com/xgboost:1.5-1")
+      "978288397137.dkr.ecr.eu-south-1.amazonaws.com/sagemaker-xgboost:1.5-1")
   }
 
   it should "setBooster" in {
