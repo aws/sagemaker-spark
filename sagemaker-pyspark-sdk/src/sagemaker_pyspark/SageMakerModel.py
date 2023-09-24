@@ -227,7 +227,7 @@ class SageMakerModel(SageMakerJavaWrapper, JavaModel):
                      namePolicy=RandomNamePolicy(),
                      uid="sagemaker"):
 
-        """ Creates a JavaSageMakerModel from existing model data in S3.
+        """ Creates a JavaSageMakerModel from an existing model endpoint.
 
         The returned JavaSageMakerModel can be used to transform Dataframes.
 
