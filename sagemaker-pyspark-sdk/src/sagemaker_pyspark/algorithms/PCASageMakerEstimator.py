@@ -33,10 +33,10 @@ class PCASageMakerEstimator(SageMakerEstimatorBase):
     dictionary with entries in trainingSparkDataFormatOptions with key "labelColumnName" or
     "featuresColumnName", with values corresponding to the desired label and features columns.
 
-    PCASageMakerEstimator uses
-    :class:`~sagemaker_pyspark.transformation.serializers.ProtobufRequestRowSerializer` to serialize
-     Rows into RecordIO-encoded Amazon Record protobuf messages for inference, by default selecting
-    the column named "features" expected to contain a Vector of Doubles.
+    :class:`~sagemaker_pyspark.transformation.serializers.ProtobufRequestRowSerializer` is used
+    by PCASageMakerEstimator to serialize Rows into RecordIO-encoded Amazon Record protobuf
+    messages for inference, by default selecting the column named "features" expected to contain
+    a Vector of Doubles.
 
     Inferences made against an Endpoint hosting a PCA model contain a "projection" field appended
     to the input DataFrame as a Dense Vector of Doubles.
