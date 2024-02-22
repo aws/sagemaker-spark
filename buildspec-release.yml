@@ -32,7 +32,7 @@ phases:
       - tox -e flake8,twine,sphinx
 
       # pyspark unit tests (no coverage)
-      - tox -e py37 -- tests/
+      - tox -e py38 -- tests/
 
       # todo consider adding subset of integration tests
 
