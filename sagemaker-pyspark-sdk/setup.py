@@ -103,7 +103,7 @@ try:  # noqa
         },
         scripts=["bin/sagemakerpyspark-jars", "bin/sagemakerpyspark-emr-jars"],
         install_requires=[
-            "pyspark==3.3.0",
+            "pyspark==3.3.2",
             "numpy",
         ],
     )
