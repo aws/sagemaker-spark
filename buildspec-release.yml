@@ -10,7 +10,7 @@ phases:
       - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/bin
 
       # install sbt launcher
-      - curl -LO https://github.com/sbt/sbt/releases/download/v1.1.6/sbt-1.1.6.tgz
+      - curl -LO https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
       - tar -xf sbt-*.tgz
       - export PATH=$CODEBUILD_SRC_DIR/sbt/bin/:$PATH
       - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
@@ -18,23 +18,21 @@ phases:
 
   build:
     commands:
+      - export SBT_OPTS="-Xms1024M -Xmx4G -Xss2M -XX:MaxMetaspaceSize=2G"
+
       # prepare the release (update versions, changelog etc.)
       - git-release --prepare
 
       # spark unit tests and package (no coverage)
       - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
-      - AWS_ACCESS_KEY_ID= AWS_SECRET_ACCESS_KEY= AWS_SESSION_TOKEN=
-        AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=
-        sbt -Dsbt.log.noformat=true clean test package
+      - sbt -Dsbt.log.noformat=true clean test package
 
       # pyspark linters, package and doc build tests
       - cd $CODEBUILD_SRC_DIR/sagemaker-pyspark-sdk
       - tox -e flake8,twine,sphinx
 
       # pyspark unit tests (no coverage)
-      - AWS_ACCESS_KEY_ID= AWS_SECRET_ACCESS_KEY= AWS_SESSION_TOKEN=
-        AWS_CONTAINER_CREDENTIALS_RELATIVE_URI= IGNORE_COVERAGE=-
-        tox -e py27,py36 -- tests/
+      - tox -e py38 -- tests/
 
       # todo consider adding subset of integration tests
 

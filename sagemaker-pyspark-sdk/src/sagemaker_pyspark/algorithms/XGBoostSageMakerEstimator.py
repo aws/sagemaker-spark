@@ -380,7 +380,7 @@ class XGBoostSageMakerEstimator(SageMakerEstimatorBase):
         if uid is None:
             uid = Identifiable._randomUID()
 
-        kwargs = locals()
+        kwargs = locals().copy()
         del kwargs['self']
         super(XGBoostSageMakerEstimator, self).__init__(**kwargs)
 

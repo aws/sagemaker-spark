@@ -10,7 +10,7 @@ phases:
       - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/bin
 
       # install sbt launcher
-      - curl -LO https://github.com/sbt/sbt/releases/download/v1.1.6/sbt-1.1.6.tgz
+      - curl -LO https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
       - tar -xf sbt-*.tgz
       - export PATH=$CODEBUILD_SRC_DIR/sbt/bin/:$PATH
       - cd $CODEBUILD_SRC_DIR/sagemaker-spark-sdk
@@ -18,6 +18,8 @@ phases:
 
   build:
     commands:
+      - export SBT_OPTS="-Xms1024M -Xmx4G -Xss2M -XX:MaxMetaspaceSize=2G"
+
       # ignore reuse error to allow retry of this build stage
       # when sonatype step has transient error
       - publish-pypi-package --ignore-reuse-error $CODEBUILD_SRC_DIR_ARTIFACT_1/sagemaker-pyspark-sdk/dist/sagemaker_pyspark-*.tar.gz

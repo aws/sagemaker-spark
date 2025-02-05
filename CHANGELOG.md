@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.5 (2022-08-26)
+
+### Bug Fixes and Other Changes
+
+ * remove compiler-bridge dependency
+
+## v1.4.4 (2022-08-26)
+
+### Bug Fixes and Other Changes
+
+ * Upgrade sbt version to 1.7.1
+
+## v1.4.3 (2022-08-23)
+
+### Bug Fixes and Other Changes
+
+ * Upgrade Spark and PySpark version to 3.3.0
+
 ## v1.4.2 (2021-04-23)
 
 ### Bug Fixes and Other Changes

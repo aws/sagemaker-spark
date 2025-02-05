@@ -36,17 +36,19 @@ try:  # noqa
             print("Could not create dir {0}".format(TEMP_PATH), file=sys.stderr)
             exit(1)
 
-        p = subprocess.Popen("sbt printClasspath".split(),
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
-                             cwd="../sagemaker-spark-sdk/")
+        p = subprocess.Popen(
+            "sbt printClasspath".split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd="../sagemaker-spark-sdk/",
+        )
 
         output, errors = p.communicate()
 
         classpath = []
         # Java Libraries to include.
-        java_libraries = ['aws', 'sagemaker', 'hadoop', 'htrace']
-        for line in output.decode('utf-8').splitlines():
+        java_libraries = ["aws", "sagemaker", "hadoop", "htrace"]
+        for line in output.decode("utf-8").splitlines():
             path = str(line.strip())
             if path.endswith(".jar") and os.path.exists(path):
                 jar = os.path.basename(path).lower()
@@ -65,8 +67,10 @@ try:  # noqa
 
     else:
         if not os.path.exists(JARS_TARGET):
-            print("You need to be in the sagemaker-pyspark-sdk root folder to package",
-                  file=sys.stderr)
+            print(
+                "You need to be in the sagemaker-pyspark-sdk root folder to package",
+                file=sys.stderr,
+            )
             exit(-1)
 
     setup(
@@ -76,32 +80,30 @@ try:  # noqa
         author="Amazon Web Services",
         url="https://github.com/aws/sagemaker-spark",
         license="Apache License 2.0",
+        python_requires=">= 3.7",
         zip_safe=False,
-
-        packages=["sagemaker_pyspark",
-                  "sagemaker_pyspark.algorithms",
-                  "sagemaker_pyspark.transformation",
-                  "sagemaker_pyspark.transformation.deserializers",
-                  "sagemaker_pyspark.transformation.serializers",
-                  "sagemaker_pyspark.jars",
-                  "sagemaker_pyspark.licenses"],
-
+        packages=[
+            "sagemaker_pyspark",
+            "sagemaker_pyspark.algorithms",
+            "sagemaker_pyspark.transformation",
+            "sagemaker_pyspark.transformation.deserializers",
+            "sagemaker_pyspark.transformation.serializers",
+            "sagemaker_pyspark.jars",
+            "sagemaker_pyspark.licenses",
+        ],
         package_dir={
             "sagemaker_pyspark": "src/sagemaker_pyspark",
             "sagemaker_pyspark.jars": "deps/jars",
-            "sagemaker_pyspark.licenses": "licenses"
+            "sagemaker_pyspark.licenses": "licenses",
         },
         include_package_data=True,
-
         package_data={
             "sagemaker_pyspark.jars": ["*.jar"],
-            "sagemaker_pyspark.licenses": ["*.txt"]
+            "sagemaker_pyspark.licenses": ["*.txt"],
         },
-
         scripts=["bin/sagemakerpyspark-jars", "bin/sagemakerpyspark-emr-jars"],
-
         install_requires=[
-            "pyspark==2.4.0",
+            "pyspark==3.3.2",
             "numpy",
         ],
     )
