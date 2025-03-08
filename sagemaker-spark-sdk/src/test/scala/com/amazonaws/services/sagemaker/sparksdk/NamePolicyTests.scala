@@ -55,7 +55,7 @@ class NamePolicyTests extends FlatSpec with Matchers with MockitoSugar {
     assert(policy.endpointName.startsWith("endpointName"))
   }
 
-  "CustomNamePolicyWithTimeStampSuffix" should "have custom names with proper suffix" in {
+  "CustomNamePolicyWithTimeStampSuffix" should "have custom names with proper test" in {
     val policy = new CustomNamePolicyWithTimeStampSuffix("jobName", "modelName",
                                                               "endpointConfig", "endpointName")
     assert(!policy.trainingJobName.equals("jobName"))
