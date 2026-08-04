@@ -462,14 +462,49 @@ class SageMakerEstimator(val trainingImage: String,
     val s3Prefix = s3DataPath.objectPath
 
     try {
+      // listObjects(bucket, prefix) matches any key that begins with the given string, without
+      // regard to '/' as a path-segment boundary. Because s3Prefix is the job's staging path with
+      // no trailing delimiter, the listing also returns objects belonging to *other* jobs whose
+      // names merely share this string prefix (e.g. "run1" vs "run10"). Deleting everything
+      // returned would destroy those unrelated jobs' data, so we filter the listing down to the
+      // objects that provably belong to this job before deleting.
       val objectList = s3Client.listObjects(s3Bucket, s3Prefix)
-      objectList.getObjectSummaries.forEach{
-        s3Object => s3Client.deleteObject(s3Bucket, s3Object.getKey)
+      objectList.getObjectSummaries.forEach { s3Object =>
+        val key = s3Object.getKey
+        if (belongsToTrainingJob(key, s3Prefix)) {
+          s3Client.deleteObject(s3Bucket, key)
+        } else {
+          log.warn(s"Skipping deletion of s3://$s3Bucket/$key: it shares the staging prefix " +
+            s"$s3Prefix but belongs to a different training job.")
+        }
       }
       s3Client.deleteObject(s3Bucket, s3Prefix)
     } catch {
       case t: Throwable => log.warn(s"Received exception from s3 client. Data deletion failed. " +
         s"Stack trace: ${t.getStackTrace}")
+    }
+  }
+
+  /**
+    * Determines whether an S3 object key produced by a prefix listing actually belongs to the
+    * training job staged at jobPrefix, as opposed to a different job whose name happens to share
+    * jobPrefix as a string prefix.
+    *
+    * SageMaker training job names are restricted to [a-zA-Z0-9-], so a sibling job that shares this
+    * string prefix always continues with a name character (alphanumeric or '-'). This job's own
+    * artifacts, by contrast, are always separated from jobPrefix by a non-name delimiter: '/' for
+    * staged data objects, '.' for the manifest file (jobPrefix + ".manifest.txt"), and '_' for
+    * Hadoop folder markers (jobPrefix + "_$folder$"). The prefix marker object itself is exactly
+    * jobPrefix.
+    */
+  private[sparksdk] def belongsToTrainingJob(key: String, jobPrefix: String): Boolean = {
+    if (key == jobPrefix) {
+      true
+    } else if (key.startsWith(jobPrefix) && key.length > jobPrefix.length) {
+      val delimiter = key.charAt(jobPrefix.length)
+      delimiter == '/' || delimiter == '.' || delimiter == '_'
+    } else {
+      false
     }
   }
 
