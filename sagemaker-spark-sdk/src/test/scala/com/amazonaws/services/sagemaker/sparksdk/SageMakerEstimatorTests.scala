@@ -454,6 +454,58 @@ class SageMakerEstimatorTests extends FlatSpec with Matchers with MockitoSugar w
     verify(s3Mock, never).deleteObject(any[String], any[String])
   }
 
+  it should "not delete a sibling job's data whose name shares this job's staging prefix" in {
+    when(timeProviderMock.currentTimeMillis).thenReturn(0)
+    val mockAccount = "1234"
+    val mockResult = new GetCallerIdentityResult().withAccount(mockAccount)
+    when(stsMock.getCallerIdentity(any[GetCallerIdentityRequest])).thenReturn(mockResult)
+
+    // A listObjects(bucket, "b/test-training-job") call over-matches under S3's lexicographic
+    // prefix semantics: it returns this job's own object as well as a different job's object
+    // ("b/test-training-job-2/...") that merely shares the string prefix.
+    val ownObject = mock[S3ObjectSummary]
+    when(ownObject.getKey).thenReturn(s3DataPrefix)
+    val siblingKey = s3TrainingPrefix + "-2/data.pbr"
+    val siblingObject = mock[S3ObjectSummary]
+    when(siblingObject.getKey).thenReturn(siblingKey)
+    val objectListMock = mock[ObjectListing]
+    when(objectListMock.getObjectSummaries)
+      .thenReturn(util.Arrays.asList(ownObject, siblingObject))
+    when(s3Mock.listObjects(s3Bucket, s3TrainingPrefix)).thenReturn(objectListMock)
+
+    val estimator = new DummyEstimator()
+
+    when(sagemakerMock.describeTrainingJob(any[DescribeTrainingJobRequest]))
+      .thenReturn(statusToResult(TrainingJobStatus.InProgress))
+      .thenReturn(statusToResult(TrainingJobStatus.Completed))
+
+    estimator.fit(dataset)
+
+    // This job's own staged data and prefix marker are deleted...
+    verify(s3Mock).deleteObject(s3Bucket, s3DataPrefix)
+    verify(s3Mock).deleteObject(s3Bucket, s3TrainingPrefix)
+    // ...but the sibling job's data is left untouched.
+    verify(s3Mock, never).deleteObject(s3Bucket, siblingKey)
+  }
+
+  it should "delete only this job's own artifacts across supported delimiters" in {
+    val estimator = new DummyEstimator()
+    val jobPrefix = "shared/run1"
+
+    // Objects that belong to this job: the prefix marker, staged data under it, the EMR manifest
+    // sibling, and the Hadoop folder marker.
+    assert(estimator.belongsToTrainingJob("shared/run1", jobPrefix))
+    assert(estimator.belongsToTrainingJob("shared/run1/part-00000.snappy.parquet", jobPrefix))
+    assert(estimator.belongsToTrainingJob("shared/run1.manifest.txt", jobPrefix))
+    assert(estimator.belongsToTrainingJob("shared/run1_$folder$", jobPrefix))
+
+    // Objects that belong to a different job sharing the string prefix must not be matched.
+    assert(!estimator.belongsToTrainingJob("shared/run10/part-00000.snappy.parquet", jobPrefix))
+    assert(!estimator.belongsToTrainingJob("shared/run1000", jobPrefix))
+    assert(!estimator.belongsToTrainingJob("shared/run1-extra/data.pbr", jobPrefix))
+    assert(!estimator.belongsToTrainingJob("shared/other/data.pbr", jobPrefix))
+  }
+
   val dummyModelArtifactLocation : String = "s3://bucket/string"
 
   case class DummyNamePolicy(val prefix : String = "") extends NamePolicy {
